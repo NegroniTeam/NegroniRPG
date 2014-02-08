@@ -77,8 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dictionary.cs" />
+    <Compile Include="Interfaces.IShield.cs" />
     <Compile Include="Items.Armor.DragonBoots.cs" />
     <Compile Include="Items.Armor.DragonHelmet.cs" />
+    <Compile Include="Items.Armor.DragonShield.cs" />
     <Compile Include="Items.Armor.DragonRobe.cs" />
     <Compile Include="Items.ElixirHP.cs" />
     <Compile Include="Interfaces.IInventorySlot.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Interfaces.IItem.cs" />
     <Compile Include="Items.Armor.DragonGloves.cs" />
     <Compile Include="Items.Weapon.MysticStaff.cs" />
+    <Compile Include="Market.cs" />
     <Compile Include="Monsters.Monster.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scenery.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Screens.GameScreen.cs" />
     <Compile Include="SystemFunctions.Sound.cs" />
+    <Compile Include="Well.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NegroniGameContent\NegroniGameContent.contentproj">

@@ -89,6 +89,11 @@
             return new Rectangle(32 * this.Frames, 0, 32, 32);
         } 
 
+        public void Draw(SpriteBatch sb)
+        {
+            new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
+        }
+
         public List<Texture2D> PlayerTextures { get; private set; }
         public float Elapsed { get; private set; }
         public float Delay { get; private set; }

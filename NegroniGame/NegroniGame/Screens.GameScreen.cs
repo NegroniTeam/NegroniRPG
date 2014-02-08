@@ -27,10 +27,11 @@ namespace NegroniGame.Screens
         private Scenery MainScenery;
         private Player Player;
         private Monsters.Monsters Monster;
+        private Toolbar.InventorySlots InventorySlots;
 
         private MouseState mouseState;
         private Point mousePosition = new Point();
-        private Rectangle inventoryArea = new Rectangle();
+        // private Rectangle inventoryArea = new Rectangle();
 
         private List<Texture2D> allSceneryTextures;
         private List<Texture2D> playerTextures;
@@ -39,7 +40,7 @@ namespace NegroniGame.Screens
         private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
 
-        private Rectangle inventoryPopUpInfoBox;
+        // private Rectangle inventoryPopUpInfoBox;
 
         private KeyboardState ks;
         private Vector2 cursorPos = new Vector2();
@@ -67,17 +68,19 @@ namespace NegroniGame.Screens
 
             SystemFunctions.Sound.PlayIngameMusic();
 
-            Font = Content.Load<SpriteFont>("Segoe UI Mono");
-            AllMessages = new Toolbar.SystemMsg(Font);
+            FontMessages = Content.Load<SpriteFont>("Segoe UI Mono");
+            AllMessages = new Toolbar.SystemMsg(FontMessages);
             MainScenery = new Scenery();
 
-            inventoryArea = new Rectangle(475, ScreenHeight - 110, 206, 100);
+            // inventoryArea = new Rectangle(475, ScreenHeight - 110, 206, 100);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            FontInfoBox = Content.Load<SpriteFont>("Segoe UI Mono Smaller");
+
             cursorTex = Content.Load<Texture2D>("media/cursor1"); // cursor
 
             // background, toolbar, well, playerPic, equipmentShop
@@ -111,6 +114,9 @@ namespace NegroniGame.Screens
             Monster = new Monsters.Monsters(monsterTextures);
 
             infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
+
+            // Show small pop-up descriptive text box when mouse is over an item in the inventory
+            InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox);
         }
 
         protected override void Update(GameTime gameTime)
@@ -127,22 +133,12 @@ namespace NegroniGame.Screens
 
             Player.Move(gameTime, ks);
             Monster.Move(gameTime);
+            InventorySlots.Update(gameTime, mousePosition);
 
-            // Show small pop-up descriptive text box when mouse is over an item in the inventory
-            if (inventoryArea.Contains(mousePosition))
-            {
-                inventoryPopUpInfoBox = new Rectangle(550, ScreenHeight - 80, 100, 40);
-            }
-            else
-            {
-                inventoryPopUpInfoBox = new Rectangle(0, 0, 0, 0);
-            }
-
-            AllMessages.Update();
+            AllMessages.GetLastMessages();
 
             base.Update(gameTime);
         }
-
 
         protected override void Draw(GameTime gameTime)
         {
@@ -151,13 +147,10 @@ namespace NegroniGame.Screens
             spriteBatch.Begin();
 
             MainScenery.Draw(allSceneryTextures, spriteBatch);
-
-            spriteBatch.Draw(Monster.MonsterAnim, Monster.DestinationPosition, Monster.SourcePosition, Color.White);
-            spriteBatch.Draw(Player.PlayerAnim, Player.DestinationPosition, Player.SourcePosition, Color.White);
-            spriteBatch.Draw(infoBoxTexture, inventoryPopUpInfoBox, Color.White);
-
+            Monster.Draw(spriteBatch);
+            Player.Draw(spriteBatch);
+            InventorySlots.Draw(spriteBatch);
             AllMessages.DrawText(spriteBatch);
-
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);
 
             spriteBatch.End();
@@ -165,7 +158,8 @@ namespace NegroniGame.Screens
             base.Draw(gameTime);
         }
 
-        public SpriteFont Font { get; private set; }
+        public SpriteFont FontMessages { get; private set; }
+        public SpriteFont FontInfoBox { get; private set; }
         public static int ScreenWidth { get; private set; }
         public static int ScreenHeight { get; private set; }
     }

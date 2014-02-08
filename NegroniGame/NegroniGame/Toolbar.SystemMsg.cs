@@ -17,21 +17,25 @@
             this.LinesAsSprites = new List<Sprite>();
             this.ScreenHeight = Screens.GameScreen.ScreenHeight;
             this.ScreenWidth = Screens.GameScreen.ScreenWidth;
+            this.AllMessages = new List<Dictionary<string, Color>>();
         }
 
-        public void Update()
+        public void GetLastMessages()
         {
-            // retrieves all last 5 messages from the method
-            this.Last5Messages = GetLastMessages();
+            Update(); // updates the messages
 
             // defines the position of the first message
             this.MsgXPos = 130;
             this.MsgYPos = this.ScreenHeight - 20;
 
-            foreach (var Message in this.Last5Messages)
+            for (int i = AllMessages.Count - 1; i > AllMessages.Count - 6; i--)
             {
-                this.LinesAsSprites.Add(new Sprite(this.Font, Message.Key, new Vector2(this.MsgXPos, this.MsgYPos), Message.Value));
-                this.MsgYPos -= 15;
+                // gets the one record in the Dictionary
+                foreach (var Record in AllMessages[i])
+                {
+                    this.LinesAsSprites.Add(new Sprite(this.Font, Record.Key, new Vector2(this.MsgXPos, this.MsgYPos), Record.Value));
+                    this.MsgYPos -= 15;
+                }
             }
         }
 
@@ -43,18 +47,14 @@
             }
         }
 
-        private Dictionary<string, Color> GetLastMessages()
+        private void Update()
         {
-            // TO DO: loops through the array with messages and takes the last 5
-            Dictionary<string, Color> last5Messages = new Dictionary<string, Color>();
-
-            last5Messages.Add(">> You stepped on a mob", Color.Red);
-            last5Messages.Add(">> You hit with 50 dmg", Color.Yellow);
-            last5Messages.Add(">> You drunk from the well", Color.Aquamarine);
-            last5Messages.Add(">> Mob hit you with a feather", Color.Red);
-            last5Messages.Add(">> You already have a robe", Color.Pink);
-
-            return last5Messages;
+            // TO DO: auto fill with new msgs
+            AllMessages.Add(new Dictionary<string, Color>() { { ">> You stepped on a mob", Color.Red } });
+            AllMessages.Add(new Dictionary<string, Color>() { { ">> You hit with 50 dmg", Color.Yellow } });
+            AllMessages.Add(new Dictionary<string, Color>() { { ">> You drunk from the well", Color.Aquamarine } });
+            AllMessages.Add(new Dictionary<string, Color>() { { ">> Mob hit you with a feather", Color.Red } });
+            AllMessages.Add(new Dictionary<string, Color>() { { ">> You already have a robe", Color.Pink } });
         }
 
         public int MsgXPos { get; private set; }
@@ -62,7 +62,8 @@
         public SpriteFont Font { get; private set; }
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
-        public Dictionary<string, Color> Last5Messages { get; private set; }
+        public List<Dictionary<string, Color>> AllMessages { get; private set; }
+        // public List<Dictionary<string, Color>> Last5Messages { get; private set; }
         public List<Sprite> LinesAsSprites { get; private set; }
     }
 }

@@ -62,7 +62,12 @@
 
             // if on frame 0 - top up position 0
             return new Rectangle(64 * Frames, 0, 64, 64);
-        } 
+        }
+
+        public void Draw(SpriteBatch sb)
+        {
+            new SystemFunctions.Sprite(this.MonsterAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
+        }
 
         public List<Texture2D> MonsterTextures { get; private set; }
         public float Elapsed { get; private set; }
