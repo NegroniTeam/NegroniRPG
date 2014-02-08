@@ -18,34 +18,30 @@ namespace NegroniGame.Screens
     public class GameScreen : Microsoft.Xna.Framework.Game
     {
         // SINGLETON starts
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        GraphicsDevice device;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private GraphicsDevice device;
         // SINGLETON ends
 
-        Toolbar.SystemMsg AllMessages;
-        Scenery MainScenery;
-        Player Player;
+        private Toolbar.SystemMsg AllMessages;
+        private Scenery MainScenery;
+        private Player Player;
+        private Monsters.Monsters Monster;
 
         private MouseState mouseState;
         private Point mousePosition = new Point();
         private Rectangle inventoryArea = new Rectangle();
 
-        List<Texture2D> allSceneryTextures;
-        List<Texture2D> playerTextures;
+        private List<Texture2D> allSceneryTextures;
+        private List<Texture2D> playerTextures;
+        private List<Texture2D> monsterTextures;
 
-        private Texture2D cursorTex, playerAnim;
-        private Texture2D mobAnim, mobLeft, mobRight, mobUp, mobDown;
-
+        private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
-
-        private Rectangle sourceRect, destinationRectPlayer;
-        private Rectangle mobRect, destinationRectMob;
 
         private Rectangle inventoryPopUpInfoBox;
 
         private KeyboardState ks;
-        private Vector2 mobPosition = new Vector2(5f, 5f);
         private Vector2 cursorPos = new Vector2();
 
         public GameScreen()
@@ -65,9 +61,6 @@ namespace NegroniGame.Screens
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
-
-            // ScreenWidth = device.PresentationParameters.BackBufferWidth;
-            // ScreenHeight = device.PresentationParameters.BackBufferHeight;
 
             ScreenWidth = (int)graphics.PreferredBackBufferWidth;
             ScreenHeight = (int)graphics.PreferredBackBufferHeight;
@@ -97,8 +90,6 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/market")
             };
 
-            playerAnim = Content.Load<Texture2D>("media/sprites/Elvina-down");
-
             playerTextures = new List<Texture2D>()
             {
                 Content.Load<Texture2D>("media/sprites/Elvina-right"),
@@ -109,21 +100,24 @@ namespace NegroniGame.Screens
 
             Player = new Player(playerTextures);
 
-            infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
+            monsterTextures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster1-right"),
+                Content.Load<Texture2D>("media/sprites/monster1-left"),
+                Content.Load<Texture2D>("media/sprites/monster1-up"),
+                Content.Load<Texture2D>("media/sprites/monster1-down"),
+            };
 
-            // Mob Images
-            mobAnim = Content.Load<Texture2D>("media/sprites/monster1-down");
-            mobRight = Content.Load<Texture2D>("media/sprites/monster1-right");
-            mobLeft = Content.Load<Texture2D>("media/sprites/monster1-left");
-            mobUp = Content.Load<Texture2D>("media/sprites/monster1-up");
-            mobDown = Content.Load<Texture2D>("media/sprites/monster1-down");
+            Monster = new Monsters.Monsters(monsterTextures);
+
+            infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
         }
 
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //    this.Exit();
+            // if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            // this.Exit();
 
             cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); // cursor update
             mouseState = Mouse.GetState();
@@ -131,12 +125,8 @@ namespace NegroniGame.Screens
 
             ks = Keyboard.GetState();
 
-            Rectangle[] result = Player.Move(gameTime, ks);
-            sourceRect = result[0];
-            destinationRectPlayer = result[1];
-
-            mobRect = Monsters.AnimateMobs.Animate(gameTime);
-            destinationRectMob = new Rectangle((int)mobPosition.X, (int)mobPosition.Y, 64, 64);
+            Player.Move(gameTime, ks);
+            Monster.Move(gameTime);
 
             // Show small pop-up descriptive text box when mouse is over an item in the inventory
             if (inventoryArea.Contains(mousePosition))
@@ -162,8 +152,8 @@ namespace NegroniGame.Screens
 
             MainScenery.Draw(allSceneryTextures, spriteBatch);
 
-            spriteBatch.Draw(mobAnim, destinationRectMob, mobRect, Color.White);
-            spriteBatch.Draw(playerAnim, destinationRectPlayer, sourceRect, Color.White);
+            spriteBatch.Draw(Monster.MonsterAnim, Monster.DestinationPosition, Monster.SourcePosition, Color.White);
+            spriteBatch.Draw(Player.PlayerAnim, Player.DestinationPosition, Player.SourcePosition, Color.White);
             spriteBatch.Draw(infoBoxTexture, inventoryPopUpInfoBox, Color.White);
 
             AllMessages.DrawText(spriteBatch);

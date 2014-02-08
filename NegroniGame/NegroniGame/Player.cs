@@ -10,8 +10,6 @@
 
     public class Player : Interfaces.IPlayer
     {
-        // TO DO: change animation when moving in diff directions
-
         public Vector2 PlayerPosition; // <- Read the last property info in comment
 
         public Player(List<Texture2D> playerTextures)
@@ -19,13 +17,12 @@
             this.Delay = 200f;
             this.Frames = 0;
             this.PlayerTextures = playerTextures;
-
-            SourceAndDestinationPositions = new Rectangle[2];
-            PlayerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
+            this.PlayerAnim = PlayerTextures[3];
+            this.PlayerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
         }
 
         // playerTextures - right, left, up, down
-        public Rectangle[] Move(GameTime gameTime, KeyboardState ks)
+        public void Move(GameTime gameTime, KeyboardState ks)
         {
             if (ks.IsKeyDown(Keys.Right))
             {
@@ -33,7 +30,7 @@
                 {
                     this.PlayerPosition.X += 2f;
                     this.PlayerAnim = this.PlayerTextures[0];
-                    this.SourceAndDestinationPositions[0] = Animate(gameTime);
+                    this.SourcePosition = Animate(gameTime);
                 }
             }
             else if (ks.IsKeyDown(Keys.Left))
@@ -42,7 +39,7 @@
                 {
                     this.PlayerPosition.X -= 2f;
                     this.PlayerAnim = this.PlayerTextures[1];
-                    this.SourceAndDestinationPositions[0] = Animate(gameTime);
+                    this.SourcePosition = Animate(gameTime);
                 }
             }
             else if (ks.IsKeyDown(Keys.Up))
@@ -51,7 +48,7 @@
                 {
                     this.PlayerPosition.Y -= 2f;
                     this.PlayerAnim = this.PlayerTextures[2];
-                    this.SourceAndDestinationPositions[0] = Animate(gameTime);
+                    this.SourcePosition = Animate(gameTime);
                 }
             }
             else if (ks.IsKeyDown(Keys.Down))
@@ -60,17 +57,15 @@
                 {
                     this.PlayerPosition.Y += 2f;
                     this.PlayerAnim = this.PlayerTextures[3];
-                    this.SourceAndDestinationPositions[0] = Animate(gameTime);
+                    this.SourcePosition = Animate(gameTime);
                 }
             }
             else
             {
-                this.SourceAndDestinationPositions[0] = new Rectangle(64, 0, 32, 32);
+                this.SourcePosition = new Rectangle(64, 0, 32, 32);
             }
 
-            this.SourceAndDestinationPositions[1] = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
-
-            return this.SourceAndDestinationPositions;
+            this.DestinationPosition = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
         }
 
         private Rectangle Animate(GameTime gameTime)
@@ -99,8 +94,8 @@
         public float Delay { get; private set; }
         public int Frames { get; private set; }
         public Texture2D PlayerAnim { get; private set; }
-        public Rectangle[] SourceAndDestinationPositions { get; private set; }
-
-        // public Vector2  PlayerPosition { get; private set; } <- TO DO: way to modify X and Y
+        public Rectangle SourcePosition { get; private set; }
+        public Rectangle DestinationPosition { get; private set; }
+        // public Vector2  PlayerPosition { get; private set; } 
     }
 }

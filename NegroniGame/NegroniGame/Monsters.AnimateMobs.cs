@@ -15,13 +15,6 @@
 
         public static Rectangle Animate(GameTime gameTime)
         {
-            //int direction = randomGenerator.Next(1, 4);
-            //int positions = randomGenerator.Next(10, 400);
-
-            //if (direction == 1)
-            //{
-            //    // right
-            //}
 
             elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
