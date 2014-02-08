@@ -17,6 +17,8 @@ namespace NegroniGame.Screens
     /// </summary>
     public class GameScreen : Microsoft.Xna.Framework.Game
     {
+        #region Declarations
+
         // SINGLETON starts
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -30,8 +32,6 @@ namespace NegroniGame.Screens
         private Toolbar.InventorySlots InventorySlots;
 
         private MouseState mouseState;
-        private Point mousePosition = new Point();
-        // private Rectangle inventoryArea = new Rectangle();
 
         private List<Texture2D> allSceneryTextures;
         private List<Texture2D> playerTextures;
@@ -40,10 +40,10 @@ namespace NegroniGame.Screens
         private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
 
-        // private Rectangle inventoryPopUpInfoBox;
-
         private KeyboardState ks;
         private Vector2 cursorPos = new Vector2();
+
+        #endregion
 
         public GameScreen()
         {
@@ -68,17 +68,15 @@ namespace NegroniGame.Screens
 
             SystemFunctions.Sound.PlayIngameMusic();
 
-            FontMessages = Content.Load<SpriteFont>("Segoe UI Mono");
-            AllMessages = new Toolbar.SystemMsg(FontMessages);
-            MainScenery = new Scenery();
-
-            // inventoryArea = new Rectangle(475, ScreenHeight - 110, 206, 100);
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            FontMessages = Content.Load<SpriteFont>("Segoe UI Mono");
+
+            AllMessages = new Toolbar.SystemMsg(FontMessages);
+
             FontInfoBox = Content.Load<SpriteFont>("Segoe UI Mono Smaller");
 
             cursorTex = Content.Load<Texture2D>("media/cursor1"); // cursor
@@ -92,6 +90,8 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/Elvina"),
                 Content.Load<Texture2D>("media/market")
             };
+
+            MainScenery = new Scenery(allSceneryTextures);
 
             playerTextures = new List<Texture2D>()
             {
@@ -115,7 +115,6 @@ namespace NegroniGame.Screens
 
             infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
 
-            // Show small pop-up descriptive text box when mouse is over an item in the inventory
             InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox);
         }
 
@@ -127,13 +126,12 @@ namespace NegroniGame.Screens
 
             cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); // cursor update
             mouseState = Mouse.GetState();
-            mousePosition = new Point(mouseState.X, mouseState.Y);
 
             ks = Keyboard.GetState();
 
             Player.Move(gameTime, ks);
             Monster.Move(gameTime);
-            InventorySlots.Update(gameTime, mousePosition);
+            InventorySlots.Update(gameTime, mouseState);
 
             AllMessages.GetLastMessages();
 
@@ -146,7 +144,7 @@ namespace NegroniGame.Screens
 
             spriteBatch.Begin();
 
-            MainScenery.Draw(allSceneryTextures, spriteBatch);
+            MainScenery.Draw(spriteBatch);
             Monster.Draw(spriteBatch);
             Player.Draw(spriteBatch);
             InventorySlots.Draw(spriteBatch);
