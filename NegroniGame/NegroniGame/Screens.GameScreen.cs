@@ -27,7 +27,7 @@ namespace NegroniGame.Screens
 
         private Toolbar.SystemMsg AllMessages;
         private Scenery MainScenery;
-        private Player Player;
+        // private Player Player;
         private Monsters.Monsters Monster;
         private Toolbar.InventorySlots InventorySlots;
 
@@ -36,6 +36,7 @@ namespace NegroniGame.Screens
         private List<Texture2D> allSceneryTextures;
         private List<Texture2D> playerTextures;
         private List<Texture2D> monsterTextures;
+        private List<Texture2D> slotsTextures;
 
         private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
@@ -101,7 +102,8 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/Elvina-down"),
             };
 
-            Player = new Player(playerTextures);
+            Player.Instance.PlayerTextures = playerTextures;
+            Player.Instance.PlayerAnim = playerTextures[3];
 
             monsterTextures = new List<Texture2D>()
             {
@@ -115,7 +117,19 @@ namespace NegroniGame.Screens
 
             infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
 
-            InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox);
+            slotsTextures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/slots/defaultSlot1"),
+                Content.Load<Texture2D>("media/slots/defaultSlot2"),
+                Content.Load<Texture2D>("media/slots/defaultSlot3"),
+                Content.Load<Texture2D>("media/slots/defaultSlot4"),
+                Content.Load<Texture2D>("media/slots/defaultSlot5"),
+                Content.Load<Texture2D>("media/slots/defaultSlot6"),
+                Content.Load<Texture2D>("media/slots/defaultSlot7"),
+                Content.Load<Texture2D>("media/slots/defaultSlot8"),
+            };
+
+            InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox, slotsTextures);
         }
 
         protected override void Update(GameTime gameTime)
@@ -129,7 +143,7 @@ namespace NegroniGame.Screens
 
             ks = Keyboard.GetState();
 
-            Player.Move(gameTime, ks);
+            Player.Instance.Move(gameTime, ks);
             Monster.Move(gameTime);
             InventorySlots.Update(gameTime, mouseState);
 
@@ -146,7 +160,7 @@ namespace NegroniGame.Screens
 
             MainScenery.Draw(spriteBatch);
             Monster.Draw(spriteBatch);
-            Player.Draw(spriteBatch);
+            Player.Instance.Draw(spriteBatch);
             InventorySlots.Draw(spriteBatch);
             AllMessages.DrawText(spriteBatch);
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);

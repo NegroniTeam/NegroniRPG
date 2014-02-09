@@ -7,5 +7,6 @@
 
     public interface IWeapon
     {
+        int Attack { get; }
     }
 }

@@ -10,35 +10,38 @@
 
     public class InventorySlots : Interfaces.IInventorySlot
     {
-        public InventorySlots(Texture2D infoBoxTexture, SpriteFont font)
+        public InventorySlots(Texture2D infoBoxTexture, SpriteFont font, List<Texture2D> slotsTextures)
         {
             this.Font = font;
             this.TextPosition = new Vector2 (0, 0);
 
-            InventoryAreaTopPoint = Screens.GameScreen.ScreenHeight - 110;
-            InventoryAreaLeftPoint = 475;
-            InventorySlotWidth = InventorySlotHeight = 51;
+            this.DefaultSlotTextures = slotsTextures;
+
+            InventoryAreaTopPoint = Screens.GameScreen.ScreenHeight - 105;
+            InventoryAreaLeftPoint = 485;
+            InventorySlotWidth = InventorySlotHeight = 50;
 
             this.InfoBoxTexture = infoBoxTexture;
             this.InventoryArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint, 206, 100); // the whole inventory
 
+            // 1 is added for borders
             // first row of slots
             this.Slot1CoinsArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot2ElixirsArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth, InventoryAreaTopPoint,
+            this.Slot2ElixirsArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth + 1, InventoryAreaTopPoint,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot3WeaponArea = new Rectangle(InventoryAreaLeftPoint + (InventorySlotWidth * 2), InventoryAreaTopPoint,
+            this.Slot3WeaponArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 2), InventoryAreaTopPoint,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot4ShieldArea = new Rectangle(InventoryAreaLeftPoint + (InventorySlotWidth * 3), InventoryAreaTopPoint,
+            this.Slot4ShieldArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 3), InventoryAreaTopPoint,
                                                     InventorySlotWidth, InventorySlotHeight);
             // second row of slots
-            this.Slot5HelmetArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint + InventorySlotHeight,
+            this.Slot5HelmetArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint + InventorySlotHeight + 1,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot6RobeArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth, InventoryAreaTopPoint + InventorySlotHeight,
+            this.Slot6RobeArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth + 1, InventoryAreaTopPoint + InventorySlotHeight + 1,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot7GlovesArea = new Rectangle(InventoryAreaLeftPoint + (InventorySlotWidth * 2), InventoryAreaTopPoint + InventorySlotHeight,
+            this.Slot7GlovesArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 2), InventoryAreaTopPoint + InventorySlotHeight + 1,
                                                     InventorySlotWidth, InventorySlotHeight);
-            this.Slot8BootsArea = new Rectangle(InventoryAreaLeftPoint + (InventorySlotWidth * 3), InventoryAreaTopPoint + InventorySlotHeight,
+            this.Slot8BootsArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 3), InventoryAreaTopPoint + InventorySlotHeight + 1,
                                                     InventorySlotWidth, InventorySlotHeight);
 
         }
@@ -175,15 +178,41 @@
                 this.InventoryPopUpInfoBoxText = "";
             }
 
+            // Show different picture on the slot depending on the object there
+            /* if (Player.Coins.Amount > 0) { Slot1Image = Player.Coins.Texture; }
+            else { Slot1Image = DefaultSlotTextures[0]; }
+            // if (Player.Elixirs.Count > 0) { Slot2Image = Player.Coins.Texture; }
+            else { Slot2Image = DefaultSlotTextures[1]; }
+            // if (Player.Weapon.isAny == true) { Slot3Image = Player.Weapon.Texture; }
+            else { Slot3Image = DefaultSlotTextures[2]; }
+            */
+
+            Slot1Image = DefaultSlotTextures[0];
+            Slot2Image = DefaultSlotTextures[1];
+            Slot3Image = DefaultSlotTextures[2];
+            Slot4Image = DefaultSlotTextures[3];
+            Slot5Image = DefaultSlotTextures[4];
+            Slot6Image = DefaultSlotTextures[5];
+            Slot7Image = DefaultSlotTextures[6];
+            Slot8Image = DefaultSlotTextures[7];
+
         }
 
         public void Draw(SpriteBatch sb)
         {
+            new SystemFunctions.Sprite(this.Slot1Image, this.Slot1CoinsArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot2Image, this.Slot2ElixirsArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot3Image, this.Slot3WeaponArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot4Image, this.Slot4ShieldArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot5Image, this.Slot5HelmetArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot6Image, this.Slot6RobeArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot7Image, this.Slot7GlovesArea).DrawBox(sb);
+            new SystemFunctions.Sprite(this.Slot8Image, this.Slot8BootsArea).DrawBox(sb);
             new SystemFunctions.Sprite(this.InfoBoxTexture, this.InventoryPopUpInfoBox).DrawBox(sb);
             new SystemFunctions.Sprite(this.Font, this.InventoryPopUpInfoBoxText, this.TextPosition).DrawText(sb); 
         }
 
-
+        
         private int InventorySlotWidth { get; set; }
         private int InventorySlotHeight { get; set; }
         private int InventoryAreaTopPoint { get; set; }
@@ -198,6 +227,15 @@
         public Rectangle Slot6RobeArea { get; private set; }
         public Rectangle Slot7GlovesArea { get; private set; }
         public Rectangle Slot8BootsArea { get; private set; }
+        public List<Texture2D> DefaultSlotTextures { get; private set; }
+        public Texture2D Slot1Image { get; private set; }
+        public Texture2D Slot2Image { get; private set; }
+        public Texture2D Slot3Image { get; private set; }
+        public Texture2D Slot4Image { get; private set; }
+        public Texture2D Slot5Image { get; private set; }
+        public Texture2D Slot6Image { get; private set; }
+        public Texture2D Slot7Image { get; private set; }
+        public Texture2D Slot8Image { get; private set; }
         public Vector2 TextPosition { get; private set; }
         public Rectangle InventoryPopUpInfoBox { get; private set; }
         public string InventoryPopUpInfoBoxText { get; private set; }

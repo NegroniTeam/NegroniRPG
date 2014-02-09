@@ -7,5 +7,6 @@
 
     public interface IArmor : IItem
     {
+        int Defence { get; }
     }
 }

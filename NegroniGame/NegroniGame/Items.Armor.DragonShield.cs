@@ -5,7 +5,9 @@
     using System.Linq;
     using System.Text;
 
-    struct DragonShield : Interfaces.IShield
-    {　　
+    public struct DragonShield : Interfaces.IShield
+    {
+        public string Name { get; private set; }
+        public int Defence { get; private set; }
     }
 }

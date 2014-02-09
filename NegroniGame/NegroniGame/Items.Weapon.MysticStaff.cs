@@ -7,5 +7,7 @@ namespace NegroniGame.Items.Weapon
 {
     class MysticStaff : Interfaces.IWeapon
     {
+        public string Name { get; private set; }
+        public int Attack { get; private set; }
     }
 }

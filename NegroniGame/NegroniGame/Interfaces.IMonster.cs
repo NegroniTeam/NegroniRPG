@@ -7,5 +7,6 @@
 
     public interface IMonster
     {
+        string Name { get; }
     }
 }

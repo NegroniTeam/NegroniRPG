@@ -5,8 +5,7 @@
     using System.Linq;
     using System.Text;
 
-    public interface IPlayer
+    public interface IBoots : IArmor
     {
-        string Name { get; }
     }
 }

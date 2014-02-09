@@ -69,6 +69,7 @@
             new SystemFunctions.Sprite(this.MonsterAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
         }
 
+        public string Name { get; private set; }
         public List<Texture2D> MonsterTextures { get; private set; }
         public float Elapsed { get; private set; }
         public float Delay { get; private set; }

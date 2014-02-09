@@ -5,7 +5,8 @@
     using System.Linq;
     using System.Text;
 
-    class ElixirHP : Interfaces.IItem
+    public class ElixirHP : Interfaces.IItem
     {
+        public string Name { get; private set; }
     }
 }
