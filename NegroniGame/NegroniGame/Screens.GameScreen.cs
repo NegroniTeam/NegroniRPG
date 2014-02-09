@@ -27,7 +27,6 @@ namespace NegroniGame.Screens
 
         private Toolbar.SystemMsg AllMessages;
         private Scenery MainScenery;
-        // private Player Player;
         private Monsters.Monsters Monster;
         private Toolbar.InventorySlots InventorySlots;
 
@@ -37,7 +36,10 @@ namespace NegroniGame.Screens
         private List<Texture2D> playerTextures;
         private List<Texture2D> monsterTextures;
         private List<Texture2D> slotsTextures;
-
+        private List<Texture2D> majesticSetTextures;
+        private Texture2D newbieStaffTex, mysticStaffTex;
+        private Texture2D coinsTex;
+        private Texture2D elixirsTex;
         private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
 
@@ -101,9 +103,22 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/Elvina-up"),
                 Content.Load<Texture2D>("media/sprites/Elvina-down"),
             };
+            
+            majesticSetTextures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/drop/majesticBoots"),
+                Content.Load<Texture2D>("media/drop/majesticGloves"),
+                Content.Load<Texture2D>("media/drop/majesticHelmet"),
+                Content.Load<Texture2D>("media/drop/majesticRobe"),
+                Content.Load<Texture2D>("media/drop/majesticShield")
+            };
 
-            Player.Instance.PlayerTextures = playerTextures;
-            Player.Instance.PlayerAnim = playerTextures[3];
+            coinsTex = Content.Load<Texture2D>("media/drop/coins");
+            elixirsTex = Content.Load<Texture2D>("media/drop/elixirs");
+            newbieStaffTex = Content.Load<Texture2D>("media/drop/newbieStaff");
+            mysticStaffTex = Content.Load<Texture2D>("media/drop/mysticStaff");
+
+            Player.Instance.Initialize(playerTextures, majesticSetTextures, coinsTex, elixirsTex, newbieStaffTex, mysticStaffTex);
 
             monsterTextures = new List<Texture2D>()
             {
@@ -130,6 +145,7 @@ namespace NegroniGame.Screens
             };
 
             InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox, slotsTextures);
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -146,6 +162,8 @@ namespace NegroniGame.Screens
             Player.Instance.Move(gameTime, ks);
             Monster.Move(gameTime);
             InventorySlots.Update(gameTime, mouseState);
+
+            Player.Instance.UpdateInventory();
 
             AllMessages.GetLastMessages();
 

@@ -49,128 +49,146 @@
         public void Update(GameTime gameTime, MouseState mouseState)
         {
             MousePosition = new Point(mouseState.X, mouseState.Y);
+            CheckItems();
+
+            // Console.WriteLine(Player.Instance.Weapon.ToString());
 
             // Show small pop-up descriptive text box when mouse is over an item in the inventory
             if (this.Slot1CoinsArea.Contains(MousePosition))
             {
                 this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
 
-                this.InventoryPopUpInfoBoxText = "Coins" + "\n" + "100"; // Player.Coins.Amount
+                this.InventoryPopUpInfoBoxText = String.Format("Coins" + "\n" + "{0}", Player.Instance.Coins.Amount);
                 this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                 this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
             }
-            else if (this.Slot2ElixirsArea.Contains(MousePosition)) //  && Player.Elixirs.Count > 0
+
+            else if (this.Slot2ElixirsArea.Contains(MousePosition) && Player.Instance.Elixirs.Count > 0)
             {
                 this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
 
-                this.InventoryPopUpInfoBoxText = "2 HP Elixir" + "\n" + "Restores 50 hp"; // Player.Elixirs.Count ; Items.ElixirHP.Info
+                this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, Player.Instance.Elixirs.RecoveryAmount);
                 this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                 this.TextPosition = new Vector2(MousePosition.X + 25 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
             }
-            else if (this.Slot3WeaponArea.Contains(MousePosition)) //  && Player.Weapon.isAny == true
+
+            else if (this.Slot3WeaponArea.Contains(MousePosition) && IsAnyWeapon)
             {
+                Console.WriteLine("4");
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: pop up box ask if sure and destroys the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Weapon = new Items.Weapon.Weapon();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Mystic Staff" + "\n" + "Atk. 100"; // Player.Weapon.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Atk. {1}", Player.Instance.Weapon.Name, Player.Instance.Weapon.Attack);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
                 }
             }
-            else if (this.Slot4ShieldArea.Contains(MousePosition)) //  && Player.Shield.isAny == true
+
+            else if (this.Slot4ShieldArea.Contains(MousePosition) && IsAnyShield)
             {
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: destroy the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Shield = new Items.Armor.Armor();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Dragon Shield" + "\n" + "Def. 20"; // Player.Shield.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Shield.Name, Player.Instance.Shield.Defence);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
                 }
             }
-            else if (this.Slot5HelmetArea.Contains(MousePosition)) //  && Player.Helmet.isAny == true
+
+            else if (this.Slot5HelmetArea.Contains(MousePosition) && IsAnyHelmet)
             {
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: destroy the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Helmet = new Items.Armor.Armor();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Dragon Helmet" + "\n" + "Def. 10"; // Player.Helmet.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Helmet.Name, Player.Instance.Helmet.Defence);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
                 }
             }
-            else if (this.Slot6RobeArea.Contains(MousePosition)) //  && Player.Robe.isAny == true
+
+            else if (this.Slot6RobeArea.Contains(MousePosition) && IsAnyRobe)
             {
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: destroy the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Robe = new Items.Armor.Armor();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Dragon Robe" + "\n" + "Def. 30"; // Player.Robe.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Robe.Name, Player.Instance.Robe.Defence);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
                 }
             }
-            else if (this.Slot7GlovesArea.Contains(MousePosition)) //  && Player.Gloves.isAny == true
+
+            else if (this.Slot7GlovesArea.Contains(MousePosition) && IsAnyGloves)
             {
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: destroy the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Gloves = new Items.Armor.Armor();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Dragon Gloves" + "\n" + "Def. 10"; // Player.Gloves.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Gloves.Name, Player.Instance.Gloves.Defence);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
                 }
             }
-            else if (this.Slot8BootsArea.Contains(MousePosition)) //  && Player.Boots.isAny == true
+
+            else if (this.Slot8BootsArea.Contains(MousePosition) && IsAnyBoots)
             {
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
-                    // TO DO: destroy the item
+                    // TO DO: pop up box ask if sure before destroys the item
+                    Player.Instance.Boots = new Items.Armor.Armor();
                 }
                 else
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = "Dragon Boots" + "\n" + "Def. 10"; // Player.Boots.Info
+                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Boots.Name, Player.Instance.Boots.Defence);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
                 }
             }
+
             else
             {
                 this.InventoryPopUpInfoBox = new Rectangle(0, 0, 0, 0);
@@ -178,24 +196,32 @@
                 this.InventoryPopUpInfoBoxText = "";
             }
 
+            CheckItems();
+
             // Show different picture on the slot depending on the object there
-            /* if (Player.Coins.Amount > 0) { Slot1Image = Player.Coins.Texture; }
+            if (Player.Instance.Coins.Amount > 0) { Slot1Image = Player.Instance.Coins.Texture; }
             else { Slot1Image = DefaultSlotTextures[0]; }
-            // if (Player.Elixirs.Count > 0) { Slot2Image = Player.Coins.Texture; }
+
+            if (Player.Instance.Elixirs.Count > 0) { Slot2Image = Player.Instance.Elixirs.Texture; }
             else { Slot2Image = DefaultSlotTextures[1]; }
-            // if (Player.Weapon.isAny == true) { Slot3Image = Player.Weapon.Texture; }
+
+            if (IsAnyWeapon) { Slot3Image = Player.Instance.Weapon.Texture; }
             else { Slot3Image = DefaultSlotTextures[2]; }
-            */
 
-            Slot1Image = DefaultSlotTextures[0];
-            Slot2Image = DefaultSlotTextures[1];
-            Slot3Image = DefaultSlotTextures[2];
-            Slot4Image = DefaultSlotTextures[3];
-            Slot5Image = DefaultSlotTextures[4];
-            Slot6Image = DefaultSlotTextures[5];
-            Slot7Image = DefaultSlotTextures[6];
-            Slot8Image = DefaultSlotTextures[7];
+            if (IsAnyShield) { Slot4Image = Player.Instance.Shield.Texture; }
+            else { Slot4Image = DefaultSlotTextures[3]; }
 
+            if (IsAnyHelmet) { Slot5Image = Player.Instance.Helmet.Texture; }
+            else { Slot5Image = DefaultSlotTextures[4]; }
+
+            if (IsAnyRobe) { Slot6Image = Player.Instance.Robe.Texture; }
+            else { Slot6Image = DefaultSlotTextures[5]; }
+
+            if (IsAnyGloves) { Slot7Image = Player.Instance.Gloves.Texture; }
+            else { Slot7Image = DefaultSlotTextures[6]; }
+
+            if (IsAnyBoots) { Slot8Image = Player.Instance.Boots.Texture; }
+            else { Slot8Image = DefaultSlotTextures[7]; }
         }
 
         public void Draw(SpriteBatch sb)
@@ -210,6 +236,16 @@
             new SystemFunctions.Sprite(this.Slot8Image, this.Slot8BootsArea).DrawBox(sb);
             new SystemFunctions.Sprite(this.InfoBoxTexture, this.InventoryPopUpInfoBox).DrawBox(sb);
             new SystemFunctions.Sprite(this.Font, this.InventoryPopUpInfoBoxText, this.TextPosition).DrawText(sb); 
+        }
+
+        public void CheckItems()
+        {
+            IsAnyWeapon = (Player.Instance.Weapon.ToString() != "NegroniGame.Items.Weapon.Weapon") ? true : false;
+            IsAnyShield = (Player.Instance.Shield.ToString() != "NegroniGame.Items.Armor.Armor") ? true : false;
+            IsAnyHelmet = (Player.Instance.Helmet.ToString() != "NegroniGame.Items.Armor.Armor") ? true : false;
+            IsAnyRobe = (Player.Instance.Robe.ToString() != "NegroniGame.Items.Armor.Armor") ? true : false;
+            IsAnyGloves = (Player.Instance.Gloves.ToString() != "NegroniGame.Items.Armor.Armor") ? true : false;
+            IsAnyBoots = (Player.Instance.Boots.ToString() != "NegroniGame.Items.Armor.Armor") ? true : false;
         }
 
         
@@ -241,7 +277,13 @@
         public string InventoryPopUpInfoBoxText { get; private set; }
         public Texture2D InfoBoxTexture { get; private set; }
         public SpriteFont Font { get; private set; }
-        public Point MousePosition  { get; private set; }
-        
+        public Point MousePosition { get; private set; }
+        public bool IsAnyWeapon { get; private set; }
+        public bool IsAnyShield { get; private set; }
+        public bool IsAnyHelmet { get; private set; }
+        public bool IsAnyRobe { get; private set; }
+        public bool IsAnyGloves { get; private set; }
+        public bool IsAnyBoots { get; private set; }
+       
     }
 }

@@ -76,13 +76,15 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dictionary.cs" />
+    <Compile Include="SystemFunctions.DirectionsEnum.cs" />
     <Compile Include="Interfaces.IBoots.cs" />
+    <Compile Include="Interfaces.IHelmet.cs" />
     <Compile Include="Interfaces.IShield.cs" />
-    <Compile Include="Items.Armor.DragonBoots.cs" />
-    <Compile Include="Items.Armor.DragonHelmet.cs" />
-    <Compile Include="Items.Armor.DragonShield.cs" />
-    <Compile Include="Items.Armor.DragonRobe.cs" />
+    <Compile Include="Items.Armor.MajesticBoots.cs" />
+    <Compile Include="Items.Armor.MajesticHelmet.cs" />
+    <Compile Include="Items.Armor.MajesticShield.cs" />
+    <Compile Include="Items.Armor.MajesticRobe.cs" />
+    <Compile Include="Items.Coins.cs" />
     <Compile Include="Items.ElixirHP.cs" />
     <Compile Include="Interfaces.IInventorySlot.cs" />
     <Compile Include="Interfaces.IArmor.cs" />
@@ -91,8 +93,11 @@
     <Compile Include="Interfaces.IWeapon.cs" />
     <Compile Include="Interfaces.IPlayer.cs" />
     <Compile Include="Interfaces.IItem.cs" />
-    <Compile Include="Items.Armor.DragonGloves.cs" />
+    <Compile Include="Items.Armor.MajesticGloves.cs" />
+    <Compile Include="Items.Weapon.NewbieStaff.cs" />
     <Compile Include="Items.Weapon.MysticStaff.cs" />
+    <Compile Include="Items.Armor.Armor.cs" />
+    <Compile Include="Items.Weapon.Weapon.cs" />
     <Compile Include="Market.cs" />
     <Compile Include="Monsters.Monster.cs" />
     <Compile Include="Player.cs" />
@@ -101,7 +106,6 @@
     <Compile Include="SystemFunctions.Sprite.cs" />
     <Compile Include="Toolbar.SystemMsg.cs" />
     <Compile Include="Monsters.AnimateMobs.cs" />
-    <Compile Include="Inventory.cs" />
     <Compile Include="Screens.StartScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntryPoint.cs" />

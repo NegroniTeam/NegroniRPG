@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NegroniGame.Items.Weapon
+﻿namespace NegroniGame.Items.Weapon
 {
-    class MysticStaff : Interfaces.IWeapon
+    using System;
+    using Microsoft.Xna.Framework.Graphics;
+
+    public class MysticStaff : Weapon, Interfaces.IWeapon
     {
-        public string Name { get; private set; }
-        public int Attack { get; private set; }
+        public MysticStaff(Texture2D texture)
+            : base("Mystic Staff", 50, texture)
+        { }
     }
 }

@@ -1,12 +1,11 @@
 ﻿namespace NegroniGame.Interfaces
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Microsoft.Xna.Framework.Graphics;
 
     public interface IItem
     {
         string Name { get; }
+        Texture2D Texture { get; }
     }
 }

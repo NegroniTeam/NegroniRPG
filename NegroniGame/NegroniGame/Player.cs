@@ -1,7 +1,4 @@
-﻿/*   public sealed class Log    {       private static Log instance;       private Log() {}       public static Log Instance       {           get          {             if (instance == null)             {                lock (instance)                {                   if (instance == null)                      instance = new Log();                }             }             return instance;          }       }    }
- */
-
-namespace NegroniGame
+﻿namespace NegroniGame
 {
     using System;
     using System.Collections.Generic;
@@ -20,14 +17,42 @@ namespace NegroniGame
 
         public class InnerPlayer : Interfaces.IPlayer
         {
-            internal InnerPlayer() { Initialize(); } // empty constructor
+            internal InnerPlayer() { } // empty constructor
 
-            private void Initialize()
+            private const float PLAYER_SPEED = 200f;
+
+            public Items.Coins Coins;
+            public Items.ElixirHP Elixirs;
+            public Items.Weapon.Weapon Weapon;
+            public Items.Armor.Armor Shield;
+            public Items.Armor.Armor Helmet;
+            public Items.Armor.Armor Robe;
+            public Items.Armor.Armor Gloves;
+            public Items.Armor.Armor Boots;
+
+            public void Initialize(List<Texture2D> playerTextures, List<Texture2D> majesticSetTextures,
+                Texture2D coinsTex, Texture2D elixirsTex, Texture2D newbieStaffTex, Texture2D mysticStaffTex)
             {
                 this.Name = "Elvina";
-                this.Delay = 200f;
                 this.Frames = 0;
                 this.PlayerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
+
+                this.PlayerTextures = playerTextures;
+                this.PlayerAnim = playerTextures[3];
+                this.MajesticSetTextures = majesticSetTextures;
+                this.NewbieStaffTex = NewbieStaffTex;
+                this.MysticStaffTex = mysticStaffTex;
+
+
+                // Boots, Gloves, Helmet, Robe, Shield
+                this.Coins = new Items.Coins(100, coinsTex);
+                this.Elixirs = new Items.ElixirHP(2, elixirsTex);
+                this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
+                this.Shield = new Items.Armor.Armor();
+                this.Helmet = new Items.Armor.Armor();
+                this.Robe = new Items.Armor.Armor();
+                this.Gloves = new Items.Armor.Armor();
+                this.Boots = new Items.Armor.Armor();
             }
 
             public Vector2 PlayerPosition; // <- Read the last property info in comment
@@ -83,7 +108,7 @@ namespace NegroniGame
             {
                 this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                if (this.Elapsed >= this.Delay)
+                if (this.Elapsed >= PLAYER_SPEED)
                 {
                     if (this.Frames >= 2)
                     {
@@ -98,22 +123,42 @@ namespace NegroniGame
 
                 // if on frame 0 - top up position 0
                 return new Rectangle(32 * this.Frames, 0, 32, 32);
-            } 
+            }
+
+            public void UpdateInventory()
+            {
+                // When picked up
+
+                // !!!!!!! first check if there is any item of the kind
+                // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
+
+                // !!!!!!! then add
+                // this.Coins = new Items.Coins(100, coinsTex);
+                // this.Elixirs = new Items.ElixirHP(2, elixirsTex);
+                // this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
+                // this.Shield = new Items.Armor.MajesticShield(majesticSetTextures[4]);
+                // this.Helmet = new Items.Armor.MajesticHelmet(majesticSetTextures[2]);
+                // this.Robe = new Items.Armor.MajesticRobe(majesticSetTextures[3]);
+                // this.Gloves = new Items.Armor.MajesticGloves(majesticSetTextures[1]);
+                // this.Boots = new Items.Armor.MajesticBoots(majesticSetTextures[0]);
+            }
 
             public void Draw(SpriteBatch sb)
             {
                 new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
             }
 
-
             public string Name { get; private set; }
-            public List<Texture2D> PlayerTextures { get; set; }
-            public Texture2D PlayerAnim { get; set; }
+            public List<Texture2D> PlayerTextures { get; private set; }
+            public Texture2D PlayerAnim { get; private set; }
+            public List<Texture2D> MajesticSetTextures { get; private set; } // Boots, Gloves, Helmet, Robe, Shield
+            public Texture2D NewbieStaffTex { get; private set; }
+            public Texture2D MysticStaffTex { get; private set; }
             public float Elapsed { get; private set; }
-            public float Delay { get; private set; }
             public int Frames { get; private set; }
             public Rectangle SourcePosition { get; private set; }
             public Rectangle DestinationPosition { get; private set; }
+
             // public Vector2  PlayerPosition { get; private set; } 
         }
     }
