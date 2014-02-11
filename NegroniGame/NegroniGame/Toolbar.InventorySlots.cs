@@ -51,8 +51,6 @@
             MousePosition = new Point(mouseState.X, mouseState.Y);
             CheckItems();
 
-            // Console.WriteLine(Player.Instance.Weapon.ToString());
-
             // Show small pop-up descriptive text box when mouse is over an item in the inventory
             if (this.Slot1CoinsArea.Contains(MousePosition))
             {
@@ -76,7 +74,6 @@
 
             else if (this.Slot3WeaponArea.Contains(MousePosition) && IsAnyWeapon)
             {
-                Console.WriteLine("4");
                 // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {

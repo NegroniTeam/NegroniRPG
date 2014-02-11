@@ -9,7 +9,7 @@ namespace NegroniGame
         /// </summary>
         static void Main()
         {
-            using (Screens.GameScreen game = new Screens.GameScreen())
+            using (Screens.GameScreen game = Screens.GameScreen.Instance)
             {
                 game.Run();
             }

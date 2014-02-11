@@ -15,8 +15,30 @@ namespace NegroniGame.Screens
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class GameScreen : Microsoft.Xna.Framework.Game
+    public sealed class GameScreen : Microsoft.Xna.Framework.Game
     {
+        // Singleton !
+        private static GameScreen instance;
+
+        private GameScreen()
+        {
+            // Windows settings
+            graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferHeight = 500;
+            graphics.PreferredBackBufferWidth = 700;
+            graphics.ApplyChanges(); //Changes the settings that you just applied
+
+            Content.RootDirectory = "Content";
+        }
+
+        public static GameScreen Instance
+        {
+            get            {                if (instance == null)                {
+                    instance = new GameScreen();                }                return instance;
+             }
+        }
+
         #region Declarations
 
         // SINGLETON starts
@@ -28,39 +50,41 @@ namespace NegroniGame.Screens
         private Toolbar.SystemMsg AllMessages;
         private Scenery MainScenery;
         private Toolbar.InventorySlots InventorySlots;
+        private Toolbar.HP HpBar;
 
         private MouseState mouseState;
 
-        private List<List<Texture2D>> monstersTextures;
-        private List<Texture2D> monster1Textures, monster2Textures, monster3Textures, monster4Textures;
-        private List<Texture2D> allSceneryTextures;
-        private List<Texture2D> playerTextures;
-        private List<Texture2D> slotsTextures;
-        private List<Texture2D> majesticSetTextures;
-        private List<Texture2D> negroniHPList;
-        private Texture2D newbieStaffTex, mysticStaffTex;
-        private Texture2D coinsTex;
-        private Texture2D elixirsTex;
-        private Texture2D cursorTex;
-        private Texture2D infoBoxTexture;
-        private Texture2D negroniHP;
+        //private List<List<Texture2D>> monstersTextures;
+        //private List<Texture2D> monster1Textures, monster2Textures, monster3Textures, monster4Textures;
+        //private List<Texture2D> allSceneryTextures;
+        //private List<Texture2D> playerTextures;
+        //private List<Texture2D> slotsTextures;
+        //private List<Texture2D> majesticSetTextures;
+        //private List<Texture2D> negroniHPList;
+        //private List<Texture2D> shotsTextures;
+        //private Texture2D newbieStaffTex, mysticStaffTex;
+        //private Texture2D coinsTex;
+        //private Texture2D elixirsTex;
+        //private Texture2D cursorTex;
+        //private Texture2D infoBoxTexture;
+        //private Texture2D fireballs;
 
         private KeyboardState ks;
         private Vector2 cursorPos = new Vector2();
 
         #endregion
 
-        public GameScreen()
-        {
-            // Windows settings
-            graphics = new GraphicsDeviceManager(this);
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferHeight = 500;
-            graphics.PreferredBackBufferWidth = 700;
-            graphics.ApplyChanges(); //Changes the settings that you just applied
+        //public GameScreen()
+        //{
+        //    // Windows settings
+        //    graphics = new GraphicsDeviceManager(this);
+        //    graphics.IsFullScreen = false;
+        //    graphics.PreferredBackBufferHeight = 500;
+        //    graphics.PreferredBackBufferWidth = 700;
+        //    graphics.ApplyChanges(); //Changes the settings that you just applied
 
-            Content.RootDirectory = "Content";
-        }
+        //    Content.RootDirectory = "Content";
+        //}
 
         protected override void Initialize()
         {
@@ -193,8 +217,14 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/negroniHPempty")
             };
 
-            // negroniHPfull, negroniHP2of3, negroniHP1of3, negroniHPempty
-            negroniHP = Content.Load<Texture2D>("media/negroniHP1of3");
+            HpBar = new Toolbar.HP(negroniHPList);
+
+            // fireballs = Content.Load<Texture2D>("media/sprites/fireballs");
+
+            shotsTextures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/fireballs")
+            };
         }
 
         protected override void Update(GameTime gameTime)
@@ -208,7 +238,7 @@ namespace NegroniGame.Screens
 
             ks = Keyboard.GetState();
 
-            Player.Instance.Move(gameTime, ks);
+            Player.Instance.Update(gameTime, ks);
 
             // Monster.Move(gameTime);
 
@@ -216,10 +246,11 @@ namespace NegroniGame.Screens
             Monsters.MonsterGroup.Instance.Move(gameTime);
 
             InventorySlots.Update(gameTime, mouseState);
+            AllMessages.GetLastMessages();
+            HpBar.Update(gameTime);
 
             Player.Instance.UpdateInventory();
 
-            AllMessages.GetLastMessages();
 
             base.Update(gameTime);
         }
@@ -231,15 +262,15 @@ namespace NegroniGame.Screens
             spriteBatch.Begin();
 
             MainScenery.Draw(spriteBatch);
-            // Monster.Draw(spriteBatch);
+
             Monsters.MonsterGroup.Instance.Draw(spriteBatch);
-
-
             Player.Instance.Draw(spriteBatch);
+
+            // Player.Instance.Shoot(fireballs, spriteBatch, gameTime);
+
             InventorySlots.Draw(spriteBatch);
             AllMessages.DrawText(spriteBatch);
-
-            spriteBatch.Draw(negroniHP, new Rectangle(385, ScreenHeight - 50, 50, 55), Color.White);
+            HpBar.Draw(spriteBatch);
 
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);
 
@@ -252,5 +283,24 @@ namespace NegroniGame.Screens
         public SpriteFont FontInfoBox { get; private set; }
         public static int ScreenWidth { get; private set; }
         public static int ScreenHeight { get; private set; }
+
+        public List<List<Texture2D>> monstersTextures { get; private set; }
+        public List<Texture2D> monster1Textures { get; private set; }
+        public List<Texture2D> monster2Textures { get; private set; }
+        public List<Texture2D> monster3Textures { get; private set; }
+        public List<Texture2D> monster4Textures { get; private set; }
+        public List<Texture2D> allSceneryTextures { get; private set; }
+        public List<Texture2D> playerTextures { get; private set; }
+        public List<Texture2D> slotsTextures { get; private set; }
+        public List<Texture2D> majesticSetTextures { get; private set; }
+        public List<Texture2D> negroniHPList { get; private set; }
+        public List<Texture2D> shotsTextures { get; private set; }
+        public Texture2D newbieStaffTex { get; private set; }
+        public Texture2D mysticStaffTex { get; private set; }
+        public Texture2D coinsTex { get; private set; }
+        public Texture2D elixirsTex { get; private set; }
+        public Texture2D cursorTex { get; private set; }
+        public Texture2D infoBoxTexture { get; private set; }
+        public Texture2D fireballs { get; private set; }
     }
 }

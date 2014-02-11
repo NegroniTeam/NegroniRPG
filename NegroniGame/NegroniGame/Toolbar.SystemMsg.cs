@@ -1,15 +1,27 @@
 ﻿namespace NegroniGame.Toolbar
 {
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Input;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using SystemFunctions;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
 
-    public class SystemMsg
+    public sealed class SystemMsg
     {
+        //// Singleton !
+        //private static SystemMsg instance;
+
+        //private SystemMsg() { }
+
+        //public static SystemMsg Instance
+        //{
+        //    get        //    {        //        if (instance == null)        //        {
+        //            instance = new SystemMsg();        //        }        //        return instance;
+        //     }
+        //}
+
         // constructor gets everything needed from the game class
         public SystemMsg(SpriteFont font)
         {

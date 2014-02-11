@@ -22,7 +22,9 @@
              }
         }
 
-        private const float PLAYER_SPEED = 200f;
+        private const float PLAYER_SPEED = 2f;
+        private const float PLAYER_ANIM_SPEED = 200f;
+        private const float SHOT_REUSE_TIME = 1200f;
 
         public void Initialize(List<Texture2D> playerTextures, List<Texture2D> majesticSetTextures,
             Texture2D coinsTex, Texture2D elixirsTex, Texture2D newbieStaffTex, Texture2D mysticStaffTex)
@@ -36,7 +38,11 @@
             this.MajesticSetTextures = majesticSetTextures;
             this.NewbieStaffTex = NewbieStaffTex;
             this.MysticStaffTex = mysticStaffTex;
+            this.HpPointsInitial = 50;
+            this.HpPointsCurrent = 32;
 
+            this.Direction = SystemFunctions.DirectionsEnum.South;
+            this.Shots = new List<Shots>();
 
             // Boots, Gloves, Helmet, Robe, Shield
             this.Coins = new Items.Coins(100, coinsTex);
@@ -50,6 +56,32 @@
         }
 
         public Vector2 PlayerPosition; // <- Read the last property info in comment
+        public Vector2 ShotPosition; // <- Read the last property info in comment
+
+        public void Update(GameTime gameTime, KeyboardState ks)
+        {
+            Move(gameTime, ks);
+            UpdateInventory();
+
+            this.ElapsedTimeShot += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            // Adds new shot to the list
+            if (ks.IsKeyDown(Keys.Space))
+            {
+                if (this.ElapsedTimeShot >= SHOT_REUSE_TIME)
+                {
+                    Shots.Add(new Shots(this.PlayerPosition, this.Direction));
+                    this.ElapsedTimeShot = 0;
+                }
+            }
+
+            // Updates shots
+            foreach (var Shot in Shots)
+            {
+                Shot.Update(gameTime);
+            }
+
+        }
 
         // playerTextures - right, left, up, down
         public void Move(GameTime gameTime, KeyboardState ks)
@@ -58,36 +90,40 @@
             {
                 if (PlayerPosition.X < Screens.GameScreen.ScreenWidth - 30)
                 {
-                    this.PlayerPosition.X += 2f;
+                    this.PlayerPosition.X += PLAYER_SPEED;
                     this.PlayerAnim = this.PlayerTextures[0];
-                    this.SourcePosition = Animate(gameTime);
+                    this.SourcePosition = AnimatePlayer(gameTime);
+                    this.Direction = SystemFunctions.DirectionsEnum.East;
                 }
             }
             else if (ks.IsKeyDown(Keys.Left))
             {
                 if (PlayerPosition.X > 0)
                 {
-                    this.PlayerPosition.X -= 2f;
+                    this.PlayerPosition.X -= PLAYER_SPEED;
                     this.PlayerAnim = this.PlayerTextures[1];
-                    this.SourcePosition = Animate(gameTime);
+                    this.SourcePosition = AnimatePlayer(gameTime);
+                    this.Direction = SystemFunctions.DirectionsEnum.West;
                 }
             }
             else if (ks.IsKeyDown(Keys.Up))
             {
                 if (PlayerPosition.Y > 0)
                 {
-                    this.PlayerPosition.Y -= 2f;
+                    this.PlayerPosition.Y -= PLAYER_SPEED;
                     this.PlayerAnim = this.PlayerTextures[2];
-                    this.SourcePosition = Animate(gameTime);
+                    this.SourcePosition = AnimatePlayer(gameTime);
+                    this.Direction = SystemFunctions.DirectionsEnum.North;
                 }
             }
             else if (ks.IsKeyDown(Keys.Down))
             {
                 if (PlayerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
                 {
-                    this.PlayerPosition.Y += 2f;
+                    this.PlayerPosition.Y += PLAYER_SPEED;
                     this.PlayerAnim = this.PlayerTextures[3];
-                    this.SourcePosition = Animate(gameTime);
+                    this.SourcePosition = AnimatePlayer(gameTime);
+                    this.Direction = SystemFunctions.DirectionsEnum.South;
                 }
             }
             else
@@ -98,11 +134,11 @@
             this.DestinationPosition = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
         }
 
-        private Rectangle Animate(GameTime gameTime)
+        private Rectangle AnimatePlayer(GameTime gameTime)
         {
-            this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            this.ElapsedTimePlayer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (this.Elapsed >= PLAYER_SPEED)
+            if (this.ElapsedTimePlayer >= PLAYER_ANIM_SPEED)
             {
                 if (this.Frames >= 2)
                 {
@@ -112,7 +148,7 @@
                 {
                     this.Frames++;
                 }
-                this.Elapsed = 0;
+                this.ElapsedTimePlayer = 0;
             }
 
             // if on frame 0 - top up position 0
@@ -137,9 +173,15 @@
             // this.Boots = new Items.Armor.MajesticBoots(this.MajesticSetTextures[0]);
         }
 
+        
         public void Draw(SpriteBatch sb)
         {
             new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
+
+            foreach (var Shot in Shots)
+            {
+                Shot.Draw(sb);
+            }
         }
 
         public string Name { get; private set; }
@@ -148,12 +190,20 @@
         public List<Texture2D> MajesticSetTextures { get; private set; } // Boots, Gloves, Helmet, Robe, Shield
         public Texture2D NewbieStaffTex { get; private set; }
         public Texture2D MysticStaffTex { get; private set; }
-        public float Elapsed { get; private set; }
+        public float ElapsedTimePlayer { get; private set; }
+        public float ElapsedTimeShot { get; private set; }
         public int Frames { get; private set; }
         public Rectangle SourcePosition { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
+        public int HpPointsCurrent { get; private set; }
+        public int HpPointsInitial { get; private set; }
+        public SystemFunctions.DirectionsEnum Direction { get; private set; }
+        public List<Shots> Shots { get; private set; }
 
-        // public Vector2  PlayerPosition { get; private set; }  
+        // public Vector2 ShotStartingPosition { get; private set; }
+        // public Texture2D ShotAnim { get; private set; }
+        // public Vector2 ShotPosition { get; private set; } <- cannot set X and Y if property
+        // public Vector2  PlayerPosition { get; set; }  <- cannot set X and Y if property
 
         public Items.Coins Coins { get; set; }
         public Items.ElixirHP Elixirs { get; set; }

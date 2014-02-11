@@ -35,7 +35,13 @@
         {
             this.Elapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (this.SpawnedMobsNumber < 4 && this.IsCountingDownToSpawn == false)
+            if (this.SpawnedMobsNumber == 0 && this.IsCountingDownToSpawn == false)
+            {
+                // generates time to next spawn
+                this.TimeToNextSpawn = 1;
+                this.IsCountingDownToSpawn = true;
+            }
+            else if (this.SpawnedMobsNumber < 4 && this.IsCountingDownToSpawn == false)
             {
                 // generates time to next spawn
                 this.TimeToNextSpawn = RandomGenerator.Next(5, 10);
@@ -87,8 +93,6 @@
                 this.SpawnedMobsNumber++;
                 this.IsCountingDownToSpawn = false;
                 this.Elapsed = 0;
-
-                Console.WriteLine("added");
             }
         }
 

@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Interfaces.IRobe.cs" />
     <Compile Include="Monsters.MonsterGroup.cs" />
+    <Compile Include="Shots.cs" />
     <Compile Include="SystemFunctions.DirectionsEnum.cs" />
     <Compile Include="Interfaces.IBoots.cs" />
     <Compile Include="Interfaces.IHelmet.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Monsters.Monster.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scenery.cs" />
+    <Compile Include="Toolbar.HP.cs" />
     <Compile Include="Toolbar.InventorySlots.cs" />
     <Compile Include="SystemFunctions.Sprite.cs" />
     <Compile Include="Toolbar.SystemMsg.cs" />

@@ -74,6 +74,7 @@
         public int Frames { get; private set; }
         public Texture2D MonsterAnim { get; private set; }
         public Rectangle SourcePosition { get; private set; }
+
         // public Rectangle DestinationPosition { get; private set; }
 
         // public Vector2  MonsterPosition { get; private set; } <- TO DO
