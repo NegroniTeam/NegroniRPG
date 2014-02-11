@@ -20,6 +20,7 @@
             this.SpawnedMobs = new List<Monster>();
             this.TimeToNextSpawn = 0;
             this.IsCountingDownToSpawn = false;
+            this.ShotTargets = new List<int>();
         }
 
         public static MonsterGroup Instance
@@ -63,6 +64,7 @@
                 while (true)
                 {
                     bool doesIntersectWithMobs = false;
+                    bool doesIntersectWithDrop = false;
 
                     for (int index = 0; index < SpawnedMobs.Count; index++)
                     {
@@ -73,10 +75,20 @@
                         }
                     }
 
+                    for (int index = 0; index < Scenery.Instance.DropList.Count; index++)
+                    {
+                        if (this.SpawnPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
+                        {
+                            doesIntersectWithDrop = true;
+                            break;
+                        }
+                    }
+
                     if (!this.SpawnPosition.Intersects(Player.Instance.DestinationPosition)
                     && !this.SpawnPosition.Intersects(Well.Instance.WellPosition)
                     && !this.SpawnPosition.Intersects(Market.Instance.MarketPosition)
-                    && !doesIntersectWithMobs)
+                    && !doesIntersectWithMobs
+                    && !doesIntersectWithDrop)
                     {
                         break;
                     }
@@ -96,23 +108,37 @@
             }
         }
 
-        //public bool CheckForCollision(int positionX, int positionY)
-        //{
-        //    if (positionX)
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-
-        public void Move(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
+            // updates the position of all monsters
             foreach (var Monster in SpawnedMobs)
             {
                 Monster.Move(gameTime);
             }
+
+            // Checks for dead monsters STARTS //
+            this.IndexesForDeletion = new List<int>();
+
+            foreach (int mobIndex in this.ShotTargets)
+            {
+                SpawnedMobs[mobIndex].HpPointsCurrent -= Player.Instance.WeaponDmg;
+                if (SpawnedMobs[mobIndex].HpPointsCurrent <= 0)
+                {
+                    IndexesForDeletion.Add(mobIndex);
+                }
+            }
+
+            this.ShotTargets = new List<int>();
+
+            foreach (int mobIndex in IndexesForDeletion)
+            {
+                // adds drop on the place of the dead mob
+                Scenery.Instance.AddDrop(new Drop(this.SpawnedMobs[mobIndex].MonsterPosition));
+                this.SpawnedMobsNumber--;
+                this.SpawnedMobs.RemoveAt(mobIndex);
+            }
+
+            // Checks for dead monsters ENDS //
         }
 
         public void Draw(SpriteBatch spritebatch)
@@ -131,5 +157,7 @@
         public sbyte SpawnedMobsNumber { get; private set; }
         public Rectangle SpawnPosition { get; private set; }
         public List<List<Texture2D>> MonsterTextures { get; set; }
+        public List<int> ShotTargets { get; set; }
+        public List<int> IndexesForDeletion { get; private set; }
     }
 }

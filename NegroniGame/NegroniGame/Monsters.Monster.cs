@@ -10,6 +10,8 @@
 
     public class Monster : Interfaces.IMonster
     {
+        private const int HP_POINTS_INITIAL = 100;
+
         public Monster(List<Texture2D> mobTextures, Rectangle spawnPosition)
         {
             this.Delay = 200f;
@@ -17,6 +19,7 @@
             this.MonsterTextures = mobTextures;
             this.MonsterAnim = MonsterTextures[3];
             this.MonsterPosition = spawnPosition;
+            this.HpPointsCurrent = 100;
         }
 
         public void Move(GameTime gameTime)
@@ -74,6 +77,7 @@
         public int Frames { get; private set; }
         public Texture2D MonsterAnim { get; private set; }
         public Rectangle SourcePosition { get; private set; }
+        public int HpPointsCurrent { get; set; }
 
         // public Rectangle DestinationPosition { get; private set; }
 

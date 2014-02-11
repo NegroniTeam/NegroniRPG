@@ -21,15 +21,15 @@
             {
                 this.CurrentHpTexture = this.HpTexture[3];
             }
-            else if (Player.Instance.HpPointsCurrent <= Player.Instance.HpPointsInitial / 3)
+            else if (Player.Instance.HpPointsCurrent <= Player.HP_POINTS_INITIAL / 3)
             {
                 this.CurrentHpTexture = this.HpTexture[2];
             }
-            else if (Player.Instance.HpPointsCurrent <= (Player.Instance.HpPointsInitial / 3) * 2)
+            else if (Player.Instance.HpPointsCurrent <= (Player.HP_POINTS_INITIAL / 3) * 2)
             {
                 this.CurrentHpTexture = this.HpTexture[1];
             }
-            else if (Player.Instance.HpPointsCurrent == Player.Instance.HpPointsInitial)
+            else if (Player.Instance.HpPointsCurrent == Player.HP_POINTS_INITIAL)
             {
                 this.CurrentHpTexture = this.HpTexture[0];
             }

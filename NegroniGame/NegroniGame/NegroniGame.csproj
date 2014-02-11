@@ -76,6 +76,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drop.cs" />
     <Compile Include="Interfaces.IRobe.cs" />
     <Compile Include="Monsters.MonsterGroup.cs" />
     <Compile Include="Shots.cs" />

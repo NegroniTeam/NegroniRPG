@@ -25,6 +25,7 @@
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
         private const float SHOT_REUSE_TIME = 1200f;
+        public const int HP_POINTS_INITIAL = 50;
 
         public void Initialize(List<Texture2D> playerTextures, List<Texture2D> majesticSetTextures,
             Texture2D coinsTex, Texture2D elixirsTex, Texture2D newbieStaffTex, Texture2D mysticStaffTex)
@@ -38,11 +39,12 @@
             this.MajesticSetTextures = majesticSetTextures;
             this.NewbieStaffTex = NewbieStaffTex;
             this.MysticStaffTex = mysticStaffTex;
-            this.HpPointsInitial = 50;
-            this.HpPointsCurrent = 32;
+            this.HpPointsCurrent = 50;
+            this.WeaponDmg = 15;
 
             this.Direction = SystemFunctions.DirectionsEnum.South;
             this.Shots = new List<Shots>();
+            this.IndexesForDeletion = new List<int>();
 
             // Boots, Gloves, Helmet, Robe, Shield
             this.Coins = new Items.Coins(100, coinsTex);
@@ -62,25 +64,7 @@
         {
             Move(gameTime, ks);
             UpdateInventory();
-
-            this.ElapsedTimeShot += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            // Adds new shot to the list
-            if (ks.IsKeyDown(Keys.Space))
-            {
-                if (this.ElapsedTimeShot >= SHOT_REUSE_TIME)
-                {
-                    Shots.Add(new Shots(this.PlayerPosition, this.Direction));
-                    this.ElapsedTimeShot = 0;
-                }
-            }
-
-            // Updates shots
-            foreach (var Shot in Shots)
-            {
-                Shot.Update(gameTime);
-            }
-
+            UpdateShots(gameTime, ks);
         }
 
         // playerTextures - right, left, up, down
@@ -173,6 +157,38 @@
             // this.Boots = new Items.Armor.MajesticBoots(this.MajesticSetTextures[0]);
         }
 
+        public void UpdateShots(GameTime gameTime, KeyboardState ks)
+        {
+            this.ElapsedTimeShot += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            // Adds new shot to the list
+            if (ks.IsKeyDown(Keys.Space))
+            {
+                if (this.ElapsedTimeShot >= SHOT_REUSE_TIME)
+                {
+                    Shots.Add(new Shots(this.PlayerPosition, this.Direction));
+                    this.ElapsedTimeShot = 0;
+                }
+            }
+
+            // Updates shots
+            for (int index = 0; index < Shots.Count; index++)
+            {
+                bool isOutOfRange = Shots[index].Update(gameTime);
+
+                if (isOutOfRange == true)
+                {
+                    this.IndexesForDeletion.Add(index);
+                }
+            }
+
+            foreach (int index in IndexesForDeletion)
+            {
+                Shots.RemoveAt(index);
+            }
+
+            IndexesForDeletion = new List<int>();
+        }
         
         public void Draw(SpriteBatch sb)
         {
@@ -196,10 +212,9 @@
         public Rectangle SourcePosition { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
         public int HpPointsCurrent { get; private set; }
-        public int HpPointsInitial { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
         public List<Shots> Shots { get; private set; }
-
+        public List<int> IndexesForDeletion { get; private set; }
         // public Vector2 ShotStartingPosition { get; private set; }
         // public Texture2D ShotAnim { get; private set; }
         // public Vector2 ShotPosition { get; private set; } <- cannot set X and Y if property
@@ -208,6 +223,7 @@
         public Items.Coins Coins { get; set; }
         public Items.ElixirHP Elixirs { get; set; }
         public Items.Weapon.Weapon Weapon { get; set; }
+        public int WeaponDmg { get; set; }
         public Items.Armor.Armor Shield { get; set; }
         public Items.Armor.Armor Helmet { get; set; }
         public Items.Armor.Armor Robe { get; set; }
