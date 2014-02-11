@@ -6,10 +6,19 @@
 
     public class Well
     {
-        public Well(Texture2D wellGraphic)
+        // Singleton !
+        private static Well instance;
+
+        private Well()
         {
-            this.WellGraphic = wellGraphic;
             this.WellPosition = new Rectangle(300, Screens.GameScreen.ScreenHeight / 2 + 30, 48, 48);
+        }
+
+        public static Well Instance
+        {
+            get            {                if (instance == null)                {
+                    instance = new Well();                }                return instance;
+             }
         }
 
         public void Draw(SpriteBatch sb)
@@ -17,7 +26,7 @@
             new SystemFunctions.Sprite(this.WellGraphic, this.WellPosition).DrawBox(sb);
         }
 
-        public Texture2D WellGraphic { get; private set; }
+        public Texture2D WellGraphic { get; set; }
         public Rectangle WellPosition { get; private set; }
     }
 }

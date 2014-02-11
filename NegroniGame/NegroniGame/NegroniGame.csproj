@@ -61,7 +61,7 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>NegroniGame.EntryPoint</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -76,6 +76,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces.IRobe.cs" />
+    <Compile Include="Monsters.MonsterGroup.cs" />
     <Compile Include="SystemFunctions.DirectionsEnum.cs" />
     <Compile Include="Interfaces.IBoots.cs" />
     <Compile Include="Interfaces.IHelmet.cs" />
@@ -105,7 +107,6 @@
     <Compile Include="Toolbar.InventorySlots.cs" />
     <Compile Include="SystemFunctions.Sprite.cs" />
     <Compile Include="Toolbar.SystemMsg.cs" />
-    <Compile Include="Monsters.AnimateMobs.cs" />
     <Compile Include="Screens.StartScreen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntryPoint.cs" />

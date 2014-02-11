@@ -27,21 +27,23 @@ namespace NegroniGame.Screens
 
         private Toolbar.SystemMsg AllMessages;
         private Scenery MainScenery;
-        private Monsters.Monsters Monster;
         private Toolbar.InventorySlots InventorySlots;
 
         private MouseState mouseState;
 
+        private List<List<Texture2D>> monstersTextures;
+        private List<Texture2D> monster1Textures, monster2Textures, monster3Textures, monster4Textures;
         private List<Texture2D> allSceneryTextures;
         private List<Texture2D> playerTextures;
-        private List<Texture2D> monsterTextures;
         private List<Texture2D> slotsTextures;
         private List<Texture2D> majesticSetTextures;
+        private List<Texture2D> negroniHPList;
         private Texture2D newbieStaffTex, mysticStaffTex;
         private Texture2D coinsTex;
         private Texture2D elixirsTex;
         private Texture2D cursorTex;
         private Texture2D infoBoxTexture;
+        private Texture2D negroniHP;
 
         private KeyboardState ks;
         private Vector2 cursorPos = new Vector2();
@@ -120,7 +122,7 @@ namespace NegroniGame.Screens
 
             Player.Instance.Initialize(playerTextures, majesticSetTextures, coinsTex, elixirsTex, newbieStaffTex, mysticStaffTex);
 
-            monsterTextures = new List<Texture2D>()
+            monster1Textures = new List<Texture2D>()
             {
                 Content.Load<Texture2D>("media/sprites/monster1-right"),
                 Content.Load<Texture2D>("media/sprites/monster1-left"),
@@ -128,7 +130,44 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/monster1-down"),
             };
 
-            Monster = new Monsters.Monsters(monsterTextures);
+            monster2Textures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster2-right"),
+                Content.Load<Texture2D>("media/sprites/monster2-left"),
+                Content.Load<Texture2D>("media/sprites/monster2-up"),
+                Content.Load<Texture2D>("media/sprites/monster2-down"),
+            };
+
+            monster3Textures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster3-right"),
+                Content.Load<Texture2D>("media/sprites/monster3-left"),
+                Content.Load<Texture2D>("media/sprites/monster3-up"),
+                Content.Load<Texture2D>("media/sprites/monster3-down"),
+            };
+
+            monster4Textures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster4-right"),
+                Content.Load<Texture2D>("media/sprites/monster4-left"),
+                Content.Load<Texture2D>("media/sprites/monster4-up"),
+                Content.Load<Texture2D>("media/sprites/monster4-down"),
+            };
+
+            monstersTextures = new List<List<Texture2D>>()
+            {
+                monster1Textures,
+                monster2Textures,
+                monster3Textures,
+                monster4Textures
+            };
+
+            //Monster = new Monsters.Monster(monster1Textures);
+
+            Monsters.MonsterGroup.Instance.MonsterTextures = monstersTextures;
+
+            // Monsters.MonsterGroup.Instance.
+
 
             infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
 
@@ -146,6 +185,16 @@ namespace NegroniGame.Screens
 
             InventorySlots = new Toolbar.InventorySlots(infoBoxTexture, FontInfoBox, slotsTextures);
 
+            negroniHPList = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/negroniHPfull"),
+                Content.Load<Texture2D>("media/negroniHP2of3"),
+                Content.Load<Texture2D>("media/negroniHP1of3"),
+                Content.Load<Texture2D>("media/negroniHPempty")
+            };
+
+            // negroniHPfull, negroniHP2of3, negroniHP1of3, negroniHPempty
+            negroniHP = Content.Load<Texture2D>("media/negroniHP1of3");
         }
 
         protected override void Update(GameTime gameTime)
@@ -160,7 +209,12 @@ namespace NegroniGame.Screens
             ks = Keyboard.GetState();
 
             Player.Instance.Move(gameTime, ks);
-            Monster.Move(gameTime);
+
+            // Monster.Move(gameTime);
+
+            Monsters.MonsterGroup.Instance.SpawnGenerator(gameTime);
+            Monsters.MonsterGroup.Instance.Move(gameTime);
+
             InventorySlots.Update(gameTime, mouseState);
 
             Player.Instance.UpdateInventory();
@@ -177,10 +231,16 @@ namespace NegroniGame.Screens
             spriteBatch.Begin();
 
             MainScenery.Draw(spriteBatch);
-            Monster.Draw(spriteBatch);
+            // Monster.Draw(spriteBatch);
+            Monsters.MonsterGroup.Instance.Draw(spriteBatch);
+
+
             Player.Instance.Draw(spriteBatch);
             InventorySlots.Draw(spriteBatch);
             AllMessages.DrawText(spriteBatch);
+
+            spriteBatch.Draw(negroniHP, new Rectangle(385, ScreenHeight - 50, 50, 55), Color.White);
+
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);
 
             spriteBatch.End();

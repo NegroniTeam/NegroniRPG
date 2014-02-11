@@ -8,158 +8,160 @@
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Graphics;
 
-    public static class Player
+    public sealed class Player : Interfaces.IPlayer
     {
         // Singleton !
-        public static InnerPlayer Instance { get; private set; }
+        private static Player instance;
 
-        static Player() { Instance = new InnerPlayer(); }
+        private Player() {}
 
-        public class InnerPlayer : Interfaces.IPlayer
+        public static Player Instance
         {
-            internal InnerPlayer() { } // empty constructor
+            get            {                if (instance == null)                {
+                    instance = new Player();                }                return instance;
+             }
+        }
 
-            private const float PLAYER_SPEED = 200f;
+        private const float PLAYER_SPEED = 200f;
 
-            public Items.Coins Coins;
-            public Items.ElixirHP Elixirs;
-            public Items.Weapon.Weapon Weapon;
-            public Items.Armor.Armor Shield;
-            public Items.Armor.Armor Helmet;
-            public Items.Armor.Armor Robe;
-            public Items.Armor.Armor Gloves;
-            public Items.Armor.Armor Boots;
+        public void Initialize(List<Texture2D> playerTextures, List<Texture2D> majesticSetTextures,
+            Texture2D coinsTex, Texture2D elixirsTex, Texture2D newbieStaffTex, Texture2D mysticStaffTex)
+        {
+            this.Name = "Elvina";
+            this.Frames = 0;
+            this.PlayerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
 
-            public void Initialize(List<Texture2D> playerTextures, List<Texture2D> majesticSetTextures,
-                Texture2D coinsTex, Texture2D elixirsTex, Texture2D newbieStaffTex, Texture2D mysticStaffTex)
+            this.PlayerTextures = playerTextures;
+            this.PlayerAnim = playerTextures[3];
+            this.MajesticSetTextures = majesticSetTextures;
+            this.NewbieStaffTex = NewbieStaffTex;
+            this.MysticStaffTex = mysticStaffTex;
+
+
+            // Boots, Gloves, Helmet, Robe, Shield
+            this.Coins = new Items.Coins(100, coinsTex);
+            this.Elixirs = new Items.ElixirHP(2, elixirsTex);
+            this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
+            this.Shield = new Items.Armor.Armor();
+            this.Helmet = new Items.Armor.Armor();
+            this.Robe = new Items.Armor.Armor();
+            this.Gloves = new Items.Armor.Armor();
+            this.Boots = new Items.Armor.Armor();
+        }
+
+        public Vector2 PlayerPosition; // <- Read the last property info in comment
+
+        // playerTextures - right, left, up, down
+        public void Move(GameTime gameTime, KeyboardState ks)
+        {
+            if (ks.IsKeyDown(Keys.Right))
             {
-                this.Name = "Elvina";
-                this.Frames = 0;
-                this.PlayerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
-
-                this.PlayerTextures = playerTextures;
-                this.PlayerAnim = playerTextures[3];
-                this.MajesticSetTextures = majesticSetTextures;
-                this.NewbieStaffTex = NewbieStaffTex;
-                this.MysticStaffTex = mysticStaffTex;
-
-
-                // Boots, Gloves, Helmet, Robe, Shield
-                this.Coins = new Items.Coins(100, coinsTex);
-                this.Elixirs = new Items.ElixirHP(2, elixirsTex);
-                this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
-                this.Shield = new Items.Armor.Armor();
-                this.Helmet = new Items.Armor.Armor();
-                this.Robe = new Items.Armor.Armor();
-                this.Gloves = new Items.Armor.Armor();
-                this.Boots = new Items.Armor.Armor();
+                if (PlayerPosition.X < Screens.GameScreen.ScreenWidth - 30)
+                {
+                    this.PlayerPosition.X += 2f;
+                    this.PlayerAnim = this.PlayerTextures[0];
+                    this.SourcePosition = Animate(gameTime);
+                }
+            }
+            else if (ks.IsKeyDown(Keys.Left))
+            {
+                if (PlayerPosition.X > 0)
+                {
+                    this.PlayerPosition.X -= 2f;
+                    this.PlayerAnim = this.PlayerTextures[1];
+                    this.SourcePosition = Animate(gameTime);
+                }
+            }
+            else if (ks.IsKeyDown(Keys.Up))
+            {
+                if (PlayerPosition.Y > 0)
+                {
+                    this.PlayerPosition.Y -= 2f;
+                    this.PlayerAnim = this.PlayerTextures[2];
+                    this.SourcePosition = Animate(gameTime);
+                }
+            }
+            else if (ks.IsKeyDown(Keys.Down))
+            {
+                if (PlayerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
+                {
+                    this.PlayerPosition.Y += 2f;
+                    this.PlayerAnim = this.PlayerTextures[3];
+                    this.SourcePosition = Animate(gameTime);
+                }
+            }
+            else
+            {
+                this.SourcePosition = new Rectangle(64, 0, 32, 32);
             }
 
-            public Vector2 PlayerPosition; // <- Read the last property info in comment
+            this.DestinationPosition = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
+        }
 
-            // playerTextures - right, left, up, down
-            public void Move(GameTime gameTime, KeyboardState ks)
+        private Rectangle Animate(GameTime gameTime)
+        {
+            this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (this.Elapsed >= PLAYER_SPEED)
             {
-                if (ks.IsKeyDown(Keys.Right))
+                if (this.Frames >= 2)
                 {
-                    if (PlayerPosition.X < Screens.GameScreen.ScreenWidth - 30)
-                    {
-                        this.PlayerPosition.X += 2f;
-                        this.PlayerAnim = this.PlayerTextures[0];
-                        this.SourcePosition = Animate(gameTime);
-                    }
-                }
-                else if (ks.IsKeyDown(Keys.Left))
-                {
-                    if (PlayerPosition.X > 0)
-                    {
-                        this.PlayerPosition.X -= 2f;
-                        this.PlayerAnim = this.PlayerTextures[1];
-                        this.SourcePosition = Animate(gameTime);
-                    }
-                }
-                else if (ks.IsKeyDown(Keys.Up))
-                {
-                    if (PlayerPosition.Y > 0)
-                    {
-                        this.PlayerPosition.Y -= 2f;
-                        this.PlayerAnim = this.PlayerTextures[2];
-                        this.SourcePosition = Animate(gameTime);
-                    }
-                }
-                else if (ks.IsKeyDown(Keys.Down))
-                {
-                    if (PlayerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
-                    {
-                        this.PlayerPosition.Y += 2f;
-                        this.PlayerAnim = this.PlayerTextures[3];
-                        this.SourcePosition = Animate(gameTime);
-                    }
+                    this.Frames = 0;
                 }
                 else
                 {
-                    this.SourcePosition = new Rectangle(64, 0, 32, 32);
+                    this.Frames++;
                 }
-
-                this.DestinationPosition = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
+                this.Elapsed = 0;
             }
 
-            private Rectangle Animate(GameTime gameTime)
-            {
-                this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-                if (this.Elapsed >= PLAYER_SPEED)
-                {
-                    if (this.Frames >= 2)
-                    {
-                        this.Frames = 0;
-                    }
-                    else
-                    {
-                        this.Frames++;
-                    }
-                    this.Elapsed = 0;
-                }
-
-                // if on frame 0 - top up position 0
-                return new Rectangle(32 * this.Frames, 0, 32, 32);
-            }
-
-            public void UpdateInventory()
-            {
-                // When picked up
-
-                // !!!!!!! first check if there is any item of the kind
-                // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
-
-                // !!!!!!! then add
-                // this.Coins = new Items.Coins(100, coinsTex);
-                // this.Elixirs = new Items.ElixirHP(2, elixirsTex);
-                // this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
-                // this.Shield = new Items.Armor.MajesticShield(majesticSetTextures[4]);
-                // this.Helmet = new Items.Armor.MajesticHelmet(majesticSetTextures[2]);
-                // this.Robe = new Items.Armor.MajesticRobe(majesticSetTextures[3]);
-                // this.Gloves = new Items.Armor.MajesticGloves(majesticSetTextures[1]);
-                // this.Boots = new Items.Armor.MajesticBoots(majesticSetTextures[0]);
-            }
-
-            public void Draw(SpriteBatch sb)
-            {
-                new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
-            }
-
-            public string Name { get; private set; }
-            public List<Texture2D> PlayerTextures { get; private set; }
-            public Texture2D PlayerAnim { get; private set; }
-            public List<Texture2D> MajesticSetTextures { get; private set; } // Boots, Gloves, Helmet, Robe, Shield
-            public Texture2D NewbieStaffTex { get; private set; }
-            public Texture2D MysticStaffTex { get; private set; }
-            public float Elapsed { get; private set; }
-            public int Frames { get; private set; }
-            public Rectangle SourcePosition { get; private set; }
-            public Rectangle DestinationPosition { get; private set; }
-
-            // public Vector2  PlayerPosition { get; private set; } 
+            // if on frame 0 - top up position 0
+            return new Rectangle(32 * this.Frames, 0, 32, 32);
         }
+
+        public void UpdateInventory()
+        {
+            // When picked up
+
+            // !!!!!!! first check if there is any item of the kind
+            // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
+
+            // !!!!!!! then add
+            // this.Coins = new Items.Coins(100, this.CoinsTex);
+            // this.Elixirs = new Items.ElixirHP(2, this.ElixirsTex);
+            // this.Weapon = new Items.Weapon.NewbieStaff(this.NewbieStaffTex);
+            // this.Shield = new Items.Armor.MajesticShield(this.MajesticSetTextures[4]);
+            // this.Helmet = new Items.Armor.MajesticHelmet(this.MajesticSetTextures[2]);
+            // this.Robe = new Items.Armor.MajesticRobe(this.MajesticSetTextures[3]);
+            // this.Gloves = new Items.Armor.MajesticGloves(this.MajesticSetTextures[1]);
+            // this.Boots = new Items.Armor.MajesticBoots(this.MajesticSetTextures[0]);
+        }
+
+        public void Draw(SpriteBatch sb)
+        {
+            new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
+        }
+
+        public string Name { get; private set; }
+        public List<Texture2D> PlayerTextures { get; private set; }
+        public Texture2D PlayerAnim { get; private set; }
+        public List<Texture2D> MajesticSetTextures { get; private set; } // Boots, Gloves, Helmet, Robe, Shield
+        public Texture2D NewbieStaffTex { get; private set; }
+        public Texture2D MysticStaffTex { get; private set; }
+        public float Elapsed { get; private set; }
+        public int Frames { get; private set; }
+        public Rectangle SourcePosition { get; private set; }
+        public Rectangle DestinationPosition { get; private set; }
+
+        // public Vector2  PlayerPosition { get; private set; }  
+
+        public Items.Coins Coins { get; set; }
+        public Items.ElixirHP Elixirs { get; set; }
+        public Items.Weapon.Weapon Weapon { get; set; }
+        public Items.Armor.Armor Shield { get; set; }
+        public Items.Armor.Armor Helmet { get; set; }
+        public Items.Armor.Armor Robe { get; set; }
+        public Items.Armor.Armor Gloves { get; set; }
+        public Items.Armor.Armor Boots { get; set; }
     }
 }
