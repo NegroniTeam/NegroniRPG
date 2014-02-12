@@ -18,9 +18,14 @@
 
         public static InfoBoxes Instance
         {
-            get            {                if (instance == null)                {
-                    instance = new InfoBoxes();                }                return instance;
-             }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new InfoBoxes();
+                }
+                return instance;
+            }
         }
 
         public void Update(GameTime gameTime, MouseState mouseState)
@@ -86,14 +91,14 @@
 
             new Sprite(Screens.GameScreen.Instance.infoBox1Texture, PlayerInfoRectangle).DrawBox(sb);
             new Sprite(Screens.GameScreen.Instance.FontMessages, this.PlayerInfoText, new Vector2(PlayerInfoRectangle.X + 25, PlayerInfoRectangle.Y + 1)).DrawText(sb);
-            
+
         }
 
         public Rectangle PlayerNameRectangle { get; private set; }
         public Rectangle MarketInfoRectangle { get; private set; }
         public Rectangle WellInfoRectangle { get; private set; }
         public Rectangle PlayerInfoRectangle { get; private set; }
-        
+
         public Point MousePosition { get; private set; }
         public string BoxNameText { get; private set; }
         public string BoxMarketText { get; private set; }

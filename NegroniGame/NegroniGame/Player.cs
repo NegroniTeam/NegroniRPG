@@ -13,13 +13,18 @@
         // Singleton !
         private static Player instance;
 
-        private Player() {}
+        private Player() { }
 
         public static Player Instance
         {
-            get            {                if (instance == null)                {
-                    instance = new Player();                }                return instance;
-             }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Player();
+                }
+                return instance;
+            }
         }
 
         private const float PLAYER_SPEED = 2f;
@@ -40,7 +45,6 @@
             this.NewbieStaffTex = NewbieStaffTex;
             this.MysticStaffTex = mysticStaffTex;
             this.HpPointsCurrent = 32;
-            this.WeaponDmg = 15;
 
             this.Direction = SystemFunctions.DirectionsEnum.South;
             this.Shots = new List<Shots>();
@@ -55,6 +59,8 @@
             this.Robe = new Items.Armor.Armor();
             this.Gloves = new Items.Armor.Armor();
             this.Boots = new Items.Armor.Armor();
+
+            this.WeaponDmg = this.Weapon.Attack;
         }
 
         public Vector2 PlayerPosition; // <- Read the last property info in comment
@@ -65,6 +71,7 @@
             Move(gameTime, ks);
             UpdateInventory(gameTime);
             UpdateShots(gameTime, ks);
+            this.WeaponDmg = this.Weapon.Attack;
         }
 
         // playerTextures - right, left, up, down
@@ -74,7 +81,12 @@
             {
                 if (PlayerPosition.X < Screens.GameScreen.ScreenWidth - 30)
                 {
-                    this.PlayerPosition.X += PLAYER_SPEED;
+                    // checks if the player is going over the well. If so, doesn't move
+                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
+                        && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4)))
+                    {
+                        this.PlayerPosition.X += PLAYER_SPEED;
+                    }
                     this.PlayerAnim = this.PlayerTextures[0];
                     this.SourcePosition = AnimatePlayer(gameTime);
                     this.Direction = SystemFunctions.DirectionsEnum.East;
@@ -84,7 +96,11 @@
             {
                 if (PlayerPosition.X > 0)
                 {
-                    this.PlayerPosition.X -= PLAYER_SPEED;
+                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
+                       && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4)))
+                    {
+                        this.PlayerPosition.X -= PLAYER_SPEED;
+                    }
                     this.PlayerAnim = this.PlayerTextures[1];
                     this.SourcePosition = AnimatePlayer(gameTime);
                     this.Direction = SystemFunctions.DirectionsEnum.West;
@@ -94,7 +110,16 @@
             {
                 if (PlayerPosition.Y > 0)
                 {
-                    this.PlayerPosition.Y -= PLAYER_SPEED;
+                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y - PLAYER_SPEED), 32, 32))
+                       && !((Market.Instance.MarketPosition.Y + 12 >= this.PlayerPosition.Y) && Market.Instance.MarketPosition.Intersects(this.DestinationPosition))
+                       && !((this.PlayerPosition.X + this.DestinationPosition.Width >= Market.Instance.MarketPosition.X && this.PlayerPosition.X <= Market.Instance.MarketPosition.X + 14)
+                                && Market.Instance.MarketPosition.Intersects(this.DestinationPosition))
+                       && !((this.PlayerPosition.X + this.DestinationPosition.Width >= Market.Instance.MarketPosition.X + Market.Instance.MarketPosition.Width - 10
+                                && Market.Instance.MarketPosition.Intersects(this.DestinationPosition)))
+                       )
+                    {
+                        this.PlayerPosition.Y -= PLAYER_SPEED;
+                    }
                     this.PlayerAnim = this.PlayerTextures[2];
                     this.SourcePosition = AnimatePlayer(gameTime);
                     this.Direction = SystemFunctions.DirectionsEnum.North;
@@ -104,7 +129,10 @@
             {
                 if (PlayerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
                 {
-                    this.PlayerPosition.Y += PLAYER_SPEED;
+                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y + PLAYER_SPEED), 32, 32)))
+                    {
+                        this.PlayerPosition.Y += PLAYER_SPEED;
+                    }
                     this.PlayerAnim = this.PlayerTextures[3];
                     this.SourcePosition = AnimatePlayer(gameTime);
                     this.Direction = SystemFunctions.DirectionsEnum.South;
@@ -154,8 +182,7 @@
                     {
                         this.Coins = new Items.Coins(this.Coins.Amount + Scenery.Instance.DropList[index].Amount);
 
-                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>()
-                        { { String.Format(">> You picked up {0} {1}.", Scenery.Instance.DropList[index].Amount, Scenery.Instance.DropList[index].Name), Color.Beige } });
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You picked up {0} {1}.", Scenery.Instance.DropList[index].Amount, Scenery.Instance.DropList[index].Name), Color.Beige } });
 
                         this.IndexesForDeletionDrop.Add(index);
                     }

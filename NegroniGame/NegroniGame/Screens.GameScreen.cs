@@ -34,9 +34,14 @@ namespace NegroniGame.Screens
 
         public static GameScreen Instance
         {
-            get            {                if (instance == null)                {
-                    instance = new GameScreen();                }                return instance;
-             }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new GameScreen();
+                }
+                return instance;
+            }
         }
 
         #region Declarations
@@ -99,7 +104,7 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/Elvina-up"),
                 Content.Load<Texture2D>("media/sprites/Elvina-down"),
             };
-            
+
             majesticSetTextures = new List<Texture2D>()
             {
                 Content.Load<Texture2D>("media/drop/majesticBoots"),
@@ -148,12 +153,30 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/monster4-down"),
             };
 
+            monster5Textures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster5-right"),
+                Content.Load<Texture2D>("media/sprites/monster5-left"),
+                Content.Load<Texture2D>("media/sprites/monster5-up"),
+                Content.Load<Texture2D>("media/sprites/monster5-down"),
+            };
+
+            monster6Textures = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/sprites/monster6-right"),
+                Content.Load<Texture2D>("media/sprites/monster6-left"),
+                Content.Load<Texture2D>("media/sprites/monster6-up"),
+                Content.Load<Texture2D>("media/sprites/monster6-down"),
+            };
+
             monstersTextures = new List<List<Texture2D>>()
             {
                 monster1Textures,
                 monster2Textures,
                 monster3Textures,
-                monster4Textures
+                monster4Textures,
+                monster5Textures,
+                monster6Textures
             };
 
             //Monster = new Monsters.Monster(monster1Textures);
@@ -219,14 +242,14 @@ namespace NegroniGame.Screens
 
             Monsters.MonsterGroup.Instance.SpawnGenerator(gameTime);
             Monsters.MonsterGroup.Instance.Update(gameTime);
-            Scenery.Instance.UpdateScenery(gameTime, mouseState);
 
+            Scenery.Instance.Update(gameTime);
             InventorySlots.Update(gameTime, mouseState);
             Toolbar.SystemMsg.Instance.GetLastMessages();
             HpBar.Update(gameTime, mouseState);
+            InfoBoxes.Instance.Update(gameTime, mouseState);
 
             Player.Instance.UpdateInventory(gameTime);
-
 
             base.Update(gameTime);
         }
@@ -241,10 +264,12 @@ namespace NegroniGame.Screens
 
             Monsters.MonsterGroup.Instance.Draw(spriteBatch);
             Player.Instance.Draw(spriteBatch);
+            Market.Instance.Draw(spriteBatch);
 
             InventorySlots.Draw(spriteBatch);
             Toolbar.SystemMsg.Instance.DrawText(spriteBatch);
             HpBar.Draw(spriteBatch);
+            InfoBoxes.Instance.Draw(spriteBatch);
 
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);
 
@@ -263,6 +288,8 @@ namespace NegroniGame.Screens
         public List<Texture2D> monster2Textures { get; private set; }
         public List<Texture2D> monster3Textures { get; private set; }
         public List<Texture2D> monster4Textures { get; private set; }
+        public List<Texture2D> monster5Textures { get; private set; }
+        public List<Texture2D> monster6Textures { get; private set; }
         public List<Texture2D> allSceneryTextures { get; private set; }
         public List<Texture2D> playerTextures { get; private set; }
         public List<Texture2D> slotsTextures { get; private set; }
