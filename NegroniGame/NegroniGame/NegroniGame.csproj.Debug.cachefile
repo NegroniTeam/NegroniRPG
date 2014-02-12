@@ -1,26 +1,21 @@
 Content\media\background.xnb
+Content\media\Elvina.xnb
+Content\media\toolbar.xnb
+Content\media\cursor1.xnb
 Content\media\sprites\Elvina-down.xnb
 Content\media\sprites\Elvina-left.xnb
 Content\media\sprites\Elvina-right.xnb
 Content\media\sprites\Elvina-up.xnb
-Content\media\Elvina.xnb
-Content\media\toolbar.xnb
-Content\media\cursor1.xnb
+Content\Segoe UI Mono.xnb
 Content\media\sprites\monster1-down.xnb
 Content\media\sprites\monster1-left.xnb
 Content\media\sprites\monster1-right.xnb
 Content\media\sprites\monster1-up.xnb
+Content\media\Well.xnb
 Content\media\infoBox.xnb
 Content\media\drop\coins.xnb
 Content\media\market.xnb
-Content\media\well.xnb
-Content\media\drop\majesticBoots.xnb
-Content\media\drop\majesticGloves.xnb
-Content\media\drop\majesticHelmet.xnb
-Content\media\drop\majesticRobe.xnb
-Content\media\drop\majesticShield.xnb
-Content\media\drop\mysticStaff.xnb
-Content\media\drop\newbieStaff.xnb
+Content\Segoe UI Mono Smaller.xnb
 Content\media\slots\defaultSlot1.xnb
 Content\media\slots\defaultSlot2.xnb
 Content\media\slots\defaultSlot3.xnb
@@ -29,6 +24,13 @@ Content\media\slots\defaultSlot5.xnb
 Content\media\slots\defaultSlot6.xnb
 Content\media\slots\defaultSlot7.xnb
 Content\media\slots\defaultSlot8.xnb
+Content\media\drop\majesticBoots.xnb
+Content\media\drop\majesticGloves.xnb
+Content\media\drop\majesticHelmet.xnb
+Content\media\drop\majesticRobe.xnb
+Content\media\drop\majesticShield.xnb
+Content\media\drop\mysticStaff.xnb
+Content\media\drop\newbieStaff.xnb
 Content\media\drop\elixirs.xnb
 Content\media\negroniHP1of3.xnb
 Content\media\negroniHP2of3.xnb
@@ -48,5 +50,4 @@ Content\media\sprites\monster4-right.xnb
 Content\media\sprites\monster4-up.xnb
 Content\media\sprites\fireballs.xnb
 Content\media\drop\coins2.xnb
-Content\Segoe UI Mono.xnb
-Content\Segoe UI Mono Smaller.xnb
+Content\media\infoBox1.xnb
