@@ -163,6 +163,7 @@ namespace NegroniGame.Screens
             // Monsters.MonsterGroup.Instance.
 
             infoBoxTexture = Content.Load<Texture2D>("media/infoBox");
+            infoBox1Texture = Content.Load<Texture2D>("media/infoBox1");
 
             slotsTextures = new List<Texture2D>()
             {
@@ -218,11 +219,11 @@ namespace NegroniGame.Screens
 
             Monsters.MonsterGroup.Instance.SpawnGenerator(gameTime);
             Monsters.MonsterGroup.Instance.Update(gameTime);
-            Scenery.Instance.UpdateDrop(gameTime);
+            Scenery.Instance.UpdateScenery(gameTime, mouseState);
 
             InventorySlots.Update(gameTime, mouseState);
             Toolbar.SystemMsg.Instance.GetLastMessages();
-            HpBar.Update(gameTime);
+            HpBar.Update(gameTime, mouseState);
 
             Player.Instance.UpdateInventory(gameTime);
 
@@ -275,6 +276,7 @@ namespace NegroniGame.Screens
         public Texture2D elixirsTex { get; private set; }
         public Texture2D cursorTex { get; private set; }
         public Texture2D infoBoxTexture { get; private set; }
+        public Texture2D infoBox1Texture { get; private set; }
         public Texture2D fireballs { get; private set; }
     }
 }
