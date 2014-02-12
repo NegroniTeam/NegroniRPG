@@ -52,7 +52,6 @@ namespace NegroniGame.Screens
         private GraphicsDevice device;
         // SINGLETON ends
 
-        private Toolbar.SystemMsg AllMessages;
         private Toolbar.InventorySlots InventorySlots;
         private Toolbar.HP HpBar;
 
@@ -73,6 +72,8 @@ namespace NegroniGame.Screens
             ScreenHeight = (int)graphics.PreferredBackBufferHeight;
 
             SystemFunctions.Sound.PlayIngameMusic();
+
+            IsPaused = false;
 
             base.Initialize();
         }
@@ -236,20 +237,37 @@ namespace NegroniGame.Screens
 
             ks = Keyboard.GetState();
 
-            Player.Instance.Update(gameTime, ks);
+            if (ks.IsKeyDown(Keys.P))
+            {
+                if (IsPaused == false)
+                {
+                    IsPaused = true;
+                }
+                else
+                {
+                    IsPaused = false;
+                }
+            }
 
-            // Monster.Move(gameTime);
+            if (IsPaused)
+            {
 
-            Monsters.MonsterGroup.Instance.SpawnGenerator(gameTime);
-            Monsters.MonsterGroup.Instance.Update(gameTime);
+            }
+            else
+            {
+                Player.Instance.Update(gameTime, ks);
 
-            Scenery.Instance.Update(gameTime);
-            InventorySlots.Update(gameTime, mouseState);
-            Toolbar.SystemMsg.Instance.GetLastMessages();
-            HpBar.Update(gameTime, mouseState);
-            InfoBoxes.Instance.Update(gameTime, mouseState);
+                Monsters.MonsterGroup.Instance.SpawnGenerator(gameTime);
+                Monsters.MonsterGroup.Instance.Update(gameTime);
 
-            Player.Instance.UpdateInventory(gameTime);
+                Scenery.Instance.Update(gameTime);
+                InventorySlots.Update(gameTime, mouseState);
+                Toolbar.SystemMsg.Instance.GetLastMessages();
+                HpBar.Update(gameTime, mouseState);
+                InfoBoxes.Instance.Update(gameTime, mouseState);
+
+                Player.Instance.UpdateInventory(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -274,10 +292,11 @@ namespace NegroniGame.Screens
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);
 
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
 
+
+        public bool IsPaused { get; set; }
         public SpriteFont FontMessages { get; private set; }
         public SpriteFont FontInfoBox { get; private set; }
         public static int ScreenWidth { get; private set; }

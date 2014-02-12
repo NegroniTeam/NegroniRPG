@@ -71,7 +71,15 @@
             Move(gameTime, ks);
             UpdateInventory(gameTime);
             UpdateShots(gameTime, ks);
-            this.WeaponDmg = this.Weapon.Attack;
+
+            if (this.Weapon.ToString() == "NegroniGame.Items.Weapon.Weapon")
+            {
+                this.WeaponDmg = 5;
+            }
+            else
+            {
+                this.WeaponDmg = this.Weapon.Attack;
+            }
         }
 
         // playerTextures - right, left, up, down

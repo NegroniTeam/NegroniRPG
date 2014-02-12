@@ -44,6 +44,17 @@
             this.Slot8BootsArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 3), InventoryAreaTopPoint + InventorySlotHeight + 1,
                                                     InventorySlotWidth, InventorySlotHeight);
 
+            //default textures for inventory slots
+            Slot1Image = DefaultSlotTextures[0];
+            Slot2Image = DefaultSlotTextures[1];
+            Slot3Image = DefaultSlotTextures[2];
+            Slot4Image = DefaultSlotTextures[3];
+            Slot5Image = DefaultSlotTextures[4];
+            Slot6Image = DefaultSlotTextures[5];
+            Slot7Image = DefaultSlotTextures[6];
+            Slot8Image = DefaultSlotTextures[7];
+
+            this.InventoryPopUpInfoBoxText = "";
         }
 
         public void Update(GameTime gameTime, MouseState mouseState)
