@@ -70,8 +70,10 @@
 
             if (this.ShotDestPosition.Contains(EndPoint) // The shot is removed if the shot reaches the end point of the range
                 || this.ShotDestPosition.Intersects(Well.Instance.WellPosition) // The shot is removed if the shot reaches object on the map
-                || this.ShotDestPosition.Intersects(Market.Instance.MarketPosition))
+                || this.ShotDestPosition.Intersects(Market.Instance.MarketPosition)
+                || this.ShotDestPosition.Y > Screens.GameScreen.ScreenHeight - 135)
             {
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> You missed the target.", Color.Pink } });
                 return true;
             }
 
@@ -81,6 +83,8 @@
                 if (this.ShotDestPosition.Intersects(Monsters.MonsterGroup.Instance.SpawnedMobs[index].MonsterPosition))
                 {
                     Monsters.MonsterGroup.Instance.ShotTargets.Add(index);
+
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You hit mob with {0} dmg.", Player.Instance.WeaponDmg), Color.Yellow } });
                     return true;
                 }
             }

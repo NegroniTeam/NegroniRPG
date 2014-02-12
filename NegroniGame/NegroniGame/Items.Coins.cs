@@ -5,16 +5,10 @@
 
     public struct Coins
     {
-        public Coins(int amount)
-            : this()
+        public Coins(int amount) : this()
         {
             this.Amount = amount;
-        }
-
-        public Coins(int amount, Texture2D texture)
-            : this(amount)
-        {
-            this.Texture = texture;
+            this.Texture = Screens.GameScreen.Instance.coinsTex;
         }
 
         public int Amount { get; private set; }

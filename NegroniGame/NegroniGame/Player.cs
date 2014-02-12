@@ -39,15 +39,15 @@
             this.MajesticSetTextures = majesticSetTextures;
             this.NewbieStaffTex = NewbieStaffTex;
             this.MysticStaffTex = mysticStaffTex;
-            this.HpPointsCurrent = 50;
+            this.HpPointsCurrent = 32;
             this.WeaponDmg = 15;
 
             this.Direction = SystemFunctions.DirectionsEnum.South;
             this.Shots = new List<Shots>();
-            this.IndexesForDeletion = new List<int>();
+            this.IndexesForDeletionShots = new List<int>();
 
             // Boots, Gloves, Helmet, Robe, Shield
-            this.Coins = new Items.Coins(100, coinsTex);
+            this.Coins = new Items.Coins(100);
             this.Elixirs = new Items.ElixirHP(2, elixirsTex);
             this.Weapon = new Items.Weapon.NewbieStaff(newbieStaffTex);
             this.Shield = new Items.Armor.Armor();
@@ -63,7 +63,7 @@
         public void Update(GameTime gameTime, KeyboardState ks)
         {
             Move(gameTime, ks);
-            UpdateInventory();
+            UpdateInventory(gameTime);
             UpdateShots(gameTime, ks);
         }
 
@@ -139,8 +139,38 @@
             return new Rectangle(32 * this.Frames, 0, 32, 32);
         }
 
-        public void UpdateInventory()
+        public void UpdateInventory(GameTime gameTime)
         {
+            this.ElapsedTimeLastMsgElixir += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            this.IndexesForDeletionDrop = new List<int>();
+
+            // picks up drop
+            for (int index = 0; index < Scenery.Instance.DropList.Count; index++)
+            {
+                if (this.DestinationPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
+                {
+                    if (Scenery.Instance.DropList[index].Name == "Coins")
+                    {
+                        this.Coins = new Items.Coins(this.Coins.Amount + Scenery.Instance.DropList[index].Amount);
+
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>()
+                        { { String.Format(">> You picked up {0} {1}.", Scenery.Instance.DropList[index].Amount, Scenery.Instance.DropList[index].Name), Color.Beige } });
+
+                        this.IndexesForDeletionDrop.Add(index);
+                    }
+                }
+            }
+
+            // deletes picked up drop
+            foreach (int index in IndexesForDeletionDrop)
+            {
+                Scenery.Instance.DropList.RemoveAt(index);
+            }
+
+            // updates elixir reuse time
+            this.Elixirs.Update(gameTime);
+
             // When picked up
 
             // !!!!!!! first check if there is any item of the kind
@@ -178,18 +208,44 @@
 
                 if (isOutOfRange == true)
                 {
-                    this.IndexesForDeletion.Add(index);
+                    this.IndexesForDeletionShots.Add(index);
                 }
             }
 
-            foreach (int index in IndexesForDeletion)
+            foreach (int index in IndexesForDeletionShots)
             {
                 Shots.RemoveAt(index);
             }
 
-            IndexesForDeletion = new List<int>();
+            IndexesForDeletionShots = new List<int>();
         }
-        
+
+        public void UseElixir(GameTime gameTime)
+        {
+
+            if (this.Elixirs.ElapsedTimeElixir >= Items.ElixirHP.REUSE_TIME)
+            {
+                // TO DO: pop up box ask if sure before drinking the elixir
+                int restoredPoints = ((Player.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent) >= Items.ElixirHP.RECOVERY_AMOUNT) ? Items.ElixirHP.RECOVERY_AMOUNT : Player.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent;
+
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You restored {0} HP.", restoredPoints), Color.Aquamarine } });
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> 1 HP Elixir destroyed."), Color.Red } });
+
+                Player.Instance.HpPointsCurrent += restoredPoints;
+                this.Elixirs.DestroyElixir();
+                this.ElapsedTimeLastMsgElixir = 0;
+            }
+            else
+            {
+                if (this.ElapsedTimeLastMsgElixir >= 1)
+                {
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() {
+                        { String.Format(">> {0} seconds to reuse Elixir.", (int)Items.ElixirHP.REUSE_TIME - (int)this.Elixirs.ElapsedTimeElixir), Color.Aquamarine } });
+                    this.ElapsedTimeLastMsgElixir = 0;
+                }
+            }
+        }
+
         public void Draw(SpriteBatch sb)
         {
             new SystemFunctions.Sprite(this.PlayerAnim, this.DestinationPosition, this.SourcePosition).DrawBoxAnim(sb);
@@ -208,13 +264,16 @@
         public Texture2D MysticStaffTex { get; private set; }
         public float ElapsedTimePlayer { get; private set; }
         public float ElapsedTimeShot { get; private set; }
+        public float ElapsedTimeLastMsgElixir { get; private set; }
         public int Frames { get; private set; }
         public Rectangle SourcePosition { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
         public int HpPointsCurrent { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
         public List<Shots> Shots { get; private set; }
-        public List<int> IndexesForDeletion { get; private set; }
+        public List<int> IndexesForDeletionShots { get; private set; }
+        public List<int> IndexesForDeletionDrop { get; private set; }
+
         // public Vector2 ShotStartingPosition { get; private set; }
         // public Texture2D ShotAnim { get; private set; }
         // public Vector2 ShotPosition { get; private set; } <- cannot set X and Y if property

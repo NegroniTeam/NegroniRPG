@@ -56,7 +56,7 @@
             {
                 this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
 
-                this.InventoryPopUpInfoBoxText = String.Format("Coins" + "\n" + "{0}", Player.Instance.Coins.Amount);
+                this.InventoryPopUpInfoBoxText = String.Format("Coins" + "\n" + "{0}", Player.Instance.Coins.Amount); ////////////////
                 this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                 this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
@@ -64,12 +64,20 @@
 
             else if (this.Slot2ElixirsArea.Contains(MousePosition) && Player.Instance.Elixirs.Count > 0)
             {
-                this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
+                // Checks if left mouse button is clicked and drinks the elixir
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    Player.Instance.UseElixir(gameTime);
+                }
+                else
+                {
+                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
 
-                this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, Player.Instance.Elixirs.RecoveryAmount);
-                this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
+                    this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, Items.ElixirHP.RECOVERY_AMOUNT);
+                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
-                this.TextPosition = new Vector2(MousePosition.X + 25 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
+                    this.TextPosition = new Vector2(MousePosition.X + 25 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
+                }
             }
 
             else if (this.Slot3WeaponArea.Contains(MousePosition) && IsAnyWeapon)
@@ -78,6 +86,8 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Weapon.Name), Color.Red } });
                     Player.Instance.Weapon = new Items.Weapon.Weapon();
                 }
                 else
@@ -97,6 +107,7 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Shield.Name), Color.Red } });
                     Player.Instance.Shield = new Items.Armor.Armor();
                 }
                 else
@@ -116,6 +127,7 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Helmet.Name), Color.Red } });
                     Player.Instance.Helmet = new Items.Armor.Armor();
                 }
                 else
@@ -135,6 +147,7 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Robe.Name), Color.Red } });
                     Player.Instance.Robe = new Items.Armor.Armor();
                 }
                 else
@@ -154,6 +167,7 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Gloves.Name), Color.Red } });
                     Player.Instance.Gloves = new Items.Armor.Armor();
                 }
                 else
@@ -173,6 +187,7 @@
                 if (mouseState.RightButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before destroys the item
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", Player.Instance.Boots.Name), Color.Red } });
                     Player.Instance.Boots = new Items.Armor.Armor();
                 }
                 else

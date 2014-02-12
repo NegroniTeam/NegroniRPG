@@ -76,8 +76,6 @@ namespace NegroniGame.Screens
         {
             FontMessages = Content.Load<SpriteFont>("Segoe UI Mono");
 
-            AllMessages = new Toolbar.SystemMsg(FontMessages);
-
             FontInfoBox = Content.Load<SpriteFont>("Segoe UI Mono Smaller");
 
             cursorTex = Content.Load<Texture2D>("media/cursor1"); // cursor
@@ -223,10 +221,10 @@ namespace NegroniGame.Screens
             Scenery.Instance.UpdateDrop(gameTime);
 
             InventorySlots.Update(gameTime, mouseState);
-            AllMessages.GetLastMessages();
+            Toolbar.SystemMsg.Instance.GetLastMessages();
             HpBar.Update(gameTime);
 
-            Player.Instance.UpdateInventory();
+            Player.Instance.UpdateInventory(gameTime);
 
 
             base.Update(gameTime);
@@ -244,7 +242,7 @@ namespace NegroniGame.Screens
             Player.Instance.Draw(spriteBatch);
 
             InventorySlots.Draw(spriteBatch);
-            AllMessages.DrawText(spriteBatch);
+            Toolbar.SystemMsg.Instance.DrawText(spriteBatch);
             HpBar.Draw(spriteBatch);
 
             spriteBatch.Draw(cursorTex, cursorPos, Color.White);

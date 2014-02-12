@@ -36,31 +36,33 @@
         {
             this.Elapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            // generates time to next spawn
             if (this.SpawnedMobsNumber == 0 && this.IsCountingDownToSpawn == false)
             {
-                // generates time to next spawn
+                this.Elapsed = 0;
                 this.TimeToNextSpawn = 1;
                 this.IsCountingDownToSpawn = true;
             }
             else if (this.SpawnedMobsNumber < 4 && this.IsCountingDownToSpawn == false)
             {
-                // generates time to next spawn
-                this.TimeToNextSpawn = RandomGenerator.Next(5, 10);
+                this.Elapsed = 0;
+                this.TimeToNextSpawn = RandomGenerator.Next(5, 15);
                 this.IsCountingDownToSpawn = true;
             }
+
+            // generates spawn position
             if (this.Elapsed >= this.TimeToNextSpawn && this.IsCountingDownToSpawn == true)
             {
                 // generates picture of the mob
                 sbyte numberOfTexture = (sbyte)RandomGenerator.Next(0, 4);
 
-                // excludes positions
 
                 // generates position
                 int positionX = RandomGenerator.Next(1, Screens.GameScreen.ScreenWidth - 30);
                 int positionY = RandomGenerator.Next(1, Screens.GameScreen.ScreenHeight - 170);
                 this.SpawnPosition = new Rectangle(positionX, positionY, 32, 32);
 
-                // checks if the generated position is OK
+                // checks if the generated position is OK and excludes positions
                 while (true)
                 {
                     bool doesIntersectWithMobs = false;
@@ -104,7 +106,6 @@
                 // returns values of variables
                 this.SpawnedMobsNumber++;
                 this.IsCountingDownToSpawn = false;
-                this.Elapsed = 0;
             }
         }
 
@@ -132,8 +133,13 @@
 
             foreach (int mobIndex in IndexesForDeletion)
             {
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> Mob died.", Color.Cyan } });
+
                 // adds drop on the place of the dead mob
-                Scenery.Instance.AddDrop(new Drop(this.SpawnedMobs[mobIndex].MonsterPosition));
+                Drop currentDrop = new Drop(this.SpawnedMobs[mobIndex].MonsterPosition);
+                Scenery.Instance.AddDrop(currentDrop);
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> Mob drops {0} {1}.", currentDrop.Amount, currentDrop.Name), Color.SpringGreen } });
+
                 this.SpawnedMobsNumber--;
                 this.SpawnedMobs.RemoveAt(mobIndex);
             }
