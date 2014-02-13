@@ -30,8 +30,6 @@ Content\media\slots\defaultSlot6.xnb
 Content\media\slots\defaultSlot7.xnb
 Content\media\slots\defaultSlot8.xnb
 Content\media\drop\elixirs.xnb
-Content\Segoe UI Mono.xnb
-Content\Segoe UI Mono Smaller.xnb
 Content\media\negroniHP1of3.xnb
 Content\media\negroniHP2of3.xnb
 Content\media\negroniHPempty.xnb
@@ -51,6 +49,8 @@ Content\media\sprites\monster4-up.xnb
 Content\media\sprites\fireballs.xnb
 Content\media\drop\coins2.xnb
 Content\media\infoBox1.xnb
+Content\Segoe UI Mono.xnb
+Content\Segoe UI Mono Smaller.xnb
 Content\media\sprites\monster5-down.xnb
 Content\media\sprites\monster5-left.xnb
 Content\media\sprites\monster5-right.xnb
