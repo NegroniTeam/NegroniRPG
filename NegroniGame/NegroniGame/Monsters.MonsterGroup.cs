@@ -29,7 +29,7 @@
              }
         }
 
-        public int number;
+        public const int MAX_SPAWNED_MOBS = 30;
 
         // Player.Instance.PlayerPosition
         public void SpawnGenerator(GameTime gameTime)
@@ -43,7 +43,7 @@
                 this.TimeToNextSpawn = 1;
                 this.IsCountingDownToSpawn = true;
             }
-            else if (this.SpawnedMobsNumber < 4 && this.IsCountingDownToSpawn == false)
+            else if (this.SpawnedMobsNumber < MAX_SPAWNED_MOBS && this.IsCountingDownToSpawn == false)
             {
                 this.Elapsed = 0;
                 this.TimeToNextSpawn = RandomGenerator.Next(5, 15);
