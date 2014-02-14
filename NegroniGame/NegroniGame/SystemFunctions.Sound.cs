@@ -11,6 +11,10 @@
         {
             inGameMusic.PlayLooping();
         }
+        public static void StopIngameMusic()
+        {
+            inGameMusic.Stop();
+        }
 
         //public static bool isPlayingMusic = true;
         //public static bool isPlayingMusicMenu = true;

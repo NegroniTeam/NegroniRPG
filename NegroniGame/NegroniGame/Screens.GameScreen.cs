@@ -242,10 +242,12 @@ namespace NegroniGame.Screens
                 if (IsPaused == false)
                 {
                     IsPaused = true;
+                    SystemFunctions.Sound.StopIngameMusic();
                 }
                 else
                 {
                     IsPaused = false;
+                    SystemFunctions.Sound.PlayIngameMusic();
                 }
             }
 
