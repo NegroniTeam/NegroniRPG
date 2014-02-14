@@ -91,7 +91,8 @@
                 {
                     // checks if the player is going over the well. If so, doesn't move
                     if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
-                        && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4)))
+                        && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
+                        && !IntersectsWithMobs(new Rectangle((int)(this.PlayerPosition.X + PLAYER_SPEED), (int)(this.PlayerPosition.Y), 32, 32)))
                     {
                         this.PlayerPosition.X += PLAYER_SPEED;
                     }
@@ -105,7 +106,8 @@
                 if (PlayerPosition.X > 0)
                 {
                     if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
-                       && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4)))
+                       && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y + 28), 4, 4))
+                       && !IntersectsWithMobs(new Rectangle((int)(this.PlayerPosition.X - PLAYER_SPEED), (int)(this.PlayerPosition.Y), 32, 32)))
                     {
                         this.PlayerPosition.X -= PLAYER_SPEED;
                     }
@@ -124,7 +126,7 @@
                                 && Market.Instance.MarketPosition.Intersects(this.DestinationPosition))
                        && !((this.PlayerPosition.X + this.DestinationPosition.Width >= Market.Instance.MarketPosition.X + Market.Instance.MarketPosition.Width - 10
                                 && Market.Instance.MarketPosition.Intersects(this.DestinationPosition)))
-                       )
+                       && !IntersectsWithMobs(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y - PLAYER_SPEED), 32, 32)))
                     {
                         this.PlayerPosition.Y -= PLAYER_SPEED;
                     }
@@ -137,7 +139,8 @@
             {
                 if (PlayerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
                 {
-                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y + PLAYER_SPEED), 32, 32)))
+                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y + PLAYER_SPEED), 32, 32))
+                       && !IntersectsWithMobs(new Rectangle((int)(this.PlayerPosition.X), (int)(this.PlayerPosition.Y + PLAYER_SPEED), 32, 32)))
                     {
                         this.PlayerPosition.Y += PLAYER_SPEED;
                     }
@@ -152,6 +155,19 @@
             }
 
             this.DestinationPosition = new Rectangle((int)this.PlayerPosition.X, (int)this.PlayerPosition.Y, 32, 32);
+        }
+
+        private bool IntersectsWithMobs(Rectangle newPosition)
+        {
+            foreach (Monsters.Monster monster in Monsters.MonsterGroup.Instance.SpawnedMobs)
+            {
+                if (monster.DestinationPosition.Intersects(newPosition))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private Rectangle AnimatePlayer(GameTime gameTime)
