@@ -83,7 +83,7 @@
                 {
                     Monsters.MonstersHandler.Instance.MobsHit.Add(index);
 
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You hit mob with {0} dmg.", Player.Instance.WeaponDmg), Color.Yellow } });
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You did {0} dmg to {1}.", Player.Instance.WeaponDmg, Monsters.MonstersHandler.Instance.SpawnedMobs[index].Name), Color.Yellow } });
                     return true;
                 }
             }
@@ -94,7 +94,7 @@
         private Rectangle AnimateShot(GameTime gameTime)
         {
             this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
+            
             if (this.Elapsed >= SHOT_ANIM_SPEED)
             {
                 if (this.Frames >= 7)

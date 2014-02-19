@@ -25,7 +25,7 @@
         private float elapsedTimeChangeAnim;
         private float elapsedTimeChangePos;
         private bool isInCombatState = false;
-        private string changeDirection = "";
+        private string changeDirection;
 
         public Monster(int numberOfMob, Rectangle initialMonsterPos, string name, List<Texture2D> mobTextures, int initialHpPoints)
         {
@@ -65,11 +65,11 @@
             }
             else
             {
-                MoveCombat(gameTime);
+                MoveAggro(gameTime);
             }
         }
 
-        private void MoveCombat(GameTime gameTime)
+        private void MoveAggro(GameTime gameTime)
         {
             string direction = Math.Abs(Player.Instance.DestinationPosition.X - this.DestinationPosition.X)
                                         > Math.Abs(Player.Instance.DestinationPosition.Y - this.DestinationPosition.Y)
@@ -78,6 +78,7 @@
             if (this.changeDirection != "")
             {
                 direction = this.changeDirection;
+                this.changeDirection = "";
             }
 
             if (direction == "horizontal")
@@ -91,14 +92,13 @@
                         this.monsterPosition.X += MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[2]; // moves right
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
                     }
                     else if (IntersectsWithObstaclesNoPlayer(newPosition))
                     {
                         this.changeDirection = "vertical";
                     }
                 }
-                else
+                else if (this.monsterPosition.X > Player.Instance.CenterOfPlayer.X)
                 {
                     Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
@@ -107,7 +107,6 @@
                         this.monsterPosition.X -= MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[1]; // moves left
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
                     }
                     else if (IntersectsWithObstaclesNoPlayer(newPosition))
                     {
@@ -127,14 +126,13 @@
                         this.monsterPosition.Y += MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[0]; // moves down
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
                     }
                     else if (IntersectsWithObstaclesNoPlayer(newPosition))
                     {
                         this.changeDirection = "horizontal";
                     }
                 }
-                else
+                else if (this.monsterPosition.Y > Player.Instance.CenterOfPlayer.Y)
                 {
                     Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
 
@@ -143,7 +141,6 @@
                         this.monsterPosition.Y -= MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[3]; // moves up
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
                     }
                     else if (IntersectsWithObstaclesNoPlayer(newPosition))
                     {

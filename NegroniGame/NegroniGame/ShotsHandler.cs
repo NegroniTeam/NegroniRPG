@@ -10,7 +10,7 @@
         // Singleton !
         private static ShotsHandler instance;
 
-        private const float SHOT_REUSE_TIME = 1200f;
+        private const float SHOT_REUSE_TIME = 1000f;
         private float elapsedTimeShot;
         private List<int> indexesForDeletionShots = new List<int>();
 

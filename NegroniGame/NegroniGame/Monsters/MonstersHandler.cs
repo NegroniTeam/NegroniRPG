@@ -10,7 +10,7 @@
         // Singleton !
         private static MonstersHandler instance;
 
-        public const int MAX_SPAWNED_MOBS = 20; // 4
+        public const int MAX_SPAWNED_MOBS = 4; // 4
 
         private readonly Random randomGenerator = new Random();
         private bool isCountingDownToSpawn = false;
@@ -37,8 +37,8 @@
             }
         }
 
-        public List<Monster> SpawnedMobs { get; private set; }
         public sbyte SpawnedMobsNumber { get; private set; }
+        public List<Monster> SpawnedMobs { get; private set; }
         public List<int> MobsHit { get; set; }
 
         public void Update(GameTime gameTime)
@@ -46,7 +46,7 @@
             // updates the position of all monsters
             foreach (var monster in SpawnedMobs)
             {
-                monster.Move(gameTime);
+                monster.Update(gameTime);
             }
 
             // generates new mobs
@@ -75,7 +75,7 @@
                 Scenery.Instance.AddDrop(currentDrop);
 
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() {
-                            { String.Format(">> {0} drops {1} {2}.", this.SpawnedMobs[mobIndex].Name, currentDrop.Amount, currentDrop.Name), Color.SpringGreen } });
+                            { String.Format(">> {0} droped {1} {2}.", this.SpawnedMobs[mobIndex].Name, currentDrop.Amount, currentDrop.Name), Color.SpringGreen } });
 
                 this.SpawnedMobsNumber--;
                 this.SpawnedMobs.RemoveAt(mobIndex);
@@ -84,11 +84,11 @@
             // Checks for dead monsters ENDS //
         }
 
-        public void Draw()
+        public void Draw(GameTime gameTime)
         {
             foreach (var monster in SpawnedMobs)
             {
-                monster.Draw();
+                monster.Draw(gameTime);
             }
         }
 
@@ -113,7 +113,61 @@
             // creates new mob
             if (this.elapsedTimeToNextSpawn >= this.timeToNextSpawn && this.isCountingDownToSpawn == true)
             {
-                this.SpawnedMobs.Add(new Monster(this.SpawnedMobsNumber));
+                // generates position
+                int positionX = randomGenerator.Next(1, Screens.GameScreen.ScreenWidth - 30);
+                int positionY = randomGenerator.Next(1, Screens.GameScreen.ScreenHeight - 170);
+                Rectangle monsterPosition = new Rectangle(positionX, positionY, 32, 32);
+
+                // checks if the generated position is OK and excludes positions
+                while (true)
+                {
+                    bool doesIntersectWithMobs = false;
+                    bool doesIntersectWithDrop = false;
+
+                    for (int index = 0; index < Monsters.MonstersHandler.Instance.SpawnedMobs.Count; index++)
+                    {
+                        if (monsterPosition.Intersects(this.SpawnedMobs[index].DestinationPosition))
+                        {
+                            doesIntersectWithMobs = true;
+                            break;
+                        }
+                    }
+
+                    for (int index = 0; index < Scenery.Instance.DropList.Count; index++)
+                    {
+                        if (monsterPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
+                        {
+                            doesIntersectWithDrop = true;
+                            break;
+                        }
+                    }
+
+                    if (!monsterPosition.Intersects(Player.Instance.DestinationPosition)
+                    && !monsterPosition.Intersects(Well.Instance.WellPosition)
+                    && !monsterPosition.Intersects(Market.Instance.MarketPosition)
+                    && !doesIntersectWithMobs
+                    && !doesIntersectWithDrop)
+                    {
+                        break;
+                    }
+
+                    positionX = randomGenerator.Next(1, Screens.GameScreen.ScreenWidth - 30);
+                    positionY = randomGenerator.Next(1, Screens.GameScreen.ScreenHeight - 170);
+                    monsterPosition = new Rectangle(positionX, positionY, 32, 32);
+                }
+
+                // generates which of the mobs will spawn
+                sbyte randomMobType = (sbyte)randomGenerator.Next(0, 6);
+
+                switch (randomMobType)
+                {
+                    case 0: this.SpawnedMobs.Add(new RedDragon(this.SpawnedMobsNumber, monsterPosition)); break;
+                    case 1: this.SpawnedMobs.Add(new Viking(this.SpawnedMobsNumber, monsterPosition)); break;
+                    case 2: this.SpawnedMobs.Add(new GreenOne(this.SpawnedMobsNumber, monsterPosition)); break;
+                    case 3: this.SpawnedMobs.Add(new Bug(this.SpawnedMobsNumber, monsterPosition)); break;
+                    case 4: this.SpawnedMobs.Add(new Genie(this.SpawnedMobsNumber, monsterPosition)); break;
+                    case 5: this.SpawnedMobs.Add(new PurpleBat(this.SpawnedMobsNumber, monsterPosition)); break;
+                }
 
                 // returns values of variables
                 this.SpawnedMobsNumber++;

@@ -17,10 +17,14 @@
         private const float PLAYER_ANIM_SPEED = 200f;
 
         private Vector2 playerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
+        
         private readonly List<Texture2D> playerTextures = Screens.GameScreen.Instance.PlayerTextures;
         private Texture2D playerAnim = Screens.GameScreen.Instance.PlayerTextures[3];
+
         private Rectangle animSourcePosition;
+
         private float elapsedTimePlayerAnim;
+
         private int frames = 0;
 
         private Player() { }
@@ -39,6 +43,7 @@
 
         public string Name { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
+        public Vector2 CenterOfPlayer { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
         public int HpPointsCurrent { get; private set; }
         public int WeaponDmg { get; private set; }
@@ -58,6 +63,9 @@
             this.HpPointsCurrent = HP_POINTS_INITIAL;
             this.Direction = SystemFunctions.DirectionsEnum.South;
 
+            // 16 = half of texture width
+            this.CenterOfPlayer = new Vector2(this.playerPosition.X + 16, this.playerPosition.Y + 16);
+
             this.Coins = new Items.Coins(100);
             this.Elixirs = new Items.ElixirsHP(2);
             this.Weapon = new Items.Weapon.NewbieStaff();
@@ -69,9 +77,11 @@
         public void Update(GameTime gameTime, KeyboardState ks)
         {
             Move(gameTime, ks);
+            this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
+
             UpdateItems(gameTime);
 
-            if (this.Weapon == null) //.ToString() == "NegroniGame.Items.Weapon.Weapon"
+            if (this.Weapon == null)
             {
                 this.WeaponDmg = 5;
             }

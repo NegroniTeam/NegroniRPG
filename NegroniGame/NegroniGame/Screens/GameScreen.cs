@@ -121,7 +121,7 @@ namespace NegroniGame.Screens
             MysticStaffTexture = Content.Load<Texture2D>("media/drop/mysticStaff");
 
             InfoBoxTexture = Content.Load<Texture2D>("media/infoBox");
-            
+
             InfoBox1Texture = Content.Load<Texture2D>("media/infoBox1");
 
             MarketDialog = Content.Load<Texture2D>("media/marketDialog");
@@ -157,50 +157,50 @@ namespace NegroniGame.Screens
 
             monster1Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster1-right"),
-                Content.Load<Texture2D>("media/sprites/monster1-left"),
-                Content.Load<Texture2D>("media/sprites/monster1-up"),
                 Content.Load<Texture2D>("media/sprites/monster1-down"),
+                Content.Load<Texture2D>("media/sprites/monster1-left"),
+                Content.Load<Texture2D>("media/sprites/monster1-right"),
+                Content.Load<Texture2D>("media/sprites/monster1-up"),
             };
 
             monster2Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster2-right"),
-                Content.Load<Texture2D>("media/sprites/monster2-left"),
-                Content.Load<Texture2D>("media/sprites/monster2-up"),
                 Content.Load<Texture2D>("media/sprites/monster2-down"),
+                Content.Load<Texture2D>("media/sprites/monster2-left"),
+                Content.Load<Texture2D>("media/sprites/monster2-right"),
+                Content.Load<Texture2D>("media/sprites/monster2-up"),
             };
 
             monster3Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster3-right"),
-                Content.Load<Texture2D>("media/sprites/monster3-left"),
-                Content.Load<Texture2D>("media/sprites/monster3-up"),
                 Content.Load<Texture2D>("media/sprites/monster3-down"),
+                Content.Load<Texture2D>("media/sprites/monster3-left"),
+                Content.Load<Texture2D>("media/sprites/monster3-right"),
+                Content.Load<Texture2D>("media/sprites/monster3-up"),
             };
 
             monster4Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster4-right"),
-                Content.Load<Texture2D>("media/sprites/monster4-left"),
-                Content.Load<Texture2D>("media/sprites/monster4-up"),
                 Content.Load<Texture2D>("media/sprites/monster4-down"),
+                Content.Load<Texture2D>("media/sprites/monster4-left"),
+                Content.Load<Texture2D>("media/sprites/monster4-right"),
+                Content.Load<Texture2D>("media/sprites/monster4-up"),
             };
 
             monster5Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster5-right"),
-                Content.Load<Texture2D>("media/sprites/monster5-left"),
-                Content.Load<Texture2D>("media/sprites/monster5-up"),
                 Content.Load<Texture2D>("media/sprites/monster5-down"),
+                Content.Load<Texture2D>("media/sprites/monster5-left"),
+                Content.Load<Texture2D>("media/sprites/monster5-right"),
+                Content.Load<Texture2D>("media/sprites/monster5-up"),
             };
 
             monster6Textures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/sprites/monster6-right"),
-                Content.Load<Texture2D>("media/sprites/monster6-left"),
-                Content.Load<Texture2D>("media/sprites/monster6-up"),
                 Content.Load<Texture2D>("media/sprites/monster6-down"),
+                Content.Load<Texture2D>("media/sprites/monster6-left"),
+                Content.Load<Texture2D>("media/sprites/monster6-right"),
+                Content.Load<Texture2D>("media/sprites/monster6-up"),
             };
 
             MonstersTextures = new List<List<Texture2D>>()
@@ -308,7 +308,7 @@ namespace NegroniGame.Screens
 
             Scenery.Instance.Draw(); // draws scenery
 
-            Monsters.MonstersHandler.Instance.Draw(); // draws monsters
+            Monsters.MonstersHandler.Instance.Draw(gameTime); // draws monsters
 
             ShotsHandler.Instance.Draw(); // draws shots
 
