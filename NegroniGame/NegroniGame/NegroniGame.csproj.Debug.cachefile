@@ -49,8 +49,6 @@ Content\media\sprites\monster4-up.xnb
 Content\media\sprites\fireballs.xnb
 Content\media\drop\coins2.xnb
 Content\media\infoBox1.xnb
-Content\Segoe UI Mono.xnb
-Content\Segoe UI Mono Smaller.xnb
 Content\media\sprites\monster5-down.xnb
 Content\media\sprites\monster5-left.xnb
 Content\media\sprites\monster5-right.xnb
@@ -59,3 +57,7 @@ Content\media\sprites\monster6-down.xnb
 Content\media\sprites\monster6-left.xnb
 Content\media\sprites\monster6-right.xnb
 Content\media\sprites\monster6-up.xnb
+Content\media\marketDialog.xnb
+Content\media\buy.xnb
+Content\Segoe UI Mono.xnb
+Content\Segoe UI Mono Smaller.xnb
