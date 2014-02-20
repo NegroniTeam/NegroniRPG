@@ -5,7 +5,7 @@
 
     public struct ElixirsHP : Interfaces.IItem
     {
-        public const int RECOVERY_AMOUNT = 10;
+        public const int RECOVERY_AMOUNT = 30;
 
         public ElixirsHP(int count) : this()
         {

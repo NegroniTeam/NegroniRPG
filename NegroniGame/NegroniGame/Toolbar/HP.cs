@@ -72,7 +72,7 @@
             new SystemFunctions.Sprite(CurrentHpTexture, HpPosition).DrawBox();
 
             new SystemFunctions.Sprite(Screens.GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
-            new SystemFunctions.Sprite(Screens.GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 20, HpInfoRectangle.Y)).DrawText();
+            new SystemFunctions.Sprite(Screens.GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
         }
 
         public List<Texture2D> HpTexture { get; private set; }

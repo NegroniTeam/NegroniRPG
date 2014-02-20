@@ -8,11 +8,12 @@
 
     public abstract class Monster : Interfaces.IMonster
     {
-        private const float TIME_TO_CHANGE_DIRECTION = 3; // sec 5
+        private const float TIME_TO_CHANGE_DIRECTION = 5; // sec 5
         private const int MOVE_MAX_LENGTH = 80;
         private const float ANIM_DELAY = 200f;
         private const int MOB_SPEED = 1;
         private const int AGGRO_RANGE = 50;
+        private const int ATTACK_INTERVAL = 2;
 
         private int currentFrame = 0;
         private readonly int hpPointsInitial;
@@ -24,6 +25,7 @@
         private int positionsToMove;
         private float elapsedTimeChangeAnim;
         private float elapsedTimeChangePos;
+        private float elapsedTimeHit;
         private bool isInCombatState = false;
         private string changeDirection = "";
 
@@ -31,6 +33,7 @@
         {
             this.ID = numberOfMob;
             this.Name = name;
+            this.Damage = 10;
             this.monsterPosition = initialMonsterPos;
             this.monsterTextures = mobTextures;
             this.monsterAnim = this.monsterTextures[0];
@@ -41,6 +44,7 @@
 
         public int ID { get; private set; }
         public string Name { get; private set; }
+        public int Damage { get; private set; }
         public int DirectionForMovement { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
         public int HpPointsCurrent { get; set; }
@@ -68,93 +72,6 @@
                 MoveCombat(gameTime);
             }
         }
-
-        private void MoveCombat(GameTime gameTime)
-        {
-            string direction = Math.Abs(Player.Instance.DestinationPosition.X - this.DestinationPosition.X)
-                                        > Math.Abs(Player.Instance.DestinationPosition.Y - this.DestinationPosition.Y)
-                                        ? "horizontal" : "vertical";
-
-            if (this.changeDirection != "")
-            {
-                direction = this.changeDirection;
-            }
-
-            if (direction == "horizontal")
-            {
-                if (this.monsterPosition.X < Player.Instance.CenterOfPlayer.X)
-                {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
-
-                    if (!IntersectsWithObstacles(newPosition))
-                    {
-                        this.monsterPosition.X += MOB_SPEED;
-                        this.monsterAnim = this.monsterTextures[2]; // moves right
-                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
-                    }
-                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
-                    {
-                        this.changeDirection = "vertical";
-                    }
-                }
-                else
-                {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
-
-                    if (!IntersectsWithObstacles(newPosition))
-                    {
-                        this.monsterPosition.X -= MOB_SPEED;
-                        this.monsterAnim = this.monsterTextures[1]; // moves left
-                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
-                    }
-                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
-                    {
-                        this.changeDirection = "vertical";
-                    }
-                }
-            }
-
-            else if (direction == "vertical")
-            {
-                if (this.monsterPosition.Y < Player.Instance.CenterOfPlayer.Y)
-                {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
-
-                    if (!IntersectsWithObstacles(newPosition))
-                    {
-                        this.monsterPosition.Y += MOB_SPEED;
-                        this.monsterAnim = this.monsterTextures[0]; // moves down
-                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
-                    }
-                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
-                    {
-                        this.changeDirection = "horizontal";
-                    }
-                }
-                else
-                {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
-
-                    if (!IntersectsWithObstacles(newPosition))
-                    {
-                        this.monsterPosition.Y -= MOB_SPEED;
-                        this.monsterAnim = this.monsterTextures[3]; // moves up
-                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
-                        this.changeDirection = "";
-                    }
-                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
-                    {
-                        this.changeDirection = "horizontal";
-                    }
-                }
-            }
-
-            this.animSourcePosition = Animate(gameTime);
-        }
-
 
         private void MoveNormal(GameTime gameTime)
         {
@@ -279,11 +196,185 @@
             this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
         }
 
+        private void MoveCombat(GameTime gameTime)
+        {
+            this.elapsedTimeHit += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            string direction = Math.Abs(Player.Instance.DestinationPosition.X - this.DestinationPosition.X)
+                                        > Math.Abs(Player.Instance.DestinationPosition.Y - this.DestinationPosition.Y)
+                                        ? "horizontal" : "vertical";
+
+            //if (this.changeDirection == "up" || this.changeDirection == "down")
+            //{
+            //    direction = "vertical";
+            //}
+            //else if (this.changeDirection != "")
+            //{
+            //    direction = "horizontal";
+            //}
+
+            if (this.changeDirection != "")
+            {
+                direction = this.changeDirection;
+            }
+
+            if (direction == "horizontal")
+            {
+                if (this.monsterPosition.X < Player.Instance.CenterOfPlayer.X || this.changeDirection == "right")
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
+
+                    if (!IntersectsWithObstacles(newPosition))
+                    {
+                        this.monsterPosition.X += MOB_SPEED;
+                        this.monsterAnim = this.monsterTextures[2]; // moves right
+                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
+                    }
+                    else if (Player.Instance.DestinationPosition.Intersects(newPosition))
+                    {
+                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        {
+                            Player.Instance.TakeDamage(this.Damage);
+                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
+                            this.elapsedTimeHit = 0;
+                        }
+                    }
+                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "vertical";
+                    }
+                }
+                else
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
+
+                    if (!IntersectsWithObstacles(newPosition))
+                    {
+                        this.monsterPosition.X -= MOB_SPEED;
+                        this.monsterAnim = this.monsterTextures[1]; // moves left
+                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
+                    }
+                    else if (Player.Instance.DestinationPosition.Intersects(newPosition))
+                    {
+                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        {
+                            Player.Instance.TakeDamage(this.Damage);
+                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
+                            this.elapsedTimeHit = 0;
+                        }
+                    }
+                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "vertical";
+                    }
+                }
+            }
+
+            else if (direction == "vertical")
+            {
+                if (this.monsterPosition.Y < Player.Instance.CenterOfPlayer.Y || this.changeDirection == "down")
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
+
+                    if (!IntersectsWithObstacles(newPosition))
+                    {
+                        this.monsterPosition.Y += MOB_SPEED;
+                        this.monsterAnim = this.monsterTextures[0]; // moves down
+                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
+                    }
+                    else if (Player.Instance.DestinationPosition.Intersects(newPosition))
+                    {
+                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        {
+                            Player.Instance.TakeDamage(this.Damage);
+                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
+                            this.elapsedTimeHit = 0;
+                        }
+                    }
+                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "horizontal";
+                    }
+                }
+                else
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
+
+                    if (!IntersectsWithObstacles(newPosition))
+                    {
+                        this.monsterPosition.Y -= MOB_SPEED;
+                        this.monsterAnim = this.monsterTextures[3]; // moves up
+                        this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
+                    }
+                    else if (Player.Instance.DestinationPosition.Intersects(newPosition))
+                    {
+                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        {
+                            Player.Instance.TakeDamage(this.Damage);
+                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
+                            this.elapsedTimeHit = 0;
+                        }
+                    }
+                    else if (IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "horizontal";
+                    }
+                }
+            }
+
+            this.animSourcePosition = Animate(gameTime);
+
+
+            // Check if the obstacle is already gone and changes to normal direction
+            if (this.changeDirection == "vertical")
+            {
+                if (this.monsterPosition.X < Player.Instance.CenterOfPlayer.X)
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
+
+                    if (!IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "";
+                    }
+                }
+                else
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
+
+                    if (!IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "";
+                    }
+                }
+            }
+            else if (this.changeDirection == "horizontal")
+            {
+                if (this.monsterPosition.Y < Player.Instance.CenterOfPlayer.Y)
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
+
+                    if (!IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "";
+                    }
+                }
+                else
+                {
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
+
+                    if (!IntersectsWithObstaclesNoPlayer(newPosition))
+                    {
+                        this.changeDirection = "";
+                    }
+                }
+            }
+        }
+
         private bool IntersectsWithObstacles(Rectangle newPosition)
         {
             bool intersectsWithObstacles = false;
             bool intersectsWithAnotherMob = false;
-
+            
             // checks if the new position intersects with another mob
             foreach (Monster monster in Monsters.MonstersHandler.Instance.SpawnedMobs)
             {

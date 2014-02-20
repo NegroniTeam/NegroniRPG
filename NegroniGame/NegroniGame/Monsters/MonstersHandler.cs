@@ -106,7 +106,7 @@
             else if (this.SpawnedMobsNumber < MAX_SPAWNED_MOBS && this.isCountingDownToSpawn == false)
             {
                 this.elapsedTimeToNextSpawn = 0;
-                this.timeToNextSpawn = randomGenerator.Next(1, 2); ///// 5, 15 ////////////////////
+                this.timeToNextSpawn = randomGenerator.Next(5, 10); ///// 5, 15 ////////////////////
                 this.isCountingDownToSpawn = true;
             }
 
@@ -135,7 +135,7 @@
 
                     for (int index = 0; index < Scenery.Instance.DropList.Count; index++)
                     {
-                        if (monsterPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
+                        if (Scenery.Instance.DropList[index] != null && monsterPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
                         {
                             doesIntersectWithDrop = true;
                             break;

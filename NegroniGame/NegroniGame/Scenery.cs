@@ -55,7 +55,12 @@
         {
             for (int index = 0; index < this.DropList.Count; index++)
             {
-                bool isTimeUp = this.DropList[index].Update(gameTime);
+                bool isTimeUp = false;
+
+                if (this.DropList[index] != null)
+                {
+                    isTimeUp = this.DropList[index].Update(gameTime);
+                }
 
                 // deletes the drop if time is up
                 if (isTimeUp)
@@ -67,7 +72,7 @@
             // picks up drop
             for (int index = 0; index < Scenery.Instance.DropList.Count; index++)
             {
-                if (Player.Instance.DestinationPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
+                if (this.DropList[index] != null && Player.Instance.DestinationPosition.Intersects(Scenery.Instance.DropList[index].DropPosition))
                 {
                     if (Scenery.Instance.DropList[index].Name == "Coins")
                     {
@@ -82,7 +87,8 @@
 
             foreach (int index in IndexForDeletion)
             {
-                DropList.RemoveAt(index);
+                this.DropList[index] = null;
+                // DropList.RemoveAt(index);
             }
 
             this.IndexForDeletion = new List<int>();
@@ -100,7 +106,10 @@
             // drop
             foreach (Drop drop in DropList)
             {
-                drop.Draw();
+                if (drop != null)
+                {
+                    drop.Draw();
+                }
             }
 
         }

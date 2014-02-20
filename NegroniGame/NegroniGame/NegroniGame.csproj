@@ -88,6 +88,7 @@
     <Compile Include="Drop.cs" />
     <Compile Include="InfoBoxes.cs" />
     <Compile Include="Interfaces\IRobe.cs" />
+    <Compile Include="Monsters\Monster - Copy.cs" />
     <Compile Include="Monsters\PurpleBat.cs" />
     <Compile Include="Monsters\Genie.cs" />
     <Compile Include="Monsters\Bug.cs" />

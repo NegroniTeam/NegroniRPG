@@ -17,9 +17,6 @@ namespace NegroniGame.Screens
         private readonly GraphicsDeviceManager graphics;
         // private GraphicsDevice device;
 
-        private MouseState mouseState;
-
-        private KeyboardState keyboardState;
         private Vector2 cursorPos = new Vector2();
 
         private List<Texture2D> monster1Textures;
@@ -60,6 +57,8 @@ namespace NegroniGame.Screens
 
         #region Properties Declarations
 
+        public MouseState MouseState { get; set; }
+        public KeyboardState KeyboardState { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
         public bool IsPaused { get; set; }
         public static int ScreenWidth { get; private set; }
@@ -253,13 +252,13 @@ namespace NegroniGame.Screens
             //this.Exit();
 
             cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); // cursor update
-            mouseState = Mouse.GetState();
+            MouseState = Mouse.GetState();
 
-            keyboardState = Keyboard.GetState();
+            KeyboardState = Keyboard.GetState();
 
             // Checks for pause
-            if (keyboardState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.P)
-                && KeyboardStatePrevious.IsKeyUp(Microsoft.Xna.Framework.Input.Keys.P))
+            if (KeyboardState.IsKeyDown(Keys.P)
+                && KeyboardStatePrevious.IsKeyUp(Keys.P))
             {
                 if (IsPaused == false)
                 {
@@ -279,23 +278,25 @@ namespace NegroniGame.Screens
             }
             else
             {
-                Player.Instance.Update(gameTime, keyboardState);
+                Player.Instance.Update(gameTime, KeyboardState);
 
                 Monsters.MonstersHandler.Instance.Update(gameTime);
                 Scenery.Instance.Update(gameTime);
-                Toolbar.InventorySlots.Instance.Update(gameTime, mouseState);
-                ShotsHandler.Instance.UpdateShots(gameTime, keyboardState);
+                Toolbar.InventorySlots.Instance.Update(gameTime, MouseState);
+                ShotsHandler.Instance.UpdateShots(gameTime, KeyboardState);
                 Toolbar.SystemMsg.Instance.GetLastMessages();
-                Toolbar.HP.Instance.Update(gameTime, mouseState);
-                InfoBoxes.Instance.Update(gameTime, mouseState);
+                Toolbar.HP.Instance.Update(gameTime, MouseState);
+                InfoBoxes.Instance.Update(gameTime, MouseState);
 
                 // Player.Instance.UpdateInventory(gameTime);
 
                 // updates elixir reuse time
                 ElixirsHandler.Instance.Update(gameTime);
+
+                Well.Instance.Update(gameTime);
             }
 
-            this.KeyboardStatePrevious = keyboardState;
+            this.KeyboardStatePrevious = KeyboardState;
 
             base.Update(gameTime);
         }

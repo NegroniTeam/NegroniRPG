@@ -12,7 +12,7 @@
         // Singleton !
         private static Player instance;
 
-        public const int HP_POINTS_INITIAL = 50;
+        public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
 
@@ -76,6 +76,11 @@
 
         public void Update(GameTime gameTime, KeyboardState ks)
         {
+            if (this.HpPointsCurrent <= 0)
+            {
+                Screens.GameScreen.Instance.IsPaused = true;
+            }
+
             Move(gameTime, ks);
             this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
 
@@ -146,10 +151,31 @@
             }
         }
 
+        public int RestoreFullHp()
+        {
+            int restoredPoints = HP_POINTS_INITIAL - this.HpPointsCurrent;
+
+            this.HpPointsCurrent = HP_POINTS_INITIAL;
+
+            return restoredPoints;
+        }
+
         public void DrinkElixir()
         {
             this.HpPointsCurrent += ElixirsHandler.Instance.RestoredPoints;
             this.Elixirs = new Items.ElixirsHP(this.Elixirs.Count - 1);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (this.HpPointsCurrent > 0)
+            {
+                this.HpPointsCurrent -= damage;
+            }
+            if (this.HpPointsCurrent < 0)
+            {
+                this.HpPointsCurrent = 0;
+            }
         }
 
         public void Draw()
