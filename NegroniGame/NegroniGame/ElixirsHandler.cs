@@ -56,7 +56,7 @@
                 if (this.elapsedTimeLastMsgElixir >= 1)
                 {
                     Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() {
-                        { String.Format(">> {0} seconds to reuse Elixir.", REUSE_TIME - (int)this.elapsedTimeElixir), Color.Aquamarine } });
+                        { String.Format(">> {0} seconds to reuse Elixir.", REUSE_TIME - (int)this.elapsedTimeElixir), Color.Pink } });
                     this.elapsedTimeLastMsgElixir = 0;
                 }
             }

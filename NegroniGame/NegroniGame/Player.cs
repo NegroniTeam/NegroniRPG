@@ -77,9 +77,11 @@
 
         public void Update(GameTime gameTime, KeyboardState ks)
         {
+            // GAME OVER
             if (this.HpPointsCurrent <= 0)
             {
-                Screens.GameScreen.Instance.IsPaused = true;
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> GAME OVER!"), Color.Red } });
+                Screens.GameScreen.Instance.IsGameOver = true;
             }
 
             Move(gameTime, ks);
@@ -206,21 +208,6 @@
             {
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> Not enough coins.", Color.Red } });
             }
-
-            // When picked up
-
-            // !!!!!!! first check if there is any item of the kind
-            // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
-
-            // !!!!!!! then add
-            //this.Coins = new Items.Coins(100);
-            //this.Elixirs = new Items.ElixirHP(2);
-            //this.Weapon = new Items.Weapon.MysticStaff();
-            //this.Shield = new Items.Armor.MajesticShield();
-            //this.Helmet = new Items.Armor.MajesticHelmet();
-            //this.Robe = new Items.Armor.MajesticRobe();
-            //this.Gloves = new Items.Armor.MajesticGloves();
-            //this.Boots = new Items.Armor.MajesticBoots();
         }
 
         private void CompleteTransaction(Interfaces.IItem newItem, int coinsSpent)
@@ -290,7 +277,14 @@
 
         public void Draw()
         {
-            new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+            if (!Screens.GameScreen.Instance.IsGameOver)
+            {
+                new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+            }
+            else
+            {
+                new SystemFunctions.Sprite(this.playerTextures[4], new Vector2(this.DestinationPosition.X, this.DestinationPosition.Y)).Draw();
+            }
         }
 
         // playerTextures - right, left, up, down

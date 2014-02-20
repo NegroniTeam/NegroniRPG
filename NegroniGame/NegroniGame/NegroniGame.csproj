@@ -5,7 +5,7 @@
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NegroniGame</RootNamespace>
     <AssemblyName>NegroniGame</AssemblyName>
@@ -90,7 +90,6 @@
     <Compile Include="Interfaces\IRobe.cs" />
     <Compile Include="MarketDialogHandler.cs" />
     <Compile Include="MarketDialog.cs" />
-    <Compile Include="Monsters\Monster - Copy.cs" />
     <Compile Include="Monsters\PurpleBat.cs" />
     <Compile Include="Monsters\Genie.cs" />
     <Compile Include="Monsters\Bug.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="Monsters\Viking.cs" />
     <Compile Include="Monsters\RedDragon.cs" />
     <Compile Include="Monsters\MonstersHandler.cs" />
-    <Compile Include="Player - Copy.cs" />
     <Compile Include="ShotsHandler.cs" />
     <Compile Include="Shot.cs" />
     <Compile Include="Screens\GameScreen.cs" />
@@ -123,7 +121,6 @@
     <Compile Include="Items\Weapon\MysticStaff.cs" />
     <Compile Include="Items\Armor\Armor.cs" />
     <Compile Include="Items\Weapon\Weapon.cs" />
-    <Compile Include="Market.cs" />
     <Compile Include="Monsters\Monster.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scenery.cs" />

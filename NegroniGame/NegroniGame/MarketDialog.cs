@@ -93,31 +93,31 @@
             }
             else if (this.BuyButton3Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                Player.Instance.BuyItem(this.item3, this.item2.BuyingPrice);
+                Player.Instance.BuyItem(this.item3, this.item3.BuyingPrice);
                 MarketDialogHandler.Instance.IsInMarket = false;
                 Screens.GameScreen.Instance.IsPaused = false;
             }
             else if (this.BuyButton4Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                Player.Instance.BuyItem(this.item4, this.item2.BuyingPrice);
+                Player.Instance.BuyItem(this.item4, this.item4.BuyingPrice);
                 MarketDialogHandler.Instance.IsInMarket = false;
                 Screens.GameScreen.Instance.IsPaused = false;
             }
             else if (this.BuyButton5Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                Player.Instance.BuyItem(this.item5, this.item2.BuyingPrice);
+                Player.Instance.BuyItem(this.item5, this.item5.BuyingPrice);
                 MarketDialogHandler.Instance.IsInMarket = false;
                 Screens.GameScreen.Instance.IsPaused = false;
             }
             else if (this.BuyButton6Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                Player.Instance.BuyItem(this.item6, this.item2.BuyingPrice);
+                Player.Instance.BuyItem(this.item6, this.item6.BuyingPrice);
                 MarketDialogHandler.Instance.IsInMarket = false;
                 Screens.GameScreen.Instance.IsPaused = false;
             }
             else if (this.BuyButton7Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
-                Player.Instance.BuyItem(this.item7, this.item2.BuyingPrice);
+                Player.Instance.BuyItem(this.item7, this.item7.BuyingPrice);
                 MarketDialogHandler.Instance.IsInMarket = false;
                 Screens.GameScreen.Instance.IsPaused = false;
             }

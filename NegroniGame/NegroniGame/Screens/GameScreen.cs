@@ -12,24 +12,12 @@ namespace NegroniGame.Screens
     /// </summary>
     public sealed class GameScreen : Microsoft.Xna.Framework.Game
     {
-        #region Fields Declarations
-
-        private readonly GraphicsDeviceManager graphics;
-        // private GraphicsDevice device;
-
-        private Vector2 cursorPos = new Vector2();
-
-        private List<Texture2D> monster1Textures;
-        private List<Texture2D> monster2Textures;
-        private List<Texture2D> monster3Textures;
-        private List<Texture2D> monster4Textures;
-        private List<Texture2D> monster5Textures;
-        private List<Texture2D> monster6Textures;
-
-        #endregion
-
         // Singleton !
         private static GameScreen instance;
+
+        private readonly GraphicsDeviceManager graphics;
+        private Vector2 cursorPos = new Vector2();
+        private List<Texture2D> monster1Textures, monster2Textures, monster3Textures, monster4Textures, monster5Textures, monster6Textures;
 
         private GameScreen()
         {
@@ -62,6 +50,7 @@ namespace NegroniGame.Screens
         public KeyboardState KeyboardState { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
         public bool IsPaused { get; set; }
+        public bool IsGameOver { get; set; }
         public static int ScreenWidth { get; private set; }
         public static int ScreenHeight { get; private set; }
         public SpriteFont FontMessages { get; private set; }
@@ -100,6 +89,7 @@ namespace NegroniGame.Screens
             SystemFunctions.Sound.PlayIngameMusic();
 
             IsPaused = false;
+            IsGameOver = false;
 
             base.Initialize();
         }
@@ -144,6 +134,7 @@ namespace NegroniGame.Screens
                 Content.Load<Texture2D>("media/sprites/Elvina-left"),
                 Content.Load<Texture2D>("media/sprites/Elvina-up"),
                 Content.Load<Texture2D>("media/sprites/Elvina-down"),
+                Content.Load<Texture2D>("media/sprites/Elvina-dead"),
             };
 
             MajesticSetTextures = new List<Texture2D>()
@@ -248,18 +239,21 @@ namespace NegroniGame.Screens
 
         protected override void Update(GameTime gameTime)
         {
-            // // Allows the game to exit
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //this.Exit();
-
-            cursorPos = new Vector2(Mouse.GetState().X, Mouse.GetState().Y); // cursor update
             MouseState = Mouse.GetState();
+            cursorPos = new Vector2(MouseState.X, MouseState.Y); // cursor update
 
             KeyboardState = Keyboard.GetState();
+            
+            // Allows the game to exit
+            if (KeyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
 
             // Checks for pause
             if (KeyboardState.IsKeyDown(Keys.P)
-                && KeyboardStatePrevious.IsKeyUp(Keys.P))
+                && KeyboardStatePrevious.IsKeyUp(Keys.P)
+                && !IsGameOver)
             {
                 if (IsPaused == false)
                 {
@@ -273,9 +267,7 @@ namespace NegroniGame.Screens
                 }
             }
 
-            if (IsPaused)
-            { }
-            else
+            if (!IsPaused && !IsGameOver)
             {
                 Player.Instance.Update(gameTime, KeyboardState);
 
@@ -290,10 +282,14 @@ namespace NegroniGame.Screens
                 // updates elixir reuse time
                 ElixirsHandler.Instance.Update(gameTime);
 
+                MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+
                 Well.Instance.Update(gameTime);
             }
-
-            MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+            else if (IsPaused)
+            {
+                MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+            }
 
             this.KeyboardStatePrevious = KeyboardState;
             this.MouseStatePrevious = MouseState;

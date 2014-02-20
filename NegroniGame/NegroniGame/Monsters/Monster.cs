@@ -372,33 +372,17 @@
 
         private bool IntersectsWithObstacles(Rectangle newPosition)
         {
-            bool intersectsWithObstacles = false;
-            bool intersectsWithAnotherMob = false;
-            
-            // checks if the new position intersects with another mob
-            foreach (Monster monster in Monsters.MonstersHandler.Instance.SpawnedMobs)
+            // checks if the new position is not well, market, player or another mob
+            if (IntersectsWithObstaclesNoPlayer(newPosition) || Player.Instance.DestinationPosition.Intersects(newPosition))
             {
-                if (monster.ID != this.ID && monster.DestinationPosition.Intersects(newPosition))
-                {
-                    intersectsWithAnotherMob = true;
-                    break;
-                }
+                return true;
             }
 
-            // checks if the new position is not well or market
-            if (Well.Instance.WellPosition.Intersects(newPosition)
-            || Scenery.Instance.MarketPosition.Intersects(newPosition)
-            || Player.Instance.DestinationPosition.Intersects(newPosition)
-            || intersectsWithAnotherMob == true)
-            {
-                intersectsWithObstacles = true;
-            }
-
-            return intersectsWithObstacles;
+            return false;
         }
+
         private bool IntersectsWithObstaclesNoPlayer(Rectangle newPosition)
         {
-            bool intersectsWithObstacles = false;
             bool intersectsWithAnotherMob = false;
 
             // checks if the new position intersects with another mob
@@ -416,10 +400,10 @@
             || Scenery.Instance.MarketPosition.Intersects(newPosition)
             || intersectsWithAnotherMob == true)
             {
-                intersectsWithObstacles = true;
+                return true;
             }
 
-            return intersectsWithObstacles;
+            return false;
         }
 
         private Rectangle Animate(GameTime gameTime)
