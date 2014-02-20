@@ -6,5 +6,6 @@
     {
         string Name { get; }
         Texture2D Texture { get; }
+        int BuyingPrice { get; }
     }
 }

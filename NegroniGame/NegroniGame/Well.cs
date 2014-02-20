@@ -14,6 +14,7 @@
         private const float REUSE_TIME = 15;
         private float elapsedTimeToReuse = REUSE_TIME;
         private float elapsedTimeLastMsg;
+        private Texture2D WellGraphic = Screens.GameScreen.Instance.AllSceneryTextures[2];
 
         private Well()
         {
@@ -44,7 +45,7 @@
                     // if reuse time is elapsed
                     if (this.elapsedTimeToReuse >= REUSE_TIME)
                     {
-                        int restoredPoints = Player.Instance.RestoreFullHp();
+                        int restoredPoints = Player.Instance.DrinkFromWell();
 
                         Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> Well restored you {0} HP.", restoredPoints), Color.Aquamarine } });
 
@@ -67,7 +68,6 @@
             new SystemFunctions.Sprite(this.WellGraphic, this.WellPosition).DrawBox();
         }
 
-        public Texture2D WellGraphic { get; set; }
         public Rectangle WellPosition { get; private set; }
     }
 }

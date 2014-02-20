@@ -144,7 +144,7 @@
 
                     if (!monsterPosition.Intersects(Player.Instance.DestinationPosition)
                     && !monsterPosition.Intersects(Well.Instance.WellPosition)
-                    && !monsterPosition.Intersects(Market.Instance.MarketPosition)
+                    && !monsterPosition.Intersects(Scenery.Instance.MarketPosition)
                     && !doesIntersectWithMobs
                     && !doesIntersectWithDrop)
                     {

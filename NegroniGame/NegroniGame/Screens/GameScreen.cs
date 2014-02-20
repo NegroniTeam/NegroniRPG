@@ -56,8 +56,9 @@ namespace NegroniGame.Screens
         }
 
         #region Properties Declarations
-
+        
         public MouseState MouseState { get; set; }
+        public MouseState MouseStatePrevious { get; set; }
         public KeyboardState KeyboardState { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
         public bool IsPaused { get; set; }
@@ -273,9 +274,7 @@ namespace NegroniGame.Screens
             }
 
             if (IsPaused)
-            {
-                // Market.Instance.MarketDialog();
-            }
+            { }
             else
             {
                 Player.Instance.Update(gameTime, KeyboardState);
@@ -288,15 +287,16 @@ namespace NegroniGame.Screens
                 Toolbar.HP.Instance.Update(gameTime, MouseState);
                 InfoBoxes.Instance.Update(gameTime, MouseState);
 
-                // Player.Instance.UpdateInventory(gameTime);
-
                 // updates elixir reuse time
                 ElixirsHandler.Instance.Update(gameTime);
 
                 Well.Instance.Update(gameTime);
             }
 
+            MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+
             this.KeyboardStatePrevious = KeyboardState;
+            this.MouseStatePrevious = MouseState;
 
             base.Update(gameTime);
         }
@@ -315,7 +315,7 @@ namespace NegroniGame.Screens
 
             Player.Instance.Draw(); // draws player
 
-            Market.Instance.Draw(); // draws market + market dialog
+            MarketDialogHandler.Instance.Draw(); // draws market dialog
 
             Toolbar.InventorySlots.Instance.Draw(); // draws inventory
 

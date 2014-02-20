@@ -19,6 +19,7 @@
         private Vector2 playerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
         
         private readonly List<Texture2D> playerTextures = Screens.GameScreen.Instance.PlayerTextures;
+
         private Texture2D playerAnim = Screens.GameScreen.Instance.PlayerTextures[3];
 
         private Rectangle animSourcePosition;
@@ -84,8 +85,6 @@
             Move(gameTime, ks);
             this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
 
-            UpdateItems(gameTime);
-
             if (this.Weapon == null)
             {
                 this.WeaponDmg = 5;
@@ -120,6 +119,117 @@
 
         }
 
+        public void BuyItem(Interfaces.IItem newItem, int coinsSpent)
+        {
+            if (coinsSpent <= this.Coins.Amount)
+            {
+                if (newItem.ToString().Contains("Elixir"))
+                {
+                    this.Elixirs = (Items.ElixirsHP)newItem;
+                }
+                else if (newItem.ToString().Contains("Boots"))
+                {
+                    if (this.Boots != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Boots!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Boots = (Interfaces.IBoots)newItem;
+                    }
+                }
+                else if (newItem.ToString().Contains("Gloves"))
+                {
+                    if (this.Gloves != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Gloves!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Gloves = (Interfaces.IGloves)newItem;
+                    }
+                }
+                else if (newItem.ToString().Contains("Helmet"))
+                {
+                    if (this.Helmet != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Helmet!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Helmet = (Interfaces.IHelmet)newItem;
+                    }
+                }
+                else if (newItem.ToString().Contains("Robe"))
+                {
+                    if (this.Robe != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Robe!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Robe = (Interfaces.IRobe)newItem;
+                    }
+                }
+                else if (newItem.ToString().Contains("Shield"))
+                {
+                    if (this.Shield != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Shield!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Shield = (Interfaces.IShield)newItem;
+                    }
+                }
+                else if (newItem.ToString().Contains("Weapon"))
+                {
+                    if (this.Weapon != null)
+                    {
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> First destroy your Weapon!"), Color.Red } });
+                    }
+                    else
+                    {
+                        CompleteTransaction(newItem, coinsSpent);
+                        this.Weapon = (Interfaces.IWeapon)newItem;
+                    }
+                }
+
+
+            }
+            else
+            {
+                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> Not enough coins.", Color.Red } });
+            }
+
+            // When picked up
+
+            // !!!!!!! first check if there is any item of the kind
+            // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
+
+            // !!!!!!! then add
+            //this.Coins = new Items.Coins(100);
+            //this.Elixirs = new Items.ElixirHP(2);
+            //this.Weapon = new Items.Weapon.MysticStaff();
+            //this.Shield = new Items.Armor.MajesticShield();
+            //this.Helmet = new Items.Armor.MajesticHelmet();
+            //this.Robe = new Items.Armor.MajesticRobe();
+            //this.Gloves = new Items.Armor.MajesticGloves();
+            //this.Boots = new Items.Armor.MajesticBoots();
+        }
+
+        private void CompleteTransaction(Interfaces.IItem newItem, int coinsSpent)
+        {
+            int newCoinsAmount = this.Coins.Amount - coinsSpent;
+            this.Coins = new Items.Coins(newCoinsAmount);
+            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You bought {0}.", newItem.Name), Color.DarkGoldenrod } });
+        }
+
         public void DestroyItem(string itemForDestruction)
         {
             switch (itemForDestruction)
@@ -151,7 +261,7 @@
             }
         }
 
-        public int RestoreFullHp()
+        public int DrinkFromWell()
         {
             int restoredPoints = HP_POINTS_INITIAL - this.HpPointsCurrent;
 
@@ -190,10 +300,11 @@
             {
                 if (playerPosition.X < Screens.GameScreen.ScreenWidth - 30)
                 {
-                    // checks if the player is going over the well. If so, doesn't move
-                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.playerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4))
-                        && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.playerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4))
-                        && !IntersectsWithMobs(new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32)))
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    // Well.Instance.WellPosition.Intersects , Scenery.Instance.MarketPosition.Intersects
+                    // new Rectangle((int)(this.playerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4)
+
+                    if (!IntersectsWithObjects(newPosition))
                     {
                         this.playerPosition.X += PLAYER_SPEED;
                     }
@@ -206,9 +317,11 @@
             {
                 if (playerPosition.X > 0)
                 {
-                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4))
-                       && !Market.Instance.MarketPosition.Intersects(new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4))
-                       && !IntersectsWithMobs(new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32)))
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    // Well, Scenery
+                    //  new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4)
+
+                    if (!IntersectsWithObjects(newPosition))
                     {
                         this.playerPosition.X -= PLAYER_SPEED;
                     }
@@ -221,13 +334,9 @@
             {
                 if (playerPosition.Y > 0)
                 {
-                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - PLAYER_SPEED), 32, 32))
-                       && !((Market.Instance.MarketPosition.Y + 12 >= this.playerPosition.Y) && Market.Instance.MarketPosition.Intersects(this.DestinationPosition))
-                       && !((this.playerPosition.X + this.DestinationPosition.Width >= Market.Instance.MarketPosition.X && this.playerPosition.X <= Market.Instance.MarketPosition.X + 14)
-                                && Market.Instance.MarketPosition.Intersects(this.DestinationPosition))
-                       && !((this.playerPosition.X + this.DestinationPosition.Width >= Market.Instance.MarketPosition.X + Market.Instance.MarketPosition.Width - 10
-                                && Market.Instance.MarketPosition.Intersects(this.DestinationPosition)))
-                       && !IntersectsWithMobs(new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - PLAYER_SPEED), 32, 32)))
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - PLAYER_SPEED), 32, 32);
+
+                    if (!IntersectsWithObjects(newPosition))
                     {
                         this.playerPosition.Y -= PLAYER_SPEED;
                     }
@@ -240,8 +349,9 @@
             {
                 if (playerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
                 {
-                    if (!Well.Instance.WellPosition.Intersects(new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32))
-                       && !IntersectsWithMobs(new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32)))
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32);
+
+                    if (!IntersectsWithObjects(newPosition))
                     {
                         this.playerPosition.Y += PLAYER_SPEED;
                     }
@@ -256,22 +366,26 @@
             }
 
             this.DestinationPosition = new Rectangle((int)this.playerPosition.X, (int)this.playerPosition.Y, 32, 32);
-
-            if (this.DestinationPosition.Intersects(Market.Instance.MarketPosition))
-            {
-                Market.Instance.MarketDialog();
-                Screens.GameScreen.Instance.IsPaused = true;
-            }
         }
 
-        private bool IntersectsWithMobs(Rectangle newPosition)
+        private bool IntersectsWithObjects(Rectangle newPosition)
         {
+            bool doesIntersectWithMobs = false;
+
             foreach (Monsters.Monster monster in Monsters.MonstersHandler.Instance.SpawnedMobs)
             {
                 if (monster.DestinationPosition.Intersects(newPosition))
                 {
-                    return true;
+                    doesIntersectWithMobs = true;
+                    break;
                 }
+            }
+            
+            if (Well.Instance.WellPosition.Intersects(newPosition)
+                || Scenery.Instance.MarketPosition.Intersects(newPosition)
+                || doesIntersectWithMobs)
+            {
+                return true;
             }
 
             return false;
@@ -296,24 +410,6 @@
 
             // if on frame 0 - top up position 0
             return new Rectangle(32 * this.frames, 0, 32, 32);
-        }
-
-        private void UpdateItems(GameTime gameTime)
-        {
-            // When picked up
-
-            // !!!!!!! first check if there is any item of the kind
-            // Toolbar.InventorySlots.CheckItems(); <- here is the code for checking
-
-            // !!!!!!! then add
-            //this.Coins = new Items.Coins(100);
-            //this.Elixirs = new Items.ElixirHP(2);
-            //this.Weapon = new Items.Weapon.MysticStaff();
-            //this.Shield = new Items.Armor.MajesticShield();
-            //this.Helmet = new Items.Armor.MajesticHelmet();
-            //this.Robe = new Items.Armor.MajesticRobe();
-            //this.Gloves = new Items.Armor.MajesticGloves();
-            //this.Boots = new Items.Armor.MajesticBoots();
         }
 
     }

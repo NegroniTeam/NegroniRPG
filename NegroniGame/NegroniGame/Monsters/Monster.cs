@@ -12,7 +12,7 @@
         private const int MOVE_MAX_LENGTH = 80;
         private const float ANIM_DELAY = 200f;
         private const int MOB_SPEED = 1;
-        private const int AGGRO_RANGE = 50;
+        private const int AGGRO_RANGE = 80;
         private const int ATTACK_INTERVAL = 2;
 
         private int currentFrame = 0;
@@ -387,7 +387,7 @@
 
             // checks if the new position is not well or market
             if (Well.Instance.WellPosition.Intersects(newPosition)
-            || Market.Instance.MarketPosition.Intersects(newPosition)
+            || Scenery.Instance.MarketPosition.Intersects(newPosition)
             || Player.Instance.DestinationPosition.Intersects(newPosition)
             || intersectsWithAnotherMob == true)
             {
@@ -413,7 +413,7 @@
 
             // checks if the new position is not well or market
             if (Well.Instance.WellPosition.Intersects(newPosition)
-            || Market.Instance.MarketPosition.Intersects(newPosition)
+            || Scenery.Instance.MarketPosition.Intersects(newPosition)
             || intersectsWithAnotherMob == true)
             {
                 intersectsWithObstacles = true;

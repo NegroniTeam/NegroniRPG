@@ -43,7 +43,7 @@
                 this.BoxAtkDefText = "";
             }
 
-            if (Market.Instance.MarketPosition.Contains(MousePosition))
+            if (Scenery.Instance.MarketPosition.Contains(MousePosition))
             {
                 this.MarketInfoRectangle = new Rectangle(MousePosition.X - 40, MousePosition.Y + 20, 80, 30);
                 this.BoxMarketText = "Market\nBuy Items";

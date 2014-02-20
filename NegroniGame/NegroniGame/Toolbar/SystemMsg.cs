@@ -34,8 +34,6 @@
 
         public void GetLastMessages()
         {
-            // Update(); // updates the messages
-
             // defines the position of the first message
             this.MsgXPos = 130;
             this.MsgYPos = this.ScreenHeight - 20;
@@ -77,9 +75,33 @@
             }
         }
 
-        //private void Update()
+        //public void AddMessages(string item)
         //{
-        //    // TO DO: auto fill with new msgs
+        //    // elixirs handler 
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You restored {0} HP.", this.RestoredPoints), Color.Aquamarine } });
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> 1 HP Elixir destroyed."), Color.Red } });
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} seconds to reuse Elixir.", REUSE_TIME - (int)this.elapsedTimeElixir), Color.Aquamarine } });
+
+        //    // monster
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
+
+        //    // monsters handler
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} died.", this.SpawnedMobs[mobIndex].Name), Color.Cyan } });
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} droped {1} {2}.", this.SpawnedMobs[mobIndex].Name, currentDrop.Amount, currentDrop.Name), Color.SpringGreen } });
+
+        //    // player
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} destroyed.", item), Color.Red } });
+
+        //    // scenery
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You picked up {0} {1}.", Scenery.Instance.DropList[index].Amount, Scenery.Instance.DropList[index].Name), Color.Beige } });
+
+        //    // Shot
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { ">> You missed the target.", Color.Pink } });
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You did {0} dmg to {1}.", Player.Instance.WeaponDmg, Monsters.MonstersHandler.Instance.SpawnedMobs[index].Name), Color.Yellow } });
+
+        //    // Well
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> Well restored you {0} HP.", restoredPoints), Color.Aquamarine } });
+        //    this.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} seconds to reuse.", REUSE_TIME - (int)this.elapsedTimeToReuse), Color.Red } });
         //}
 
         public int MsgXPos { get; private set; }

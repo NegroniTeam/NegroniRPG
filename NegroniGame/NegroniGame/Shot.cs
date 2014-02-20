@@ -69,7 +69,7 @@
 
             if (this.ShotDestPosition.Contains(EndPoint) // The shot is removed if the shot reaches the end point of the range
                 || this.ShotDestPosition.Intersects(Well.Instance.WellPosition) // The shot is removed if the shot reaches object on the map
-                || this.ShotDestPosition.Intersects(Market.Instance.MarketPosition)
+                || this.ShotDestPosition.Intersects(Scenery.Instance.MarketPosition)
                 || this.ShotDestPosition.Y > Screens.GameScreen.ScreenHeight - 135)
             {
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> You missed the target.", Color.Pink } });

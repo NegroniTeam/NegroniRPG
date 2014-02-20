@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using SystemFunctions;
     using Screens;
 
@@ -17,12 +16,10 @@
             this.ScreenRectangle = new Rectangle(0, 0, GameScreen.ScreenWidth, GameScreen.ScreenHeight);
             this.ToolbarRectangle = new Rectangle(0, GameScreen.ScreenHeight - 134, 700, 134);
             this.PlayerPicRectangle = new Rectangle(13, GameScreen.ScreenHeight - 72, 96, 72);
+            this.MarketPosition = new Rectangle(Screens.GameScreen.ScreenWidth - 115, 5, 102, 54);
 
             this.DropList = new List<Drop>();
             this.IndexForDeletion = new List<int>();
-
-            this.AllSceneryTextures = Screens.GameScreen.Instance.AllSceneryTextures;
-            Well.Instance.WellGraphic = AllSceneryTextures[2];
         }
 
         public static Scenery Instance
@@ -37,9 +34,16 @@
             }
         }
 
-        public void Initialize()
-        {
-        }
+        public Rectangle ScreenRectangle { get; private set; }
+        public Rectangle ToolbarRectangle { get; private set; }
+        public Rectangle PlayerPicRectangle { get; private set; }
+        public Rectangle MarketPosition { get; private set; }
+
+        public Well Well { get; private set; }
+        public List<Drop> DropList { get; private set; }
+        public List<int> IndexForDeletion { get; private set; }
+        public Point MousePosition { get; private set; }
+
 
         public void AddDrop(Drop newDrop)
         {
@@ -88,7 +92,6 @@
             foreach (int index in IndexForDeletion)
             {
                 this.DropList[index] = null;
-                // DropList.RemoveAt(index);
             }
 
             this.IndexForDeletion = new List<int>();
@@ -98,10 +101,11 @@
         public void Draw()
         {
             // backgroundTexture, toolbar, wellGraphic, playerPic, equipmentShopGraphic
-            new Sprite(AllSceneryTextures[0], ScreenRectangle).DrawBox();
-            new Sprite(AllSceneryTextures[1], ToolbarRectangle).DrawBox();
+            new Sprite(Screens.GameScreen.Instance.AllSceneryTextures[0], this.ScreenRectangle).DrawBox();
+            new Sprite(Screens.GameScreen.Instance.AllSceneryTextures[1], this.ToolbarRectangle).DrawBox();
             Well.Instance.Draw();
-            new Sprite(AllSceneryTextures[3], PlayerPicRectangle).DrawBox();
+            new Sprite(Screens.GameScreen.Instance.AllSceneryTextures[3], this.PlayerPicRectangle).DrawBox();
+            new Sprite(Screens.GameScreen.Instance.AllSceneryTextures[4], this.MarketPosition).DrawBox();
 
             // drop
             foreach (Drop drop in DropList)
@@ -113,17 +117,5 @@
             }
 
         }
-
-
-        public List<Texture2D> AllSceneryTextures { get; private set; }
-        public Rectangle ScreenRectangle { get; private set; }
-        public Rectangle ToolbarRectangle { get; private set; }
-        public Rectangle PlayerPicRectangle { get; private set; }
-
-        public Well Well { get; private set; }
-        public Market Market { get; private set; }
-        public List<Drop> DropList { get; private set; }
-        public List<int> IndexForDeletion { get; private set; }
-        public Point MousePosition { get; private set; }
     }
 }

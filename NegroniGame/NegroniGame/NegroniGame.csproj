@@ -88,6 +88,8 @@
     <Compile Include="Drop.cs" />
     <Compile Include="InfoBoxes.cs" />
     <Compile Include="Interfaces\IRobe.cs" />
+    <Compile Include="MarketDialogHandler.cs" />
+    <Compile Include="MarketDialog.cs" />
     <Compile Include="Monsters\Monster - Copy.cs" />
     <Compile Include="Monsters\PurpleBat.cs" />
     <Compile Include="Monsters\Genie.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Monsters\Viking.cs" />
     <Compile Include="Monsters\RedDragon.cs" />
     <Compile Include="Monsters\MonstersHandler.cs" />
+    <Compile Include="Player - Copy.cs" />
     <Compile Include="ShotsHandler.cs" />
     <Compile Include="Shot.cs" />
     <Compile Include="Screens\GameScreen.cs" />

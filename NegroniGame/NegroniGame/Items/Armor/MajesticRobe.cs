@@ -5,7 +5,7 @@
     public class MajesticRobe : Armor, Interfaces.IRobe
     {
         public MajesticRobe()
-            : base("Majestic Robe", 25, Screens.GameScreen.Instance.MajesticSetTextures[3])
+            : base("Majestic Robe", 25, 200, Screens.GameScreen.Instance.MajesticSetTextures[3])
         { }
     }
 }

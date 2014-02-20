@@ -5,7 +5,7 @@
     public class MajesticGloves : Armor, Interfaces.IGloves
     {
         public MajesticGloves()
-            : base("Majestic Gloves", 10, Screens.GameScreen.Instance.MajesticSetTextures[1])
+            : base("Majestic Gloves", 10, 100, Screens.GameScreen.Instance.MajesticSetTextures[1])
         { }
     }
 }
