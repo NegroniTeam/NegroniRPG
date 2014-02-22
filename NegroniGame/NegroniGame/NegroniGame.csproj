@@ -124,7 +124,8 @@
     <Compile Include="Monsters\Monster.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Scenery.cs" />
-    <Compile Include="SystemFunctions\GameException.cs" />
+    <Compile Include="SystemFunctions\Exceptions\InvalidNameException.cs" />
+    <Compile Include="SystemFunctions\Exceptions\GameException.cs" />
     <Compile Include="Toolbar\HP.cs" />
     <Compile Include="Toolbar\InventorySlots.cs" />
     <Compile Include="SystemFunctions\Sprite.cs" />

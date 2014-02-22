@@ -7,10 +7,10 @@
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Graphics;
 
-    public sealed class Player : Interfaces.IPlayer
+    public sealed class Player : Interfaces.IPlayer //no class can inherit from class Player
     {
         // Singleton !
-        private static Player instance;
+        private static Player instance; 
 
         public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
@@ -27,8 +27,11 @@
         private float elapsedTimePlayerAnim;
 
         private int frames = 0;
+        private string name;
 
         private Player() { }
+        
+        #region Properties Declarations
 
         public static Player Instance
         {
@@ -42,7 +45,21 @@
             }
         }
 
-        public string Name { get; private set; }
+        public string Name 
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new SystemFunctions.Exceptions.InvalidNameException("The name can't be null or empty!");
+                }
+                this.name = value;
+            }
+        }
         public Rectangle DestinationPosition { get; private set; }
         public Vector2 CenterOfPlayer { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
@@ -57,6 +74,8 @@
         public Interfaces.IRobe Robe { get; private set; }
         public Interfaces.IGloves Gloves { get; private set; }
         public Interfaces.IBoots Boots { get; private set; }
+
+        #endregion
 
         public void Initialize()
         {

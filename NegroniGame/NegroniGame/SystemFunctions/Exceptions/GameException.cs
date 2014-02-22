@@ -1,10 +1,17 @@
-﻿namespace NegroniGame.SystemFunctions
+﻿using System;
+namespace NegroniGame.SystemFunctions.Exceptions
 {
-    using System;
-
     public class GameException : ApplicationException
     {
-        public string ExMessage { get; private set; }
+        
+        private string exMessage;
+
+        public string ExMessage
+        {
+            get { return exMessage; }
+            private set { exMessage = value; }
+        }
+        
 
         public GameException(string exMessage)
             : base(exMessage)
