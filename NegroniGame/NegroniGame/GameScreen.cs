@@ -1,12 +1,11 @@
 namespace NegroniGame
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Media;
+    using NegroniGame.SystemFunctions;
+    using System.Collections.Generic;
 
     /// <summary>
     /// This is the main type for your game
@@ -23,6 +22,8 @@ namespace NegroniGame
         private Video video;
         private VideoPlayer videoPlayer;
         private Texture2D videoTexture;
+        private Sorcerer sorcerer;
+        private Player2 player2;
 
         private GameScreen()
         {
@@ -49,7 +50,7 @@ namespace NegroniGame
         }
 
         #region Properties Declarations
-        
+
         public MouseState MouseState { get; set; }
         public MouseState MouseStatePrevious { get; set; }
         public KeyboardState KeyboardState { get; set; }
@@ -98,6 +99,15 @@ namespace NegroniGame
             video = Content.Load<Video>("media/IntroVideo");
             videoPlayer = new VideoPlayer();
             videoPlayer.Play(video);
+
+            sorcerer = new Sorcerer("media/sprites/sorcerer", new Vector2(4, 1), new Vector2(1, 1));
+            sorcerer.Initialize();
+            GameManager.SpriteObjList.Add(sorcerer);
+
+            player2 = new Player2("media/sprites/player2", new Vector2(3, 4), new Vector2(100, 100));
+            player2.Initialize();
+            player2.IsActive = true;
+            GameManager.SpriteObjList.Add(player2);
 
             base.Initialize();
         }
@@ -233,7 +243,7 @@ namespace NegroniGame
                 Content.Load<Texture2D>("media/negroniHP1of3"),
                 Content.Load<Texture2D>("media/negroniHPempty")
             };
-            
+
             ShotsTextures = new List<Texture2D>()
             {
                 Content.Load<Texture2D>("media/sprites/fireballs")
@@ -244,6 +254,9 @@ namespace NegroniGame
                 Content.Load<Texture2D>("media/drop/coins2")
             };
 
+            sorcerer.LoadContent(Content);
+            player2.LoadContent(Content);
+
             Player.Instance.Initialize();
         }
 
@@ -253,13 +266,13 @@ namespace NegroniGame
             cursorPos = new Vector2(MouseState.X, MouseState.Y); // cursor update
 
             KeyboardState = Keyboard.GetState();
-            
+
             // Allows the game to exit
             if (KeyboardState.IsKeyDown(Keys.Escape))
             {
                 this.Exit();
             }
-            
+
             // if Intro Video is over starts checking for updates of the game
             if (videoPlayer.State == MediaState.Stopped)
             {
@@ -310,6 +323,9 @@ namespace NegroniGame
                     Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
 
                     Handlers.GameOverHandler.Instance.Update(gameTime);
+
+                    sorcerer.Update(gameTime);
+                    player2.Update(gameTime);
                 }
                 else
                 {
@@ -360,6 +376,9 @@ namespace NegroniGame
                 InfoBoxes.Instance.Draw(); // Pop-up info boxes
 
                 Handlers.GameOverHandler.Instance.Draw();
+
+                sorcerer.Draw(SpriteBatch);
+                player2.Draw(SpriteBatch);
 
                 SpriteBatch.Draw(CursorTexture, cursorPos, Color.White); // draws cursor
             }

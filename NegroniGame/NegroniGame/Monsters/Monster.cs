@@ -1,10 +1,10 @@
 ﻿namespace NegroniGame.Monsters
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
+    using NegroniGame.SystemFunctions;
+    using System;
+    using System.Collections.Generic;
 
     public abstract class Monster : Interfaces.IMonster
     {
@@ -46,7 +46,7 @@
         }
 
         public int ID { get; private set; }
-        
+
         public string Name
         {
             get
@@ -405,7 +405,7 @@
         private bool IntersectsWithObstacles(Rectangle newPosition)
         {
             // checks if the new position is not well, market, player or another mob
-            if (IntersectsWithObstaclesNoPlayer(newPosition) || Player.Instance.DestinationPosition.Intersects(newPosition))
+            if (IntersectsWithObstaclesNoPlayer(newPosition) || Player.Instance.DestinationPosition.Intersects(newPosition) || GameManager.DoesIntersect(newPosition))
             {
                 return true;
             }

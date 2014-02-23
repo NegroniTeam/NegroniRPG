@@ -1,23 +1,23 @@
 ﻿namespace NegroniGame
 {
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
+    using NegroniGame.SystemFunctions;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Input;
-    using Microsoft.Xna.Framework.Graphics;
 
     public sealed class Player : Interfaces.IPlayer //no class can inherit from class Player
     {
         // Singleton !
-        private static Player instance; 
+        private static Player instance;
 
         public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
 
         private Vector2 playerPosition = new Vector2((float)GameScreen.ScreenWidth / 2, (float)GameScreen.ScreenHeight / 2 - 50);
-        
+
         private readonly List<Texture2D> playerTextures = GameScreen.Instance.PlayerTextures;
 
         private Texture2D playerAnim = GameScreen.Instance.PlayerTextures[3];
@@ -37,7 +37,7 @@
         private string name;
 
         private Player() { }
-        
+
         public static Player Instance
         {
             get
@@ -52,7 +52,7 @@
 
         #region Properties Declarations
 
-        public string Name 
+        public string Name
         {
             get
             {
@@ -442,10 +442,10 @@
                     break;
                 }
             }
-            
+
             if (Well.Instance.WellPosition.Intersects(newPosition)
                 || Handlers.SceneryHandler.Instance.MarketPosition.Intersects(newPosition)
-                || doesIntersectWithMobs)
+                || doesIntersectWithMobs || GameManager.DoesIntersect(newPosition))
             {
                 return true;
             }
