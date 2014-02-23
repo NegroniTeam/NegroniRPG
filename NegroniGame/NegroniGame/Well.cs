@@ -23,8 +23,13 @@
 
         public static Well Instance
         {
-            get            {                if (instance == null)                {
-                    instance = new Well();                }                return instance;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Well();
+                }
+                return instance;
              }
         }
 

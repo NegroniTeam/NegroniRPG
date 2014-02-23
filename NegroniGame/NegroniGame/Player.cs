@@ -12,7 +12,7 @@
         // Singleton !
         private static Player instance; 
 
-        public const int HP_POINTS_INITIAL = 10;
+        public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
 
