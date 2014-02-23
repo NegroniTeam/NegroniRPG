@@ -26,15 +26,12 @@
 
         private InventorySlots()
         {
-            this.Font = Screens.GameScreen.Instance.FontInfoBox;
-            this.DefaultSlotTextures = Screens.GameScreen.Instance.SlotsTextures;
-            this.TextPosition = new Vector2 (0, 0);
+            this.DefaultSlotTextures = GameScreen.Instance.SlotsTextures;
 
-            InventoryAreaTopPoint = Screens.GameScreen.ScreenHeight - 105;
+            InventoryAreaTopPoint = GameScreen.ScreenHeight - 105;
             InventoryAreaLeftPoint = 485;
             InventorySlotWidth = InventorySlotHeight = 50;
 
-            this.InfoBoxTexture = Screens.GameScreen.Instance.InfoBoxTexture;
             this.InventoryArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint, 206, 100); // the whole inventory
 
             // 1 is added for borders
@@ -66,46 +63,56 @@
             Slot6Image = DefaultSlotTextures[5];
             Slot7Image = DefaultSlotTextures[6];
             Slot8Image = DefaultSlotTextures[7];
-
-            this.InventoryPopUpInfoBoxText = "";
         }
+
+        private int InventorySlotWidth { get; set; }
+        private int InventorySlotHeight { get; set; }
+        private int InventoryAreaTopPoint { get; set; }
+        private int InventoryAreaLeftPoint { get; set; }
+        public Rectangle InventoryArea { get; private set; }
+        public Rectangle Slot1CoinsArea { get; private set; }
+        public Rectangle Slot2ElixirsArea { get; private set; }
+        public Rectangle Slot3WeaponArea { get; private set; }
+        public Rectangle Slot4ShieldArea { get; private set; }
+        public Rectangle Slot5HelmetArea { get; private set; }
+        public Rectangle Slot6RobeArea { get; private set; }
+        public Rectangle Slot7GlovesArea { get; private set; }
+        public Rectangle Slot8BootsArea { get; private set; }
+        public List<Texture2D> DefaultSlotTextures { get; private set; }
+        public Texture2D Slot1Image { get; private set; }
+        public Texture2D Slot2Image { get; private set; }
+        public Texture2D Slot3Image { get; private set; }
+        public Texture2D Slot4Image { get; private set; }
+        public Texture2D Slot5Image { get; private set; }
+        public Texture2D Slot6Image { get; private set; }
+        public Texture2D Slot7Image { get; private set; }
+        public Texture2D Slot8Image { get; private set; }
+        public Point MousePosition { get; private set; }
+        public bool IsAnyWeapon { get; private set; }
+        public bool IsAnyShield { get; private set; }
+        public bool IsAnyHelmet { get; private set; }
+        public bool IsAnyRobe { get; private set; }
+        public bool IsAnyGloves { get; private set; }
+        public bool IsAnyBoots { get; private set; }
+
 
         public void Update(GameTime gameTime, MouseState mouseState)
         {
             MousePosition = new Point(mouseState.X, mouseState.Y);
+
             CheckItems();
 
-            // Show small pop-up descriptive text box when mouse is over an item in the inventory
-            if (this.Slot1CoinsArea.Contains(MousePosition))
-            {
-                this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
-
-                this.InventoryPopUpInfoBoxText = String.Format("Coins" + "\n" + "{0}", Player.Instance.Coins.Amount); ////////////////
-                this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
-            }
-
-            else if (this.Slot2ElixirsArea.Contains(MousePosition) && Player.Instance.Elixirs.Count > 0)
+            if (this.Slot2ElixirsArea.Contains(MousePosition) && Player.Instance.Elixirs.Count > 0)
             {
                 // Checks if left mouse button is clicked and drinks the elixir
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     // TO DO: pop up box ask if sure before drinking the elixir
 
-                    if (ElixirsHandler.Instance.UseElixir())
+                    if (Handlers.ElixirsHandler.Instance.UseElixir())
                     {
                         Player.Instance.DrinkElixir();
                     }
-                }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, Items.ElixirsHP.RECOVERY_AMOUNT);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X + 25 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
                 }
             }
 
@@ -117,15 +124,6 @@
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("weapon");
                 }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Atk. {1}", Player.Instance.Weapon.Name, Player.Instance.Weapon.Attack);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
-                }
             }
 
             else if (this.Slot4ShieldArea.Contains(MousePosition) && IsAnyShield)
@@ -135,15 +133,6 @@
                 {
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("shield");
-                }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Shield.Name, Player.Instance.Shield.Defence);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);
                 }
             }
 
@@ -155,15 +144,6 @@
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("helmet");
                 }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Helmet.Name, Player.Instance.Helmet.Defence);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
-                }
             }
 
             else if (this.Slot6RobeArea.Contains(MousePosition) && IsAnyRobe)
@@ -173,15 +153,6 @@
                 {
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("robe");
-                }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Robe.Name, Player.Instance.Robe.Defence);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X + 20 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
                 }
             }
 
@@ -193,15 +164,6 @@
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("gloves");
                 }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Gloves.Name, Player.Instance.Gloves.Defence);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
-                }
             }
 
             else if (this.Slot8BootsArea.Contains(MousePosition) && IsAnyBoots)
@@ -212,22 +174,6 @@
                     // TO DO: pop up box ask if sure before destroys the item
                     Player.Instance.DestroyItem("boots");
                 }
-                else
-                {
-                    this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
-
-                    this.InventoryPopUpInfoBoxText = String.Format("{0}" + "\n" + "Def. {1}", Player.Instance.Boots.Name, Player.Instance.Boots.Defence);
-                    this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
-
-                    this.TextPosition = new Vector2(MousePosition.X - 80 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y - 15);
-                }
-            }
-
-            else
-            {
-                this.InventoryPopUpInfoBox = new Rectangle(0, 0, 0, 0);
-                this.TextPosition = new Vector2(0, 0);
-                this.InventoryPopUpInfoBoxText = "";
             }
 
             CheckItems();
@@ -268,8 +214,6 @@
             new SystemFunctions.Sprite(this.Slot6Image, this.Slot6RobeArea).DrawBox();
             new SystemFunctions.Sprite(this.Slot7Image, this.Slot7GlovesArea).DrawBox();
             new SystemFunctions.Sprite(this.Slot8Image, this.Slot8BootsArea).DrawBox();
-            new SystemFunctions.Sprite(this.InfoBoxTexture, this.InventoryPopUpInfoBox).DrawBox();
-            new SystemFunctions.Sprite(this.Font, this.InventoryPopUpInfoBoxText, this.TextPosition).DrawText(); 
         }
 
         private void CheckItems()
@@ -281,43 +225,6 @@
             IsAnyGloves = (Player.Instance.Gloves != null) ? true : false;
             IsAnyBoots = (Player.Instance.Boots != null) ? true : false;
         }
-
-        
-        private int InventorySlotWidth { get; set; }
-        private int InventorySlotHeight { get; set; }
-        private int InventoryAreaTopPoint { get; set; }
-        private int InventoryAreaLeftPoint { get; set; }
-        private int StringLength { get; set; }
-        public Rectangle InventoryArea { get; private set; }
-        public Rectangle Slot1CoinsArea { get; private set; }
-        public Rectangle Slot2ElixirsArea { get; private set; }
-        public Rectangle Slot3WeaponArea { get; private set; }
-        public Rectangle Slot4ShieldArea { get; private set; }
-        public Rectangle Slot5HelmetArea { get; private set; }
-        public Rectangle Slot6RobeArea { get; private set; }
-        public Rectangle Slot7GlovesArea { get; private set; }
-        public Rectangle Slot8BootsArea { get; private set; }
-        public List<Texture2D> DefaultSlotTextures { get; private set; }
-        public Texture2D Slot1Image { get; private set; }
-        public Texture2D Slot2Image { get; private set; }
-        public Texture2D Slot3Image { get; private set; }
-        public Texture2D Slot4Image { get; private set; }
-        public Texture2D Slot5Image { get; private set; }
-        public Texture2D Slot6Image { get; private set; }
-        public Texture2D Slot7Image { get; private set; }
-        public Texture2D Slot8Image { get; private set; }
-        public Vector2 TextPosition { get; private set; }
-        public Rectangle InventoryPopUpInfoBox { get; private set; }
-        public string InventoryPopUpInfoBoxText { get; private set; }
-        public Texture2D InfoBoxTexture { get; private set; }
-        public SpriteFont Font { get; private set; }
-        public Point MousePosition { get; private set; }
-        public bool IsAnyWeapon { get; private set; }
-        public bool IsAnyShield { get; private set; }
-        public bool IsAnyHelmet { get; private set; }
-        public bool IsAnyRobe { get; private set; }
-        public bool IsAnyGloves { get; private set; }
-        public bool IsAnyBoots { get; private set; }
        
     }
 }

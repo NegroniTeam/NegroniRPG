@@ -115,13 +115,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="media\drop\coins.png">
-      <Name>coins</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="media\market.png">
       <Name>market</Name>
       <Importer>TextureImporter</Importer>
@@ -323,13 +316,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="media\drop\coins2.png">
-      <Name>coins2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="media\infoBox1.png">
       <Name>infoBox1</Name>
       <Importer>TextureImporter</Importer>
@@ -395,6 +381,41 @@
   <ItemGroup>
     <Compile Include="media\sprites\Elvina-dead.png">
       <Name>Elvina-dead</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="media\GameOver.png">
+      <Name>GameOver</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="media\DST-GameOver.wav">
+      <Name>DST-GameOver</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="media\IntroVideo.wmv">
+      <Name>IntroVideo</Name>
+      <Importer>WmvImporter</Importer>
+      <Processor>VideoProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="media\drop\coins2.png">
+      <Name>coins2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="media\drop\coins.png">
+      <Name>coins</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

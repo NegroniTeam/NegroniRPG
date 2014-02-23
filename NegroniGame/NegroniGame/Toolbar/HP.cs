@@ -26,9 +26,9 @@
 
         private HP()
         {
-            this.HpTexture = Screens.GameScreen.Instance.NegroniHPTextures; // negroniHPfull, negroniHP2of3, negroniHP1of3, negroniHPempty
+            this.HpTexture = GameScreen.Instance.NegroniHPTextures; // negroniHPfull, negroniHP2of3, negroniHP1of3, negroniHPempty
             this.CurrentHpTexture = this.HpTexture[0];
-            this.HpPosition = new Rectangle(385, Screens.GameScreen.ScreenHeight - 50, 50, 55);
+            this.HpPosition = new Rectangle(385, GameScreen.ScreenHeight - 50, 50, 55);
         }
 
         public void Update(GameTime gameTime, MouseState mouseState)
@@ -71,8 +71,8 @@
         {
             new SystemFunctions.Sprite(CurrentHpTexture, HpPosition).DrawBox();
 
-            new SystemFunctions.Sprite(Screens.GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
-            new SystemFunctions.Sprite(Screens.GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
+            new SystemFunctions.Sprite(GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
+            new SystemFunctions.Sprite(GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
         }
 
         public List<Texture2D> HpTexture { get; private set; }

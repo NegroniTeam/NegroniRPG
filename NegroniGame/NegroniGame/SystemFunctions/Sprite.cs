@@ -46,19 +46,19 @@
 
         public void Draw()
         {
-            Screens.GameScreen.Instance.SpriteBatch.Draw(this.texture, this.position, this.tint);
+            GameScreen.Instance.SpriteBatch.Draw(this.texture, this.position, this.tint);
         }
         public void DrawBox()
         {
-            Screens.GameScreen.Instance.SpriteBatch.Draw(this.texture, this.destinationBox, this.tint);
+            GameScreen.Instance.SpriteBatch.Draw(this.texture, this.destinationBox, this.tint);
         }
         public void DrawBoxAnim()
         {
-            Screens.GameScreen.Instance.SpriteBatch.Draw(this.texture, this.destinationBox, this.sourceBox, this.tint);
+            GameScreen.Instance.SpriteBatch.Draw(this.texture, this.destinationBox, this.sourceBox, this.tint);
         }
         public void DrawText()
         {
-            Screens.GameScreen.Instance.SpriteBatch.DrawString(this.font, this.text, this.position, this.tint);
+            GameScreen.Instance.SpriteBatch.DrawString(this.font, this.text, this.position, this.tint);
         }
     }
 }

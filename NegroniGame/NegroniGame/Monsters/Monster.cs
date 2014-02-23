@@ -16,6 +16,7 @@
         private const int ATTACK_INTERVAL = 2;
 
         private int currentFrame = 0;
+        private string name;
         private readonly int hpPointsInitial;
         private readonly Random randomGenerator = new Random();
         private readonly List<Texture2D> monsterTextures;
@@ -28,6 +29,8 @@
         private float elapsedTimeHit;
         private bool isInCombatState = false;
         private string changeDirection = "";
+        private int damage;
+
 
         public Monster(int numberOfMob, Rectangle initialMonsterPos, string name, List<Texture2D> mobTextures, int initialHpPoints)
         {
@@ -43,8 +46,37 @@
         }
 
         public int ID { get; private set; }
-        public string Name { get; private set; }
-        public int Damage { get; private set; }
+        
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new SystemFunctions.Exceptions.InvalidNameException("The name can't be null or empty!");
+                }
+                this.name = value;
+            }
+        }
+        public int Damage
+        {
+            get
+            {
+                return this.damage;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new SystemFunctions.Exceptions.InvalidAmountException("The amount must be positive or zero!");
+                }
+                this.damage = value;
+            }
+        }
         public int DirectionForMovement { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
         public int HpPointsCurrent { get; set; }
@@ -115,7 +147,7 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = ((Screens.GameScreen.ScreenHeight - 170 - this.monsterPosition.Y) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (Screens.GameScreen.ScreenHeight - 170 - this.monsterPosition.Y);
+                    int maxPosition = ((GameScreen.ScreenHeight - 170 - this.monsterPosition.Y) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (GameScreen.ScreenHeight - 170 - this.monsterPosition.Y);
                     maxPosition = (maxPosition < 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
@@ -169,7 +201,7 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = ((Screens.GameScreen.ScreenWidth - 30 - this.monsterPosition.X) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (Screens.GameScreen.ScreenWidth - 30 - this.monsterPosition.X);
+                    int maxPosition = ((GameScreen.ScreenWidth - 30 - this.monsterPosition.X) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (GameScreen.ScreenWidth - 30 - this.monsterPosition.X);
                     maxPosition = (maxPosition < 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
@@ -386,7 +418,7 @@
             bool intersectsWithAnotherMob = false;
 
             // checks if the new position intersects with another mob
-            foreach (Monster monster in Monsters.MonstersHandler.Instance.SpawnedMobs)
+            foreach (Monster monster in Handlers.MonstersHandler.Instance.SpawnedMobs)
             {
                 if (monster.ID != this.ID && monster.DestinationPosition.Intersects(newPosition))
                 {
@@ -397,7 +429,7 @@
 
             // checks if the new position is not well or market
             if (Well.Instance.WellPosition.Intersects(newPosition)
-            || Scenery.Instance.MarketPosition.Intersects(newPosition)
+            || Handlers.SceneryHandler.Instance.MarketPosition.Intersects(newPosition)
             || intersectsWithAnotherMob == true)
             {
                 return true;

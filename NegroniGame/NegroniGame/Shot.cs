@@ -15,7 +15,7 @@
 
         public Shot(Vector2 playerPosition, SystemFunctions.DirectionsEnum currentDirection)
         {
-            this.ShotTextures = Screens.GameScreen.Instance.ShotsTextures;
+            this.ShotTextures = GameScreen.Instance.ShotsTextures;
             this.ShotTexture = this.ShotTextures[0];
             this.direction = currentDirection;
 
@@ -69,21 +69,21 @@
 
             if (this.ShotDestPosition.Contains(EndPoint) // The shot is removed if the shot reaches the end point of the range
                 || this.ShotDestPosition.Intersects(Well.Instance.WellPosition) // The shot is removed if the shot reaches object on the map
-                || this.ShotDestPosition.Intersects(Scenery.Instance.MarketPosition)
-                || this.ShotDestPosition.Y > Screens.GameScreen.ScreenHeight - 135)
+                || this.ShotDestPosition.Intersects(Handlers.SceneryHandler.Instance.MarketPosition)
+                || this.ShotDestPosition.Y > GameScreen.ScreenHeight - 135)
             {
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> You missed the target.", Color.Pink } });
                 return true;
             }
 
             // The shot is removed if it reaches mob
-            for (int index = 0; index < Monsters.MonstersHandler.Instance.SpawnedMobs.Count; index++)
+            for (int index = 0; index < Handlers.MonstersHandler.Instance.SpawnedMobs.Count; index++)
             {
-                if (this.ShotDestPosition.Intersects(Monsters.MonstersHandler.Instance.SpawnedMobs[index].DestinationPosition)) // if (this.ShotDestPosition.Intersects(Monsters.MonsterGroup.Instance.SpawnedMobs[index].MonsterPosition))
+                if (this.ShotDestPosition.Intersects(Handlers.MonstersHandler.Instance.SpawnedMobs[index].DestinationPosition)) // if (this.ShotDestPosition.Intersects(Monsters.MonsterGroup.Instance.SpawnedMobs[index].MonsterPosition))
                 {
-                    Monsters.MonstersHandler.Instance.MobsHit.Add(index);
+                    Handlers.MonstersHandler.Instance.MobsHit.Add(index);
 
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You did {0} dmg to {1}.", Player.Instance.WeaponDmg, Monsters.MonstersHandler.Instance.SpawnedMobs[index].Name), Color.Yellow } });
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You did {0} dmg to {1}.", Player.Instance.WeaponDmg, Handlers.MonstersHandler.Instance.SpawnedMobs[index].Name), Color.Yellow } });
                     return true;
                 }
             }

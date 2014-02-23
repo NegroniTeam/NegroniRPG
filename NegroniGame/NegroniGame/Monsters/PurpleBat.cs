@@ -8,7 +8,7 @@
     {
         // base: Mob ID, starting Position, Name, Textures, starting HP, mob Speed
         public PurpleBat(int numberOfMob, Rectangle initialMonsterPos)
-            : base(numberOfMob, initialMonsterPos, "Purple Bat", Screens.GameScreen.Instance.MonstersTextures[5], 100)
+            : base(numberOfMob, initialMonsterPos, "Purple Bat", GameScreen.Instance.MonstersTextures[5], 100)
         { }
     }
 }

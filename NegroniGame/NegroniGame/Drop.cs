@@ -14,7 +14,7 @@
             RandomGenerator = new Random();
             int numberOfTexture = RandomGenerator.Next(0, 0);
 
-            this.DropTextures = Screens.GameScreen.Instance.DropTextures;
+            this.DropTextures = GameScreen.Instance.DropTextures;
             this.CurrentTexture = DropTextures[numberOfTexture];
 
             this.DropPosition = mobPosition;

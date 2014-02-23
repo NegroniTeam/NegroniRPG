@@ -2,7 +2,7 @@
 
 namespace NegroniGame.SystemFunctions.Exceptions
 {
-    class InvalidNameException : ApplicationException
+    class InvalidAmountException  : ApplicationException
     {
         private string exMessage;
 
@@ -13,16 +13,17 @@ namespace NegroniGame.SystemFunctions.Exceptions
         }
         
 
-        public InvalidNameException(string exMessage)
+        public InvalidAmountException(string exMessage)
             : base(exMessage)
         {
 
         }
 
-        public InvalidNameException(string exMessage, Exception innerEx)
+        public InvalidAmountException(string exMessage, Exception innerEx)
             : base(exMessage, innerEx)
         {
 
         }
+
     }
 }

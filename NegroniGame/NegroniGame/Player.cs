@@ -12,27 +12,32 @@
         // Singleton !
         private static Player instance; 
 
-        public const int HP_POINTS_INITIAL = 200;
+        public const int HP_POINTS_INITIAL = 10;
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
 
-        private Vector2 playerPosition = new Vector2((float)Screens.GameScreen.ScreenWidth / 2, (float)Screens.GameScreen.ScreenHeight / 2 - 50);
+        private Vector2 playerPosition = new Vector2((float)GameScreen.ScreenWidth / 2, (float)GameScreen.ScreenHeight / 2 - 50);
         
-        private readonly List<Texture2D> playerTextures = Screens.GameScreen.Instance.PlayerTextures;
+        private readonly List<Texture2D> playerTextures = GameScreen.Instance.PlayerTextures;
 
-        private Texture2D playerAnim = Screens.GameScreen.Instance.PlayerTextures[3];
+        private Texture2D playerAnim = GameScreen.Instance.PlayerTextures[3];
 
         private Rectangle animSourcePosition;
 
         private float elapsedTimePlayerAnim;
 
         private int frames = 0;
+
+        private int hpPointsCurrent;
+
+        private int weaponDmg;
+
+        private int armorDef;
+
         private string name;
 
         private Player() { }
         
-        #region Properties Declarations
-
         public static Player Instance
         {
             get
@@ -44,6 +49,8 @@
                 return instance;
             }
         }
+
+        #region Properties Declarations
 
         public string Name 
         {
@@ -63,9 +70,58 @@
         public Rectangle DestinationPosition { get; private set; }
         public Vector2 CenterOfPlayer { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
-        public int HpPointsCurrent { get; private set; }
-        public int WeaponDmg { get; private set; }
-        public int ArmorDef { get; private set; }
+
+        public int HpPointsCurrent
+        {
+            get
+            {
+                return this.hpPointsCurrent;
+            }
+
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new SystemFunctions.Exceptions.InvalidAmountException("The amount must be positive or zero!");
+                }
+                this.hpPointsCurrent = value;
+            }
+        }
+
+        public int WeaponDmg
+        {
+            get
+            {
+                return this.weaponDmg;
+            }
+
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new SystemFunctions.Exceptions.InvalidAmountException("The amount must be positive or zero!");
+                }
+                this.weaponDmg = value;
+            }
+        }
+
+        public int ArmorDef
+        {
+            get
+            {
+                return this.armorDef;
+            }
+
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new SystemFunctions.Exceptions.InvalidAmountException("The amount must be positive or zero!");
+                }
+                this.armorDef = value;
+            }
+        }
+
         public Items.Coins Coins { get; set; } //  TO DO PRIVATE
         public Items.ElixirsHP Elixirs { get; private set; }
         public Interfaces.IWeapon Weapon { get; private set; }
@@ -96,13 +152,6 @@
 
         public void Update(GameTime gameTime, KeyboardState ks)
         {
-            // GAME OVER
-            if (this.HpPointsCurrent <= 0)
-            {
-                Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> GAME OVER!"), Color.Red } });
-                Screens.GameScreen.Instance.IsGameOver = true;
-            }
-
             Move(gameTime, ks);
             this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
 
@@ -278,7 +327,7 @@
 
         public void DrinkElixir()
         {
-            this.HpPointsCurrent += ElixirsHandler.Instance.RestoredPoints;
+            this.HpPointsCurrent += Handlers.ElixirsHandler.Instance.RestoredPoints;
             this.Elixirs = new Items.ElixirsHP(this.Elixirs.Count - 1);
         }
 
@@ -296,7 +345,7 @@
 
         public void Draw()
         {
-            if (!Screens.GameScreen.Instance.IsGameOver)
+            if (!GameScreen.Instance.IsGameOver)
             {
                 new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
             }
@@ -311,7 +360,7 @@
         {
             if (ks.IsKeyDown(Keys.Right))
             {
-                if (playerPosition.X < Screens.GameScreen.ScreenWidth - 30)
+                if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
                     Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
                     // Well.Instance.WellPosition.Intersects , Scenery.Instance.MarketPosition.Intersects
@@ -360,7 +409,7 @@
             }
             else if (ks.IsKeyDown(Keys.Down))
             {
-                if (playerPosition.Y <= Screens.GameScreen.ScreenHeight - 170)
+                if (playerPosition.Y <= GameScreen.ScreenHeight - 170)
                 {
                     Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32);
 
@@ -385,7 +434,7 @@
         {
             bool doesIntersectWithMobs = false;
 
-            foreach (Monsters.Monster monster in Monsters.MonstersHandler.Instance.SpawnedMobs)
+            foreach (Monsters.Monster monster in Handlers.MonstersHandler.Instance.SpawnedMobs)
             {
                 if (monster.DestinationPosition.Intersects(newPosition))
                 {
@@ -395,7 +444,7 @@
             }
             
             if (Well.Instance.WellPosition.Intersects(newPosition)
-                || Scenery.Instance.MarketPosition.Intersects(newPosition)
+                || Handlers.SceneryHandler.Instance.MarketPosition.Intersects(newPosition)
                 || doesIntersectWithMobs)
             {
                 return true;

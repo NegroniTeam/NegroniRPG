@@ -6,7 +6,7 @@
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
-    public class Well
+    public sealed class Well
     {
         // Singleton !
         private static Well instance;
@@ -14,11 +14,11 @@
         private const float REUSE_TIME = 15;
         private float elapsedTimeToReuse = REUSE_TIME;
         private float elapsedTimeLastMsg;
-        private Texture2D WellGraphic = Screens.GameScreen.Instance.AllSceneryTextures[2];
+        private readonly Texture2D wellGraphic = GameScreen.Instance.AllSceneryTextures[2];
 
         private Well()
         {
-            this.WellPosition = new Rectangle(300, Screens.GameScreen.ScreenHeight / 2 + 30, 48, 48);
+            this.WellPosition = new Rectangle(300, GameScreen.ScreenHeight / 2 + 30, 48, 48);
         }
 
         public static Well Instance
@@ -38,8 +38,8 @@
             {
 
                 // if Player clicks Enter
-                if (Screens.GameScreen.Instance.KeyboardState.IsKeyDown(Keys.Enter)
-                    && Screens.GameScreen.Instance.KeyboardStatePrevious.IsKeyUp(Keys.Enter))
+                if (GameScreen.Instance.KeyboardState.IsKeyDown(Keys.Enter)
+                    && GameScreen.Instance.KeyboardStatePrevious.IsKeyUp(Keys.Enter))
                 {
 
                     // if reuse time is elapsed
@@ -65,7 +65,7 @@
 
         public void Draw()
         {
-            new SystemFunctions.Sprite(this.WellGraphic, this.WellPosition).DrawBox();
+            new SystemFunctions.Sprite(this.wellGraphic, this.WellPosition).DrawBox();
         }
 
         public Rectangle WellPosition { get; private set; }

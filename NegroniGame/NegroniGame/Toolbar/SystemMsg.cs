@@ -13,10 +13,10 @@
 
         private SystemMsg()
         {
-            this.Font = Screens.GameScreen.Instance.FontMessages;
+            this.Font = GameScreen.Instance.FontMessages;
             this.LinesAsSprites = new List<Sprite>();
-            this.ScreenHeight = Screens.GameScreen.ScreenHeight;
-            this.ScreenWidth = Screens.GameScreen.ScreenWidth;
+            this.ScreenHeight = GameScreen.ScreenHeight;
+            this.ScreenWidth = GameScreen.ScreenWidth;
             this.AllMessages = new List<Dictionary<string, Color>>();
         }
 
