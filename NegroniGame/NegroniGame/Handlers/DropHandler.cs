@@ -1,9 +1,8 @@
 ﻿namespace NegroniGame.Handlers
 {
-    using System;
     using System.Collections.Generic;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Audio;
+    using System;
 
     public sealed class DropHandler
     {

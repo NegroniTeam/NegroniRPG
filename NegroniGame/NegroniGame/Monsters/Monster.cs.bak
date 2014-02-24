@@ -8,8 +8,6 @@
 
     public abstract class Monster : Interfaces.IMonster
     {
-		# region Fields Declaration
-
         private const float TIME_TO_CHANGE_DIRECTION = 5; // sec 5
         private const int MOVE_MAX_LENGTH = 80;
         private const float ANIM_DELAY = 200f;
@@ -33,7 +31,6 @@
         private string changeDirection = "";
         private int damage;
 
-		# endregion
 
         public Monster(int numberOfMob, Rectangle initialMonsterPos, string name, List<Texture2D> mobTextures, int initialHpPoints)
         {
@@ -48,8 +45,6 @@
             this.DirectionForMovement = -1;
         }
 
-		# region Properties Declaration
-	
         public int ID { get; private set; }
 
         public string Name
@@ -86,8 +81,6 @@
         public Rectangle DestinationPosition { get; private set; }
         public int HpPointsCurrent { get; set; }
 
-        # endregion
-        
         public void Draw(GameTime gameTime)
         {
             new SystemFunctions.Sprite(this.monsterAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();

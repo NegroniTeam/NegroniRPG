@@ -1,8 +1,8 @@
 ﻿namespace NegroniGame.Monsters
 {
+    using Microsoft.Xna.Framework;
     using System;
     using System.Linq;
-    using Microsoft.Xna.Framework;
 
     public class GreenOne : Monster, Interfaces.IMonster
     {

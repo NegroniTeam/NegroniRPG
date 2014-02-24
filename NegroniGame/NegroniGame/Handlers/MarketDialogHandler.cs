@@ -1,8 +1,8 @@
 ﻿namespace NegroniGame.Handlers
 {
-    using System;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Input;
+    using System;
 
     public sealed class MarketDialogHandler
     {

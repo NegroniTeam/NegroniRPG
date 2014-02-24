@@ -1,8 +1,8 @@
 ﻿namespace NegroniGame.Handlers
 {
+    using Microsoft.Xna.Framework;
     using System;
     using System.Collections.Generic;
-    using Microsoft.Xna.Framework;
 
     public sealed class ElixirsHandler
     {

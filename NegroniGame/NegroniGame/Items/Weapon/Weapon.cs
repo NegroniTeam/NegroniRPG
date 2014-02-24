@@ -1,7 +1,7 @@
 ﻿namespace NegroniGame.Items.Weapon
 {
-    using System;
     using Microsoft.Xna.Framework.Graphics;
+    using System;
 
     public abstract class Weapon : Interfaces.IWeapon
     {

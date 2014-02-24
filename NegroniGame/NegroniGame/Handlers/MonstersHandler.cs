@@ -1,10 +1,10 @@
 ﻿namespace NegroniGame.Handlers
 {
+    using Microsoft.Xna.Framework;
+    using NegroniGame.Monsters;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.Xna.Framework;
-    using Monsters;
 
     public sealed class MonstersHandler
     {

@@ -1,10 +1,10 @@
 ﻿namespace NegroniGame
 {
-    using System;
-    using System.Collections.Generic;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+    using System;
+    using System.Collections.Generic;
 
     public sealed class Well
     {

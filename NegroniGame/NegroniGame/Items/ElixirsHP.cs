@@ -1,7 +1,7 @@
 ﻿namespace NegroniGame.Items
 {
-    using System;
     using Microsoft.Xna.Framework.Graphics;
+    using System;
 
     public struct ElixirsHP : Interfaces.IItem
     {

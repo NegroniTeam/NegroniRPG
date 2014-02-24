@@ -1,11 +1,11 @@
 ﻿namespace NegroniGame
 {
-    using System;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Graphics;
     using NegroniGame.SystemFunctions;
     using NegroniGame.Toolbar;
+    using System;
 
     public sealed class InfoBoxes
     {

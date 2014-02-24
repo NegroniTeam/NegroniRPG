@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace NegroniGame.SystemFunctions.Exceptions
+﻿namespace NegroniGame.SystemFunctions.Exceptions
 {
-    class InvalidNameException : ApplicationException
+    using System;
+
+    public class InvalidNameException : ApplicationException
     {
         private string exMessage;
 

@@ -1,8 +1,8 @@
 ﻿namespace NegroniGame.Handlers
 {
-    using System;
     using Microsoft.Xna.Framework;
-    using SystemFunctions;
+    using NegroniGame.SystemFunctions;
+    using System;
 
     public sealed class SceneryHandler
     {

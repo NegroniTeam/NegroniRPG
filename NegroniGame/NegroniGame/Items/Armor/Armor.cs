@@ -1,7 +1,7 @@
 ﻿namespace NegroniGame.Items.Armor
 {
-    using System;
     using Microsoft.Xna.Framework.Graphics;
+    using System;
 
     public abstract class Armor : Interfaces.IArmor
     {

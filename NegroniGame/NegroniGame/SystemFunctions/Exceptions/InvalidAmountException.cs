@@ -1,8 +1,8 @@
-﻿using System;
-
-namespace NegroniGame.SystemFunctions.Exceptions
+﻿namespace NegroniGame.SystemFunctions.Exceptions
 {
-    class InvalidAmountException  : ApplicationException
+    using System;
+
+    public class InvalidAmountException  : ApplicationException
     {
         private string exMessage;
 
@@ -12,7 +12,6 @@ namespace NegroniGame.SystemFunctions.Exceptions
             private set { exMessage = value; }
         }
         
-
         public InvalidAmountException(string exMessage)
             : base(exMessage)
         {
