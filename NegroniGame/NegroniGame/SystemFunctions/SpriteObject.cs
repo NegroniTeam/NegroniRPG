@@ -6,8 +6,8 @@
 
     public abstract class SpriteObject
     {
+        public bool isActive;
         protected Vector2 position;
-        protected bool isActive;
 
         public string Name { get; protected set; }
         public Texture2D Image { get; protected set; }

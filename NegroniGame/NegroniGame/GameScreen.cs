@@ -26,6 +26,7 @@ namespace NegroniGame
         private Texture2D videoTexture;
         private Color videoColor;
         private Song inGameMusic, gameOverMusic;
+
         private Sorcerer sorcerer;
         private Player2 player2;
 
@@ -119,7 +120,7 @@ namespace NegroniGame
 
             player2 = new Player2("media/sprites/player2", new Vector2(3, 4), new Vector2(100, 100));
             player2.Initialize();
-            player2.IsActive = false;
+            player2.isActive = false;
             GameManager.SpriteObjList.Add(player2);
 
             base.Initialize();

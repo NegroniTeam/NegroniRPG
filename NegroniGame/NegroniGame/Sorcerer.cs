@@ -55,7 +55,7 @@
 
         public void DoAction<T>(IReact obj)
         {
-            (obj as SpriteObject).IsActive = false;
+            (obj as SpriteObject).isActive = false;
         }
     }
 }
