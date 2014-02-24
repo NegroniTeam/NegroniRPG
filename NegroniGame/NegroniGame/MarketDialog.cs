@@ -81,7 +81,7 @@
 
                 Player.Instance.BuyItem(new Items.ElixirsHP(newNumberElixirs), this.item1.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton2Position.Contains(mousePosition)
                 && mouseState.LeftButton == ButtonState.Pressed
@@ -89,37 +89,37 @@
             {
                 Player.Instance.BuyItem(this.item2, this.item2.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton3Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 Player.Instance.BuyItem(this.item3, this.item3.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton4Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 Player.Instance.BuyItem(this.item4, this.item4.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton5Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 Player.Instance.BuyItem(this.item5, this.item5.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton6Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 Player.Instance.BuyItem(this.item6, this.item6.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
             else if (this.buyButton7Position.Contains(mousePosition) && mouseState.LeftButton == ButtonState.Pressed)
             {
                 Player.Instance.BuyItem(this.item7, this.item7.BuyingPrice);
                 Handlers.MarketDialogHandler.Instance.IsInMarket = false;
-                GameScreen.Instance.IsPaused = false;
+                GameScreen.Instance.GameState = 1;
             }
 
         }

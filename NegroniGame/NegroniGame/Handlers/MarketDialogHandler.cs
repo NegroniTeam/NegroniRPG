@@ -9,7 +9,6 @@
         // Singleton !
         private static MarketDialogHandler instance;
 
-
         private MarketDialogHandler()
         {
             IsInMarket = false;
@@ -38,7 +37,7 @@
                 && GameScreen.Instance.KeyboardStatePrevious.IsKeyUp(Keys.Enter))
             {
                 IsInMarket = true;
-                GameScreen.Instance.IsPaused = true;
+                GameScreen.Instance.GameState = 2;
             }
             else if (IsInMarket == true)
             {
@@ -48,7 +47,7 @@
                     && GameScreen.Instance.KeyboardStatePrevious.IsKeyUp(Keys.Enter))
                 {
                     IsInMarket = false;
-                    GameScreen.Instance.IsPaused = false;
+                    GameScreen.Instance.GameState = 1;
                 }
             }
         }

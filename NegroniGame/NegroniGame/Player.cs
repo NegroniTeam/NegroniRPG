@@ -14,6 +14,8 @@
         // Singleton !
         private static Player instance;
 
+		#region Fields Declaration
+
         public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
         private const float PLAYER_ANIM_SPEED = 200f;
@@ -38,7 +40,11 @@
 
         //private string name;
 
+		private Random randomGenerator;
+
         private Rectangle reactRect;
+
+		#endregion
 
         private Player() { }
 
@@ -139,19 +145,21 @@
 
         public override void Initialize()
         {
-            this.name = "Elvina";
+            base.Name = "Elvina";
             this.HpPointsCurrent = HP_POINTS_INITIAL;
             this.Direction = SystemFunctions.DirectionsEnum.South;
 
             // 16 = half of texture width
             this.CenterOfPlayer = new Vector2(this.playerPosition.X + 16, this.playerPosition.Y + 16);
 
-            this.Coins = new Items.Coins(100);
+            this.Coins = new Items.Coins(1000);
             this.Elixirs = new Items.ElixirsHP(2);
             this.Weapon = new Items.Weapon.NewbieStaff();
 
             this.WeaponDmg = this.Weapon.Attack;
             this.ArmorDef = 0;
+
+			this.randomGenerator = new Random();
 
             this.IsActive = true;
         }
@@ -167,7 +175,9 @@
         public override void Update(GameTime gameTime)
         {
             KeyboardState ks = Keyboard.GetState();
+
             Move(gameTime, ks);
+
             this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
 
             if (this.Weapon == null)
@@ -208,12 +218,78 @@
             }
         }
 
+        public int DrinkFromWell()
+        {
+            int restoredPoints = HP_POINTS_INITIAL - this.HpPointsCurrent;
+
+            this.HpPointsCurrent = HP_POINTS_INITIAL;
+
+            GameScreen.Instance.DrinkWell.Play();
+
+            return restoredPoints;
+        }
+
+        public void DrinkElixir()
+        {
+            this.HpPointsCurrent += Handlers.ElixirsHandler.Instance.RestoredPoints;
+            this.Elixirs = new Items.ElixirsHP(this.Elixirs.Count - 1);
+
+            GameScreen.Instance.DrinkElixir.Play();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (this.HpPointsCurrent > 0)
+            {
+                this.HpPointsCurrent -= damage;
+            }
+            if (this.HpPointsCurrent < 0)
+            {
+                this.HpPointsCurrent = 0;
+            }
+
+            int index = this.randomGenerator.Next(0, 3);
+            GameScreen.Instance.HitSounds[index].Play();
+        }
+
+        public void DestroyItem(string itemForDestruction)
+        {
+            switch (itemForDestruction)
+            {
+                case "weapon":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} destroyed.", this.Weapon.Name), Color.Red } });
+                    this.Weapon = null;
+                    break;
+                case "shield":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Shield.Name), Color.Red } });
+                    this.Shield = null;
+                    break;
+                case "gloves":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Gloves.Name), Color.Red } });
+                    this.Gloves = null;
+                    break;
+                case "robe":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Robe.Name), Color.Red } });
+                    this.Robe = null;
+                    break;
+                case "boots":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Boots.Name), Color.Red } });
+                    this.Boots = null;
+                    break;
+                case "helmet":
+                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Helmet.Name), Color.Red } });
+                    this.Helmet = null;
+                    break;
+            }
+        }
+
         public void BuyItem(Interfaces.IItem newItem, int coinsSpent)
         {
             if (coinsSpent <= this.Coins.Amount)
             {
                 if (newItem.ToString().Contains("Elixir"))
                 {
+					CompleteTransaction(newItem, coinsSpent);
                     this.Elixirs = (Items.ElixirsHP)newItem;
                 }
                 else if (newItem.ToString().Contains("Boots"))
@@ -288,12 +364,22 @@
                         this.Weapon = (Interfaces.IWeapon)newItem;
                     }
                 }
-
-
             }
             else
             {
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> Not enough coins.", Color.Red } });
+            }
+        }
+
+		public override void Draw()
+        {
+            if (GameScreen.Instance.GameState != 3)
+            {
+                new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+            }
+            else
+            {
+                new SystemFunctions.Sprite(this.playerTextures[4], new Vector2(this.DestinationPosition.X, this.DestinationPosition.Y)).Draw();
             }
         }
 
@@ -302,78 +388,18 @@
             int newCoinsAmount = this.Coins.Amount - coinsSpent;
             this.Coins = new Items.Coins(newCoinsAmount);
             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You bought {0}.", newItem.Name), Color.DarkGoldenrod } });
-        }
-
-        public void DestroyItem(string itemForDestruction)
-        {
-            switch (itemForDestruction)
+        
+			if (newItem.ToString().Contains("Weapon"))
             {
-                case "weapon":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} destroyed.", this.Weapon.Name), Color.Red } });
-                    this.Weapon = null;
-                    break;
-                case "shield":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Shield.Name), Color.Red } });
-                    this.Shield = null;
-                    break;
-                case "gloves":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Gloves.Name), Color.Red } });
-                    this.Gloves = null;
-                    break;
-                case "robe":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Robe.Name), Color.Red } });
-                    this.Robe = null;
-                    break;
-                case "boots":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Boots.Name), Color.Red } });
-                    this.Boots = null;
-                    break;
-                case "helmet":
-                    Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You destroyed {0}.", this.Helmet.Name), Color.Red } });
-                    this.Helmet = null;
-                    break;
+                GameScreen.Instance.WeaponBought.Play();
             }
-        }
-
-        public int DrinkFromWell()
-        {
-            int restoredPoints = HP_POINTS_INITIAL - this.HpPointsCurrent;
-
-            this.HpPointsCurrent = HP_POINTS_INITIAL;
-
-            return restoredPoints;
-        }
-
-        public void DrinkElixir()
-        {
-            this.HpPointsCurrent += Handlers.ElixirsHandler.Instance.RestoredPoints;
-            this.Elixirs = new Items.ElixirsHP(this.Elixirs.Count - 1);
-        }
-
-        public void TakeDamage(int damage)
-        {
-            if (this.HpPointsCurrent > 0)
+            else if (newItem.ToString().Contains("Armor"))
             {
-                this.HpPointsCurrent -= damage;
+                GameScreen.Instance.ArmorBought.Play();
             }
-            if (this.HpPointsCurrent < 0)
+            else if (newItem.ToString().Contains("ElixirsHP"))
             {
-                this.HpPointsCurrent = 0;
-            }
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            if (!GameScreen.Instance.IsGameOver)
-            {
-                if (this.IsActive)
-                {
-                    new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
-                }
-            }
-            else
-            {
-                new SystemFunctions.Sprite(this.playerTextures[4], new Vector2(this.DestinationPosition.X, this.DestinationPosition.Y)).Draw();
+                GameScreen.Instance.ElixirBought.Play();
             }
         }
 
@@ -385,9 +411,6 @@
                 if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
                     Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
-
-                    // Well.Instance.WellPosition.Intersects , Scenery.Instance.MarketPosition.Intersects
-                    // new Rectangle((int)(this.playerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4)
 
                     if (!IntersectsWithObjects(newPosition))
                     {
@@ -403,8 +426,6 @@
                 if (playerPosition.X > 0)
                 {
                     Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
-                    // Well, Scenery
-                    //  new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4)
 
                     if (!IntersectsWithObjects(newPosition))
                     {

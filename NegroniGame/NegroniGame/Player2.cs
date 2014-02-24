@@ -10,7 +10,7 @@
     public class Player2 : SpriteObjectAnime, IReact
     {
         private Vector2 tempCurrentFrame;
-        private float moveSpeed = 120;
+        private readonly float moveSpeed = 120;
 
         private Rectangle reactRect;
 
@@ -18,23 +18,23 @@
 
         public Player2(string spriteName, Vector2 amountOfFrames, Vector2 playerPosition)
         {
-            this.name = spriteName;
-            this.position = playerPosition;
-            this.amountOfFrames = amountOfFrames;
+            base.Name = spriteName;
+            base.Position = playerPosition;
+            base.AmountOfFrames = amountOfFrames;
         }
 
         public override void Initialize()
         {
-            this.animation = new Animation();
-            this.animation.Initialize(this.Position, this.amountOfFrames);
-            this.animation.Active = true;
+            base.Animation = new Animation();
+            base.Animation.Initialize(base.Position, base.AmountOfFrames);
+            base.Animation.Active = true;
             this.tempCurrentFrame = Vector2.Zero;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            this.image = content.Load<Texture2D>(this.Name);
-            this.animation.AnimationImage = this.Image;
+            base.Image = content.Load<Texture2D>(this.Name);
+            base.Animation.AnimationImage = base.Image;
         }
 
         public override void UnloadContent()
@@ -45,76 +45,76 @@
         {
             if (this.IsActive)
             {
-                this.drawRect = new Rectangle((int)this.position.X, (int)this.position.Y, (int)(this.image.Width / this.amountOfFrames.X), (int)(this.image.Height / this.amountOfFrames.Y));
-                this.reactRect = new Rectangle(this.drawRect.X - 10, this.drawRect.Y - 10, this.drawRect.Width + 10, this.drawRect.Height + 10);
+                this.DrawRect = new Rectangle((int)base.Position.X, (int)base.Position.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
+                this.reactRect = new Rectangle(this.DrawRect.X - 10, this.DrawRect.Y - 10, this.DrawRect.Width + 10, this.DrawRect.Height + 10);
                 this.keyState = Keyboard.GetState();
 
                 if (this.keyState.IsKeyDown(Keys.Down))
                 {
-                    this.position.Y += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    base.Position.Y += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     this.tempCurrentFrame.Y = 0;
                 }
                 else if (this.keyState.IsKeyDown(Keys.Up))
                 {
-                    this.position.Y -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    base.Position.Y -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     this.tempCurrentFrame.Y = 3;
                 }
                 else if (this.keyState.IsKeyDown(Keys.Right))
                 {
-                    this.position.X += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    base.Position.X += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     this.tempCurrentFrame.Y = 2;
                 }
                 else if (this.keyState.IsKeyDown(Keys.Left))
                 {
-                    this.position.X -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    base.Position.X -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     this.tempCurrentFrame.Y = 1;
                 }
 
                 this.BounceLeftRight();
                 this.BounceTopBottom();
 
-                this.tempCurrentFrame.X = this.animation.CurrentFrame.X;
+                this.tempCurrentFrame.X = base.Animation.CurrentFrame.X;
 
-                this.animation.Position = this.Position;
-                this.animation.CurrentFrame = this.tempCurrentFrame;
+                base.Animation.Position = base.Position;
+                base.Animation.CurrentFrame = this.tempCurrentFrame;
 
-                this.animation.Update(gameTime);
+                base.Animation.Update(gameTime);
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw()
         {
             if (IsActive)
             {
-                this.animation.Draw(spriteBatch);
+                base.Animation.Draw();
             }
         }
 
         private void BounceTopBottom()
         {
-            if (this.Position.Y < 0)
+            if (base.Position.Y < 0)
             {
                 // bounce off top
-                this.position.Y = 0;
+                base.Position.Y = 0;
             }
-            else if ((this.Position.Y + this.animation.FrameHeight) > GameScreen.ScreenHeight - 130)
+            else if ((base.Position.Y + base.Animation.FrameHeight) > GameScreen.ScreenHeight - 130)
             {
                 // bounce off bottom
-                this.position.Y = GameScreen.ScreenHeight - this.animation.FrameHeight - 130;
+                base.Position.Y = GameScreen.ScreenHeight - base.Animation.FrameHeight - 130;
             }
         }
 
         private void BounceLeftRight()
         {
-            if (this.Position.X < 0)
+            if (base.Position.X < 0)
             {
                 // bounc off left
-                this.position.X = 0;
+                base.Position.X = 0;
             }
-            else if ((this.Position.X + this.animation.FrameWidth) > GameScreen.ScreenWidth)
+            else if ((base.Position.X + base.Animation.FrameWidth) > GameScreen.ScreenWidth)
             {
                 // bounce off right
-                this.position.X = GameScreen.ScreenWidth - this.animation.FrameWidth;
+                base.Position.X = GameScreen.ScreenWidth - base.Animation.FrameWidth;
             }
         }
 

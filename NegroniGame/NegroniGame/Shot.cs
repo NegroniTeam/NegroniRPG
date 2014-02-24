@@ -39,6 +39,8 @@
                 this.shotPosition = new Vector2(playerPosition.X - 8, playerPosition.Y + 12);
                 this.EndPoint = new Point((int)(shotPosition.X - RANGE), (int)(shotPosition.Y));
             }
+
+            GameScreen.Instance.FireAttackSound.Play();
         }
 
         // returns info if the shot should be removed

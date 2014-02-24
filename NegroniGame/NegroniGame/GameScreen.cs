@@ -4,6 +4,7 @@ namespace NegroniGame
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Media;
+    using Microsoft.Xna.Framework.Audio;
     using NegroniGame.SystemFunctions;
     using System.Collections.Generic;
 
@@ -15,15 +16,20 @@ namespace NegroniGame
         // Singleton !
         private static GameScreen instance;
 
+		#region Fields Declaration
+
         private readonly GraphicsDeviceManager graphics;
         private Vector2 cursorPos = new Vector2();
         private List<Texture2D> monster1Textures, monster2Textures, monster3Textures, monster4Textures, monster5Textures, monster6Textures;
-        private bool isIngameMusicStarted = false;
         private Video video;
         private VideoPlayer videoPlayer;
         private Texture2D videoTexture;
+        private Color videoColor;
+        private Song inGameMusic, gameOverMusic;
         private Sorcerer sorcerer;
         private Player2 player2;
+
+		#endregion
 
         private GameScreen()
         {
@@ -35,6 +41,8 @@ namespace NegroniGame
             graphics.ApplyChanges(); //Changes the settings that you just applied
 
             Content.RootDirectory = "Content";
+
+			GameState = 0;
         }
 
         public static GameScreen Instance
@@ -55,8 +63,7 @@ namespace NegroniGame
         public MouseState MouseStatePrevious { get; set; }
         public KeyboardState KeyboardState { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
-        public bool IsPaused { get; set; }
-        public bool IsGameOver { get; set; }
+        public int GameState { get; set; }
         public static int ScreenWidth { get; private set; }
         public static int ScreenHeight { get; private set; }
         public SpriteFont FontMessages { get; private set; }
@@ -81,6 +88,14 @@ namespace NegroniGame
         public Texture2D MarketDialog { get; private set; }
         public Texture2D BuyButton { get; private set; }
         public Texture2D GameOverTex { get; private set; }
+		public SoundEffect PickUpSound { get; private set; }
+        public SoundEffect FireAttackSound { get; private set; }
+        public SoundEffect DrinkElixir { get; private set; }
+        public SoundEffect DrinkWell { get; private set; }
+        public SoundEffect WeaponBought { get; private set; }
+        public SoundEffect ArmorBought { get; private set; }
+        public SoundEffect ElixirBought { get; private set; }
+        public List<SoundEffect> HitSounds { get; private set; }
 
         #endregion
 
@@ -93,12 +108,10 @@ namespace NegroniGame
             ScreenWidth = graphics.PreferredBackBufferWidth;
             ScreenHeight = graphics.PreferredBackBufferHeight;
 
-            IsPaused = false;
-            IsGameOver = false;
-
             video = Content.Load<Video>("media/IntroVideo");
             videoPlayer = new VideoPlayer();
             videoPlayer.Play(video);
+            videoColor = new Color(255, 255, 255);
 
             sorcerer = new Sorcerer("media/sprites/sorcerer", new Vector2(4, 1), new Vector2(1, 1));
             sorcerer.Initialize();
@@ -254,7 +267,33 @@ namespace NegroniGame
                 Content.Load<Texture2D>("media/drop/coins2")
             };
 
+            ElixirBought = Content.Load<SoundEffect>("media/sounds/potionBought");
+
+            WeaponBought = Content.Load<SoundEffect>("media/sounds/weaponBought");
+
+            ArmorBought = Content.Load<SoundEffect>("media/sounds/armorBought");
+
+            HitSounds = new List<SoundEffect>()
+            {
+                Content.Load<SoundEffect>("media/sounds/hit1"),
+                Content.Load<SoundEffect>("media/sounds/hit2"),
+                Content.Load<SoundEffect>("media/sounds/hit3"),
+            };
+
+            DrinkWell = Content.Load<SoundEffect>("media/sounds/drinkWell");
+
+            DrinkElixir = Content.Load<SoundEffect>("media/sounds/drinkPotion");
+
+            FireAttackSound = Content.Load<SoundEffect>("media/sounds/firehit");
+
+            PickUpSound = Content.Load<SoundEffect>("media/sounds/pickup");
+
+            gameOverMusic = Content.Load<Song>("media/sounds/DST-GameOver");
+
+            inGameMusic = Content.Load<Song>("media/sounds/DST-Exanos");
+
             sorcerer.LoadContent(Content);
+
             player2.LoadContent(Content);
 
             Player.Instance.Initialize();
@@ -273,68 +312,74 @@ namespace NegroniGame
                 this.Exit();
             }
 
-            // if Intro Video is over starts checking for updates of the game
-            if (videoPlayer.State == MediaState.Stopped)
+            switch (GameState)
             {
-                // ingame music starts
-                if (isIngameMusicStarted == false)
-                {
-                    SystemFunctions.Sound.PlayIngameMusic();
-                    isIngameMusicStarted = true;
-                }
-
-                // Checks for pause
-                if (KeyboardState.IsKeyDown(Keys.P)
-                    && KeyboardStatePrevious.IsKeyUp(Keys.P)
-                    && !IsGameOver)
-                {
-                    if (IsPaused == false)
+                case 0: // Video Intro
+                    if (videoPlayer.State != MediaState.Stopped)
                     {
-                        IsPaused = true;
-                        SystemFunctions.Sound.StopIngameMusic();
+                        videoTexture = videoPlayer.GetTexture();
                     }
                     else
                     {
-                        IsPaused = false;
-                        SystemFunctions.Sound.PlayIngameMusic();
+                        MediaPlayer.Play(inGameMusic);
+                        MediaPlayer.IsRepeating = true;
+                        GameState = 1;
                     }
-                }
+                    break;
 
-                if (!IsPaused && !IsGameOver)
-                {
+                case 1: // Game Started
+                    if (videoColor.A > 1)
+                    {
+                         videoColor.A -= 2;
+                    }
+
+                    // Checks for Pause
+                    if (KeyboardState.IsKeyDown(Keys.P) && KeyboardStatePrevious.IsKeyUp(Keys.P))
+                    {
+                        MediaPlayer.Pause();
+                        GameState = 2;
+                    }
+
                     Player.Instance.Update(gameTime);
-
                     Handlers.MonstersHandler.Instance.Update(gameTime);
                     Handlers.DropHandler.Instance.Update(gameTime);
                     Handlers.ShotsHandler.Instance.UpdateShots(gameTime, KeyboardState);
-
                     Toolbar.InventorySlots.Instance.Update(gameTime, MouseState);
                     Toolbar.SystemMsg.Instance.GetLastMessages();
-                    Toolbar.HP.Instance.Update(gameTime, MouseState);
-
+                    Toolbar.HP.Instance.Update(gameTime);
                     InfoBoxes.Instance.Update(gameTime, MouseState);
-
-                    // updates elixir reuse time
-                    Handlers.ElixirsHandler.Instance.Update(gameTime);
-
-                    // updates well reuse time
-                    Well.Instance.Update(gameTime);
-
+                    Handlers.ElixirsHandler.Instance.Update(gameTime); // updates elixir reuse time
+                    Well.Instance.Update(gameTime); // updates well reuse time
                     Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
-
                     Handlers.GameOverHandler.Instance.Update(gameTime);
 
                     sorcerer.Update(gameTime);
                     player2.Update(gameTime);
-                }
-                else
-                {
-                    Toolbar.HP.Instance.Update(gameTime, MouseState);
 
+                    break;
+
+                case 2: // Paused
+
+                    // Checks for Resume
+                    if (KeyboardState.IsKeyDown(Keys.P) && KeyboardStatePrevious.IsKeyUp(Keys.P))
+                    {
+                        MediaPlayer.Resume();
+                        GameState = 1;
+                    }
+                    
+                    Toolbar.HP.Instance.Update(gameTime);
                     InfoBoxes.Instance.Update(gameTime, MouseState);
-
                     Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
-                }
+
+                    break;
+
+                case 3: // Game Over
+                    if (MediaPlayer.Queue.ActiveSong == inGameMusic)
+                    {
+                        MediaPlayer.Play(gameOverMusic);
+                    }
+                    InfoBoxes.Instance.Update(gameTime, MouseState);
+                    break;
             }
 
             this.KeyboardStatePrevious = KeyboardState;
@@ -349,15 +394,7 @@ namespace NegroniGame
 
             SpriteBatch.Begin();
 
-            if (videoPlayer.State != MediaState.Stopped)
-            {
-                videoTexture = videoPlayer.GetTexture();
-                if (videoTexture != null)
-                {
-                    SpriteBatch.Draw(videoTexture, new Vector2(0, 0), Color.White);
-                }
-            }
-            else
+            if (GameState != 0 && videoColor.A != 255)
             {
                 Handlers.SceneryHandler.Instance.Draw(); // Scenery
 
@@ -365,7 +402,7 @@ namespace NegroniGame
                 Handlers.MonstersHandler.Instance.Draw(gameTime); // Monsters
                 Handlers.ShotsHandler.Instance.Draw(); // Shots
 
-                Player.Instance.Draw(SpriteBatch); // Player
+                Player.Instance.Draw(); // Player
 
                 Handlers.MarketDialogHandler.Instance.Draw(); // Market dialog
 
@@ -377,10 +414,15 @@ namespace NegroniGame
 
                 Handlers.GameOverHandler.Instance.Draw();
 
-                sorcerer.Draw(SpriteBatch);
-                player2.Draw(SpriteBatch);
+                sorcerer.Draw();
+                player2.Draw();
 
                 SpriteBatch.Draw(CursorTexture, cursorPos, Color.White); // draws cursor
+            }
+
+			if (videoColor.A > 1)
+            {
+                SpriteBatch.Draw(videoTexture, new Vector2(0, 0), videoColor); // Intro Video
             }
 
             SpriteBatch.End();

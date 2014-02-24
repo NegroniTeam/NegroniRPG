@@ -5,7 +5,6 @@
     using System.Linq;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Input;
 
     public sealed class HP
     {
@@ -31,11 +30,12 @@
             this.HpPosition = new Rectangle(385, GameScreen.ScreenHeight - 50, 50, 55);
         }
 
-        public void Update(GameTime gameTime, MouseState mouseState)
-        {
-            
-            MousePosition = new Point(mouseState.X, mouseState.Y);
+        public List<Texture2D> HpTexture { get; private set; }
+        public Texture2D CurrentHpTexture { get; private set; }
+        public Rectangle HpPosition { get; private set; }
 
+        public void Update(GameTime gameTime)
+        {
             if (Player.Instance.HpPointsCurrent <= 0)
             {
                 this.CurrentHpTexture = this.HpTexture[3];
@@ -52,34 +52,11 @@
             {
                 this.CurrentHpTexture = this.HpTexture[0];
             }
-
-            // pop ups info box 
-            if (this.HpPosition.Contains(MousePosition))
-            {
-                this.HpInfoRectangle = new Rectangle(MousePosition.X + 20, MousePosition.Y, 80, 30);
-                this.HpInfoText = String.Format("HP\n{0} / {1}", Player.Instance.HpPointsCurrent, Player.HP_POINTS_INITIAL);
-            }
-            else
-            {
-                this.HpInfoRectangle = new Rectangle(0, 0, 0, 0);
-                this.HpInfoText = "";
-            }
-
         }
 
         public void Draw()
         {
             new SystemFunctions.Sprite(CurrentHpTexture, HpPosition).DrawBox();
-
-            new SystemFunctions.Sprite(GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
-            new SystemFunctions.Sprite(GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
-        }
-
-        public List<Texture2D> HpTexture { get; private set; }
-        public Texture2D CurrentHpTexture { get; private set; }
-        public Rectangle HpPosition { get; private set; }
-        public Point MousePosition { get; private set; }
-        public Rectangle HpInfoRectangle { get; private set; }
-        public string HpInfoText { get; private set; }
-    }
+		}
+	}
 }

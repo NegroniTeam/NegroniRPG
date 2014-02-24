@@ -11,48 +11,27 @@
 
         private Vector2 position;
         private Vector2 amountOfFrames;
-        private Vector2 currentFrame;
-        private Texture2D image;
         private Rectangle sourceRect;
 
-        public Vector2 CurrentFrame
-        {
-            get { return this.currentFrame; }
-            set { this.currentFrame = value; }
-        }
+        public Vector2 CurrentFrame;
 
-        public int AnimationSpeed
-        {
-            get { return this.switchFrame; }
-            set { this.switchFrame = value; }
-        }
+        public int AnimationSpeed { get; set; }
 
-        public Vector2 Position
-        {
-            get { return this.position; }
-            set { this.position = value; }
-        }
+        public Vector2 Position { get; set; }
 
         public int FrameWidth
         {
-            get { return (int)(this.image.Width / this.amountOfFrames.X); }
+            get { return (int)(this.AnimationImage.Width / this.amountOfFrames.X); }
         }
 
         public int FrameHeight
         {
-            get { return (int)(this.image.Height / this.amountOfFrames.Y); }
+            get { return (int)(this.AnimationImage.Height / this.amountOfFrames.Y); }
         }
 
-        public bool Active
-        {
-            get { return this.active; }
-            set { this.active = value; }
-        }
+        public bool Active { get; set; }
 
-        public Texture2D AnimationImage
-        {
-            set { this.image = value; }
-        }
+        public Texture2D AnimationImage { get; set; }
 
         public void Initialize(Vector2 position, Vector2 frames)
         {
@@ -76,19 +55,19 @@
             if (this.frameCounter >= this.switchFrame)
             {
                 this.frameCounter = 0;
-                this.currentFrame.X += this.FrameWidth;
-                if (this.currentFrame.X >= this.image.Width)
+                this.CurrentFrame.X += this.FrameWidth;
+                if (this.CurrentFrame.X >= this.AnimationImage.Width)
                 {
-                    this.currentFrame.X = 0;
+                    this.CurrentFrame.X = 0;
                 }
             }
 
-            this.sourceRect = new Rectangle((int)this.currentFrame.X, (int)this.currentFrame.Y * this.FrameHeight, this.FrameWidth, this.FrameHeight);
+            this.sourceRect = new Rectangle((int)this.CurrentFrame.X, (int)this.CurrentFrame.Y * this.FrameHeight, this.FrameWidth, this.FrameHeight);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
-            spriteBatch.Draw(this.image, this.position, this.sourceRect, Color.White);
+            GameScreen.Instance.SpriteBatch.Draw(this.AnimationImage, this.position, this.sourceRect, Color.White);
         }
     }
 }

@@ -4,8 +4,8 @@
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Graphics;
-    using SystemFunctions;
-    using Toolbar;
+    using NegroniGame.SystemFunctions;
+    using NegroniGame.Toolbar;
 
     public sealed class InfoBoxes
     {
@@ -15,45 +15,10 @@
         private InfoBoxes()
         {
             this.Font = GameScreen.Instance.FontInfoBox;
-            //this.DefaultSlotTextures = GameScreen.Instance.SlotsTextures;
+
             this.TextPosition = new Vector2(0, 0);
 
-            //InventoryAreaTopPoint = GameScreen.ScreenHeight - 105;
-            //InventoryAreaLeftPoint = 485;
-            //InventorySlotWidth = InventorySlotHeight = 50;
-
             this.InfoBoxTexture = GameScreen.Instance.InfoBoxTexture;
-            //this.InventoryArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint, 206, 100); // the whole inventory
-
-            // 1 is added for borders
-            //// first row of slots
-            //this.Slot1CoinsArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot2ElixirsArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth + 1, InventoryAreaTopPoint,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot3WeaponArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 2), InventoryAreaTopPoint,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot4ShieldArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 3), InventoryAreaTopPoint,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //// second row of slots
-            //this.Slot5HelmetArea = new Rectangle(InventoryAreaLeftPoint, InventoryAreaTopPoint + InventorySlotHeight + 1,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot6RobeArea = new Rectangle(InventoryAreaLeftPoint + InventorySlotWidth + 1, InventoryAreaTopPoint + InventorySlotHeight + 1,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot7GlovesArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 2), InventoryAreaTopPoint + InventorySlotHeight + 1,
-            //                                        InventorySlotWidth, InventorySlotHeight);
-            //this.Slot8BootsArea = new Rectangle(InventoryAreaLeftPoint + ((InventorySlotWidth + 1) * 3), InventoryAreaTopPoint + InventorySlotHeight + 1,
-                                                    //InventorySlotWidth, InventorySlotHeight);
-
-            ////default textures for inventory slots
-            //Slot1Image = DefaultSlotTextures[0];
-            //Slot2Image = DefaultSlotTextures[1];
-            //Slot3Image = DefaultSlotTextures[2];
-            //Slot4Image = DefaultSlotTextures[3];
-            //Slot5Image = DefaultSlotTextures[4];
-            //Slot6Image = DefaultSlotTextures[5];
-            //Slot7Image = DefaultSlotTextures[6];
-            //Slot8Image = DefaultSlotTextures[7];
 
             this.InventoryPopUpInfoBoxText = "";
         }
@@ -70,6 +35,8 @@
             }
         }
 
+		# region Properties declaration
+
         public Rectangle InventoryPopUpInfoBox { get; private set; }
         public string InventoryPopUpInfoBoxText { get; private set; }
         public Texture2D InfoBoxTexture { get; private set; }
@@ -81,6 +48,7 @@
         public Rectangle MarketInfoRectangle { get; private set; }
         public Rectangle WellInfoRectangle { get; private set; }
         public Rectangle PlayerInfoRectangle { get; private set; }
+        public Rectangle HpInfoRectangle { get; private set; }
 
         public Point MousePosition { get; private set; }
         public string BoxNameText { get; private set; }
@@ -88,13 +56,14 @@
         public string BoxWellText { get; private set; }
         public string PlayerInfoText { get; private set; }
         public string BoxAtkDefText { get; private set; }
+        public string HpInfoText { get; private set; }
 
+		# endregion
 
         public void Update(GameTime gameTime, MouseState mouseState)
         {
             MousePosition = new Point(mouseState.X, mouseState.Y);
 
-            // upates info boxes
             if (Handlers.SceneryHandler.Instance.PlayerPicRectangle.Contains(MousePosition))
             {
                 this.PlayerNameRectangle = new Rectangle(MousePosition.X + 25, MousePosition.Y - 10, 100, 50);
@@ -141,6 +110,17 @@
                 this.PlayerInfoText = "";
             }
 
+            // hp
+            if (Toolbar.HP.Instance.HpPosition.Contains(MousePosition))
+            {
+                this.HpInfoRectangle = new Rectangle(MousePosition.X + 20, MousePosition.Y, 80, 30);
+                this.HpInfoText = String.Format("HP\n{0} / {1}", Player.Instance.HpPointsCurrent, Player.HP_POINTS_INITIAL);
+            }
+            else
+            {
+                this.HpInfoRectangle = new Rectangle(0, 0, 0, 0);
+                this.HpInfoText = "";
+            }
 
             // Show small pop-up descriptive text box when mouse is over an item in the inventory
             if (InventorySlots.Instance.Slot1CoinsArea.Contains(MousePosition))
@@ -156,7 +136,6 @@
 
             else if (InventorySlots.Instance.Slot2ElixirsArea.Contains(MousePosition) && Player.Instance.Elixirs.Count > 0)
             {
-                // Checks if left mouse button is clicked and drinks the elixir
                 if (mouseState.LeftButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
@@ -170,7 +149,6 @@
 
             else if (InventorySlots.Instance.Slot3WeaponArea.Contains(MousePosition) && Player.Instance.Weapon != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
@@ -184,7 +162,6 @@
 
             else if (InventorySlots.Instance.Slot4ShieldArea.Contains(MousePosition) && Player.Instance.Shield != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y + 20, 100, 40);
@@ -198,7 +175,6 @@
 
             else if (InventorySlots.Instance.Slot5HelmetArea.Contains(MousePosition) && Player.Instance.Helmet != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
@@ -212,7 +188,6 @@
 
             else if (InventorySlots.Instance.Slot6RobeArea.Contains(MousePosition) && Player.Instance.Robe != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y - 20, 100, 40);
@@ -226,7 +201,6 @@
 
             else if (InventorySlots.Instance.Slot7GlovesArea.Contains(MousePosition) && Player.Instance.Gloves != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
@@ -240,7 +214,6 @@
 
             else if (InventorySlots.Instance.Slot8BootsArea.Contains(MousePosition) && Player.Instance.Boots != null)
             {
-                // Checks if right mouse button is clicked and destroys the item
                 if (mouseState.RightButton != ButtonState.Pressed)
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X - 80, MousePosition.Y - 20, 100, 40);
@@ -275,6 +248,9 @@
 
             new Sprite(GameScreen.Instance.InfoBox1Texture, PlayerInfoRectangle).DrawBox();
             new Sprite(GameScreen.Instance.FontMessages, this.PlayerInfoText, new Vector2(PlayerInfoRectangle.X + 25, PlayerInfoRectangle.Y + 1)).DrawText();
+
+            new Sprite(GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
+            new Sprite(GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
 
             new Sprite(this.InfoBoxTexture, this.InventoryPopUpInfoBox).DrawBox();
             new Sprite(this.Font, this.InventoryPopUpInfoBoxText, this.TextPosition).DrawText(); 

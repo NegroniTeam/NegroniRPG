@@ -14,9 +14,7 @@
         private readonly static Texture2D gameOverTexture = GameScreen.Instance.GameOverTex;
 
         private GameOverHandler()
-        {
-            
-        }
+        { }
 
         public static GameOverHandler Instance
         {
@@ -36,15 +34,13 @@
             {
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> No more Negroni!"), Color.Red } });
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> The Bar closed!"), Color.Red } });
-                GameScreen.Instance.IsGameOver = true;
-                SystemFunctions.Sound.StopIngameMusic();
-                SystemFunctions.Sound.PlayGameOverMusic();
+                GameScreen.Instance.GameState = 3;
             }
         }
 
         public void Draw()
         {
-            if (GameScreen.Instance.IsGameOver)
+            if (GameScreen.Instance.GameState == 3)
             {
                 new SystemFunctions.Sprite(gameOverTexture, new Vector2((GameScreen.ScreenWidth - gameOverTexture.Width) / 2, (GameScreen.ScreenHeight - gameOverTexture.Height) / 2 - 50), Color.Red).Draw();
             }

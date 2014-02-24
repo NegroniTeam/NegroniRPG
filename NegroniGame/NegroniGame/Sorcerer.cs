@@ -12,24 +12,24 @@
 
         public Sorcerer(string spriteName, Vector2 amountOfFrames, Vector2 position)
         {
-            this.name = spriteName;
-            this.position = position;
-            this.amountOfFrames = amountOfFrames;
+            base.Name = spriteName;
+            base.Position = position;
+            base.AmountOfFrames = amountOfFrames;
         }
 
         public override void Initialize()
         {
-            this.animation = new Animation();
-            this.animation.Initialize(this.position, this.amountOfFrames);
-            this.animation.Active = true;
+            base.Animation = new Animation();
+            base.Animation.Initialize(base.Position, base.AmountOfFrames);
+            base.Animation.Active = true;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            this.image = content.Load<Texture2D>(this.name);
-            this.animation.AnimationImage = this.image;
-            this.drawRect = new Rectangle((int)this.position.X, (int)this.position.Y, (int)(this.image.Width / this.amountOfFrames.X), (int)(this.image.Height / this.amountOfFrames.Y));
-            this.reactRect = this.drawRect;
+            base.Image = content.Load<Texture2D>(base.Name);
+            base.Animation.AnimationImage = base.Image;
+            base.DrawRect = new Rectangle((int)base.Position.X, (int)base.Position.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
+            this.reactRect = base.DrawRect;
             this.reactRect.Width += 20;
             this.reactRect.Height += 20;
         }
@@ -40,12 +40,12 @@
 
         public override void Update(GameTime gameTime)
         {
-            this.animation.Update(gameTime);
+            base.Animation.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw()
         {
-            this.animation.Draw(spriteBatch);
+            base.Animation.Draw();
         }
 
         public Rectangle ReactRect

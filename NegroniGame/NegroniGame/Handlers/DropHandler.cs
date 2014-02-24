@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Audio;
 
     public sealed class DropHandler
     {
@@ -64,6 +65,8 @@
 
                         Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You picked up {0} {1}.", this.DropList[index].Amount, this.DropList[index].Name), Color.Beige } });
 
+                        GameScreen.Instance.PickUpSound.Play();
+                    
                         this.IndexForDeletion.Add(index);
                     }
                 }
