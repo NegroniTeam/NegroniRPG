@@ -106,7 +106,7 @@ namespace NegroniGame
 
             player2 = new Player2("media/sprites/player2", new Vector2(3, 4), new Vector2(100, 100));
             player2.Initialize();
-            player2.IsActive = true;
+            player2.IsActive = false;
             GameManager.SpriteObjList.Add(player2);
 
             base.Initialize();
@@ -302,7 +302,7 @@ namespace NegroniGame
 
                 if (!IsPaused && !IsGameOver)
                 {
-                    Player.Instance.Update(gameTime, KeyboardState);
+                    Player.Instance.Update(gameTime);
 
                     Handlers.MonstersHandler.Instance.Update(gameTime);
                     Handlers.DropHandler.Instance.Update(gameTime);
@@ -365,7 +365,7 @@ namespace NegroniGame
                 Handlers.MonstersHandler.Instance.Draw(gameTime); // Monsters
                 Handlers.ShotsHandler.Instance.Draw(); // Shots
 
-                Player.Instance.Draw(); // Player
+                Player.Instance.Draw(SpriteBatch); // Player
 
                 Handlers.MarketDialogHandler.Instance.Draw(); // Market dialog
 

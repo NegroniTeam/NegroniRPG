@@ -70,11 +70,6 @@
                     this.tempCurrentFrame.Y = 1;
                 }
 
-                if (this.keyState.IsKeyDown(Keys.Enter))
-                {
-                    GameManager.DoReaction<IReact>(this);
-                }
-
                 this.BounceLeftRight();
                 this.BounceTopBottom();
 

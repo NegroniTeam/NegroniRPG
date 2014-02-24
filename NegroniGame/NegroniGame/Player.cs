@@ -1,13 +1,15 @@
 ﻿namespace NegroniGame
 {
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+    using NegroniGame.Interfaces;
     using NegroniGame.SystemFunctions;
     using System;
     using System.Collections.Generic;
 
-    public sealed class Player : Interfaces.IPlayer //no class can inherit from class Player
+    public sealed class Player : SpriteObjectAnime, IReact, IPlayer //no class can inherit from class Player
     {
         // Singleton !
         private static Player instance;
@@ -34,7 +36,9 @@
 
         private int armorDef;
 
-        private string name;
+        //private string name;
+
+        private Rectangle reactRect;
 
         private Player() { }
 
@@ -52,21 +56,21 @@
 
         #region Properties Declarations
 
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            private set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new SystemFunctions.Exceptions.InvalidNameException("The name can't be null or empty!");
-                }
-                this.name = value;
-            }
-        }
+        //public string Name
+        //{
+        //    get
+        //    {
+        //        return this.name;
+        //    }
+        //    private set
+        //    {
+        //        if (string.IsNullOrEmpty(value))
+        //        {
+        //            throw new SystemFunctions.Exceptions.InvalidNameException("The name can't be null or empty!");
+        //        }
+        //        this.name = value;
+        //    }
+        //}
         public Rectangle DestinationPosition { get; private set; }
         public Vector2 CenterOfPlayer { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
@@ -133,9 +137,9 @@
 
         #endregion
 
-        public void Initialize()
+        public override void Initialize()
         {
-            this.Name = "Elvina";
+            this.name = "Elvina";
             this.HpPointsCurrent = HP_POINTS_INITIAL;
             this.Direction = SystemFunctions.DirectionsEnum.South;
 
@@ -148,10 +152,21 @@
 
             this.WeaponDmg = this.Weapon.Attack;
             this.ArmorDef = 0;
+
+            this.IsActive = true;
         }
 
-        public void Update(GameTime gameTime, KeyboardState ks)
+        public override void LoadContent(ContentManager content)
         {
+        }
+
+        public override void UnloadContent()
+        {
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            KeyboardState ks = Keyboard.GetState();
             Move(gameTime, ks);
             this.CenterOfPlayer = new Vector2(this.playerPosition.X, this.playerPosition.Y);
 
@@ -187,6 +202,10 @@
                 this.ArmorDef += this.Boots.Defence;
             }
 
+            if (ks.IsKeyDown(Keys.Enter))
+            {
+                GameManager.DoReaction<IReact>(this);
+            }
         }
 
         public void BuyItem(Interfaces.IItem newItem, int coinsSpent)
@@ -343,11 +362,14 @@
             }
         }
 
-        public void Draw()
+        public override void Draw(SpriteBatch spriteBatch)
         {
             if (!GameScreen.Instance.IsGameOver)
             {
-                new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+                if (this.IsActive)
+                {
+                    new SystemFunctions.Sprite(this.playerAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+                }
             }
             else
             {
@@ -363,6 +385,7 @@
                 if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
                     Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+
                     // Well.Instance.WellPosition.Intersects , Scenery.Instance.MarketPosition.Intersects
                     // new Rectangle((int)(this.playerPosition.X + this.DestinationPosition.Width + PLAYER_SPEED), (int)(this.playerPosition.Y + 28), 4, 4)
 
@@ -428,6 +451,8 @@
             }
 
             this.DestinationPosition = new Rectangle((int)this.playerPosition.X, (int)this.playerPosition.Y, 32, 32);
+
+            this.reactRect = new Rectangle(this.DestinationPosition.X - 10, this.DestinationPosition.Y - 10, this.DestinationPosition.Width + 10, this.DestinationPosition.Height + 10);
         }
 
         private bool IntersectsWithObjects(Rectangle newPosition)
@@ -474,5 +499,14 @@
             return new Rectangle(32 * this.frames, 0, 32, 32);
         }
 
+        public Rectangle ReactRect
+        {
+            get { return this.reactRect; }
+        }
+
+        public void DoAction<T>(IReact obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

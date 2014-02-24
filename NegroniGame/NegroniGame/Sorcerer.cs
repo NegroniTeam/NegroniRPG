@@ -55,7 +55,7 @@
 
         public void DoAction<T>(IReact obj)
         {
-            throw new System.NotImplementedException();
+            (obj as SpriteObject).IsActive = false;
         }
     }
 }
