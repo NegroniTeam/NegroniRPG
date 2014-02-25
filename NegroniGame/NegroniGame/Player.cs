@@ -133,7 +133,7 @@
         }
 
         public Items.Coins Coins { get; set; } //  TO DO PRIVATE
-        public Items.ElixirsHP Elixirs { get; private set; }
+        public Items.ElixirsHP Elixirs { get; set; }
         public Interfaces.IWeapon Weapon { get; private set; }
         public Interfaces.IShield Shield { get; private set; }
         public Interfaces.IHelmet Helmet { get; private set; }
@@ -401,7 +401,7 @@
         // playerTextures - right, left, up, down
         private void Move(GameTime gameTime, KeyboardState ks)
         {
-            if (ks.IsKeyDown(Keys.Right))
+            if (ks.IsKeyDown(Keys.Right) || ks.IsKeyDown(Keys.D))
             {
                 if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
@@ -416,7 +416,7 @@
                     this.Direction = SystemFunctions.DirectionsEnum.East;
                 }
             }
-            else if (ks.IsKeyDown(Keys.Left))
+            else if (ks.IsKeyDown(Keys.Left) || ks.IsKeyDown(Keys.A))
             {
                 if (playerPosition.X > 0)
                 {
@@ -431,7 +431,7 @@
                     this.Direction = SystemFunctions.DirectionsEnum.West;
                 }
             }
-            else if (ks.IsKeyDown(Keys.Up))
+            else if (ks.IsKeyDown(Keys.Up) || ks.IsKeyDown(Keys.W))
             {
                 if (playerPosition.Y > 0)
                 {
@@ -446,7 +446,7 @@
                     this.Direction = SystemFunctions.DirectionsEnum.North;
                 }
             }
-            else if (ks.IsKeyDown(Keys.Down))
+            else if (ks.IsKeyDown(Keys.Down) || ks.IsKeyDown(Keys.S))
             {
                 if (playerPosition.Y <= GameScreen.ScreenHeight - 170)
                 {

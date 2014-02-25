@@ -265,7 +265,8 @@ namespace NegroniGame
 
             DropTextures = new List<Texture2D>()
             {
-                Content.Load<Texture2D>("media/drop/coins2")
+                Content.Load<Texture2D>("media/drop/coins2"),
+                Content.Load<Texture2D>("media/drop/elixirs")
             };
 
             ElixirBought = Content.Load<SoundEffect>("media/sounds/potionBought");

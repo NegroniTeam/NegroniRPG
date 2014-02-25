@@ -8,28 +8,44 @@
     public class Drop
     {
         public const float SECONDS_TO_DISAPPEARING = 20;
+        private const int PERCENT_TO_DROP_POTION = 10;
 
         public Drop(Rectangle mobPosition)
         {
             RandomGenerator = new Random();
-            int numberOfTexture = RandomGenerator.Next(0, 0);
+            int RandomDrop = RandomGenerator.Next(0, 101);
 
-            this.DropTextures = GameScreen.Instance.DropTextures;
-            this.CurrentTexture = DropTextures[numberOfTexture];
-
-            this.DropPosition = mobPosition;
-
-            // drop is coins, than generate random its amount
-            if (this.CurrentTexture == this.DropTextures[0])
+            if (RandomDrop > PERCENT_TO_DROP_POTION && RandomDrop <= 100) //coins
             {
-                this.Name = "Coins";
-                this.Amount = RandomGenerator.Next(10, 20);
+                this.DropTextures = GameScreen.Instance.DropTextures;
+                this.CurrentTexture = DropTextures[0];
+                this.DropPosition = mobPosition;
+
+                // drop is coins, than generate random its amount
+                if (this.CurrentTexture == this.DropTextures[0])
+                {
+                    this.Name = "Coins";
+                    this.Amount = RandomGenerator.Next(10, 20);
+                }
+                else
+                {
+                    this.Name = "Coins";
+                    this.Amount = 1;
+                }
             }
-            else
+            else if (RandomDrop <= PERCENT_TO_DROP_POTION)
             {
-                this.Name = "Coins";
+                this.DropTextures = GameScreen.Instance.DropTextures;
+                this.CurrentTexture = DropTextures[1];
+                this.DropPosition = mobPosition;
+                this.Name = "HP Potion";
                 this.Amount = 1;
             }
+
+
+
+
+
 
         }
         public bool Update(GameTime gameTime)

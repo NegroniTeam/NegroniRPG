@@ -65,7 +65,18 @@
                         Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You picked up {0} {1}.", this.DropList[index].Amount, this.DropList[index].Name), Color.Beige } });
 
                         GameScreen.Instance.PickUpSound.Play();
-                    
+
+                        this.IndexForDeletion.Add(index);
+                    }
+
+                    if (this.DropList[index].Name == "HP Potion")
+                    {
+                        Player.Instance.Elixirs = new Items.ElixirsHP(Player.Instance.Elixirs.Count + 1);
+
+                        Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You picked up 1 {0}.", this.DropList[index].Name), Color.Beige } });
+
+                        GameScreen.Instance.PickUpSound.Play();
+
                         this.IndexForDeletion.Add(index);
                     }
                 }
