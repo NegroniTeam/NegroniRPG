@@ -14,7 +14,7 @@
         public Rectangle DrawRect { get; protected set; }
         public Vector2 AmountOfFrames { get; protected set; }
         public Vector2 Position { get; protected set; }
-        public bool IsActive { get; protected set; }
+        public bool IsActive { get { return this.isActive; } protected set { this.isActive = value; } }
 
 
         // TODO: Add your initialization logic here

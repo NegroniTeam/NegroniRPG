@@ -10,11 +10,11 @@
     public class Player2 : SpriteObjectAnime, IReact
     {
         private Vector2 tempCurrentFrame;
-        private readonly float moveSpeed = 120;
+        //private readonly float moveSpeed = 120;
+        private int frameCounter = 0;
+        private int activeTime = 30000;
 
         private Rectangle reactRect;
-
-        private KeyboardState keyState;
 
         public Player2(string spriteName, Vector2 amountOfFrames, Vector2 playerPosition)
         {
@@ -43,43 +43,57 @@
 
         public override void Update(GameTime gameTime)
         {
-            if (this.IsActive)
+            if (this.isActive)
             {
-                this.DrawRect = new Rectangle((int)base.position.X, (int)base.position.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
-                this.reactRect = new Rectangle(this.DrawRect.X - 10, this.DrawRect.Y - 10, this.DrawRect.Width + 10, this.DrawRect.Height + 10);
-                this.keyState = Keyboard.GetState();
-
-                if (this.keyState.IsKeyDown(Keys.Down))
+                this.frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (this.frameCounter > this.activeTime)
                 {
-                    base.position.Y += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.tempCurrentFrame.Y = 0;
+                    this.frameCounter = 0;
+                    this.isActive = false;
                 }
-                else if (this.keyState.IsKeyDown(Keys.Up))
-                {
-                    base.position.Y -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.tempCurrentFrame.Y = 3;
-                }
-                else if (this.keyState.IsKeyDown(Keys.Right))
-                {
-                    base.position.X += this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.tempCurrentFrame.Y = 2;
-                }
-                else if (this.keyState.IsKeyDown(Keys.Left))
-                {
-                    base.position.X -= this.moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    this.tempCurrentFrame.Y = 1;
-                }
-
-                this.BounceLeftRight();
-                this.BounceTopBottom();
-
-                this.tempCurrentFrame.X = base.Animation.CurrentFrame.X;
-
-                base.Animation.Position = base.position;
-                base.Animation.CurrentFrame = this.tempCurrentFrame;
-
-                base.Animation.Update(gameTime);
             }
+
+            if (Player.Instance.Direction == DirectionsEnum.East)
+            {
+                base.position.X = Player.Instance.DestinationPosition.X - 40;
+                base.position.Y = Player.Instance.DestinationPosition.Y - 40;
+                this.tempCurrentFrame.Y = 2;
+            }
+            else if (Player.Instance.Direction == DirectionsEnum.North)
+            {
+                base.position.X = Player.Instance.DestinationPosition.X;
+                base.position.Y = Player.Instance.DestinationPosition.Y + 10;
+                this.tempCurrentFrame.Y = 3;
+            }
+            else if (Player.Instance.Direction == DirectionsEnum.South)
+            {
+                base.position.X = Player.Instance.DestinationPosition.X;
+                base.position.Y = Player.Instance.DestinationPosition.Y - 50;
+                this.tempCurrentFrame.Y = 0;
+            }
+            else if (Player.Instance.Direction == DirectionsEnum.West)
+            {
+                base.position.X = Player.Instance.DestinationPosition.X + 10;
+                base.position.Y = Player.Instance.DestinationPosition.Y - 40;
+                this.tempCurrentFrame.Y = 1;
+            }
+
+            this.DrawRect = new Rectangle((int)base.position.X, (int)base.position.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
+
+            if (GameScreen.Instance.KeyboardState.IsKeyDown(Keys.Enter))
+            {
+                this.reactRect = new Rectangle(this.DrawRect.X - 10, this.DrawRect.Y - 10, this.DrawRect.Width + 10, this.DrawRect.Height + 10);
+                GameManager.DoReaction<IReact>(this);
+            }
+
+            this.reactRect = Rectangle.Empty;
+
+            this.tempCurrentFrame.X = base.Animation.CurrentFrame.X;
+
+            base.Animation.Position = base.position;
+            base.Animation.CurrentFrame = this.tempCurrentFrame;
+
+            base.Animation.Update(gameTime);
         }
 
         public override void Draw()
@@ -87,34 +101,6 @@
             if (IsActive)
             {
                 base.Animation.Draw();
-            }
-        }
-
-        private void BounceTopBottom()
-        {
-            if (base.position.Y < 0)
-            {
-                // bounce off top
-                base.position.Y = 0;
-            }
-            else if ((base.position.Y + base.Animation.FrameHeight) > GameScreen.ScreenHeight - 130)
-            {
-                // bounce off bottom
-                base.position.Y = GameScreen.ScreenHeight - base.Animation.FrameHeight - 130;
-            }
-        }
-
-        private void BounceLeftRight()
-        {
-            if (base.position.X < 0)
-            {
-                // bounc off left
-                base.position.X = 0;
-            }
-            else if ((base.position.X + base.Animation.FrameWidth) > GameScreen.ScreenWidth)
-            {
-                // bounce off right
-                base.position.X = GameScreen.ScreenWidth - base.Animation.FrameWidth;
             }
         }
 

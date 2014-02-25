@@ -28,7 +28,7 @@
             }
         }
 
-        public static bool DoesIntersect(Rectangle positionRect)
+        public static bool DoesIntersect(Rectangle positionRect, SpriteObject obj)
         {
             foreach (var item in SpriteObjList)
             {

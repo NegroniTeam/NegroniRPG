@@ -14,7 +14,7 @@
         // Singleton !
         private static Player instance;
 
-		#region Fields Declaration
+        #region Fields Declaration
 
         public const int HP_POINTS_INITIAL = 200;
         private const float PLAYER_SPEED = 2f;
@@ -40,11 +40,11 @@
 
         //private string name;
 
-		private Random randomGenerator;
+        private Random randomGenerator;
 
         private Rectangle reactRect;
 
-		#endregion
+        #endregion
 
         private Player() { }
 
@@ -159,7 +159,7 @@
             this.WeaponDmg = this.Weapon.Attack;
             this.ArmorDef = 0;
 
-			this.randomGenerator = new Random();
+            this.randomGenerator = new Random();
 
             this.IsActive = true;
         }
@@ -210,11 +210,6 @@
             if (this.Boots != null)
             {
                 this.ArmorDef += this.Boots.Defence;
-            }
-
-            if (ks.IsKeyDown(Keys.Enter))
-            {
-                GameManager.DoReaction<IReact>(this);
             }
         }
 
@@ -289,7 +284,7 @@
             {
                 if (newItem.ToString().Contains("Elixir"))
                 {
-					CompleteTransaction(newItem, coinsSpent);
+                    CompleteTransaction(newItem, coinsSpent);
                     this.Elixirs = (Items.ElixirsHP)newItem;
                 }
                 else if (newItem.ToString().Contains("Boots"))
@@ -371,7 +366,7 @@
             }
         }
 
-		public override void Draw()
+        public override void Draw()
         {
             if (GameScreen.Instance.GameState != 3)
             {
@@ -388,8 +383,8 @@
             int newCoinsAmount = this.Coins.Amount - coinsSpent;
             this.Coins = new Items.Coins(newCoinsAmount);
             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You bought {0}.", newItem.Name), Color.DarkGoldenrod } });
-        
-			if (newItem.ToString().Contains("Weapon"))
+
+            if (newItem.ToString().Contains("Weapon"))
             {
                 GameScreen.Instance.WeaponBought.Play();
             }
@@ -491,7 +486,7 @@
 
             if (Well.Instance.WellPosition.Intersects(newPosition)
                 || Handlers.SceneryHandler.Instance.MarketPosition.Intersects(newPosition)
-                || doesIntersectWithMobs || GameManager.DoesIntersect(newPosition))
+                || doesIntersectWithMobs)
             {
                 return true;
             }

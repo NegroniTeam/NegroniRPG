@@ -8,7 +8,7 @@
 
     public abstract class Monster : Interfaces.IMonster
     {
-		# region Fields Declaration
+        # region Fields Declaration
 
         private const float TIME_TO_CHANGE_DIRECTION = 5; // sec 5
         private const int MOVE_MAX_LENGTH = 80;
@@ -33,7 +33,7 @@
         private string changeDirection = "";
         private int damage;
 
-		# endregion
+        # endregion
 
         public Monster(int numberOfMob, Rectangle initialMonsterPos, string name, List<Texture2D> mobTextures, int initialHpPoints)
         {
@@ -48,8 +48,8 @@
             this.DirectionForMovement = -1;
         }
 
-		# region Properties Declaration
-	
+        # region Properties Declaration
+
         public int ID { get; private set; }
 
         public string Name
@@ -87,7 +87,7 @@
         public int HpPointsCurrent { get; set; }
 
         # endregion
-        
+
         public void Draw(GameTime gameTime)
         {
             new SystemFunctions.Sprite(this.monsterAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
@@ -412,7 +412,7 @@
         private bool IntersectsWithObstacles(Rectangle newPosition)
         {
             // checks if the new position is not well, market, player or another mob
-            if (IntersectsWithObstaclesNoPlayer(newPosition) || Player.Instance.DestinationPosition.Intersects(newPosition) || GameManager.DoesIntersect(newPosition))
+            if (IntersectsWithObstaclesNoPlayer(newPosition) || Player.Instance.DestinationPosition.Intersects(newPosition))
             {
                 return true;
             }

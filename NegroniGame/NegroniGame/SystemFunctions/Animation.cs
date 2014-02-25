@@ -17,7 +17,7 @@
 
         public int AnimationSpeed { get; set; }
 
-        public Vector2 Position { get; set; }
+        public Vector2 Position { get { return this.position; } set { this.position = value; } }
 
         public int FrameWidth
         {
@@ -29,7 +29,7 @@
             get { return (int)(this.AnimationImage.Height / this.amountOfFrames.Y); }
         }
 
-        public bool Active { get; set; }
+        public bool Active { get { return this.active; } set { this.active = value; } }
 
         public Texture2D AnimationImage { get; set; }
 

@@ -16,7 +16,7 @@ namespace NegroniGame
         // Singleton !
         private static GameScreen instance;
 
-		#region Fields Declaration
+        #region Fields Declaration
 
         private readonly GraphicsDeviceManager graphics;
         private Vector2 cursorPos = new Vector2();
@@ -30,7 +30,7 @@ namespace NegroniGame
         private Sorcerer sorcerer;
         private Player2 player2;
 
-		#endregion
+        #endregion
 
         private GameScreen()
         {
@@ -43,7 +43,7 @@ namespace NegroniGame
 
             Content.RootDirectory = "Content";
 
-			GameState = 0;
+            GameState = 0;
         }
 
         public static GameScreen Instance
@@ -89,7 +89,7 @@ namespace NegroniGame
         public Texture2D MarketDialog { get; private set; }
         public Texture2D BuyButton { get; private set; }
         public Texture2D GameOverTex { get; private set; }
-		public SoundEffect PickUpSound { get; private set; }
+        public SoundEffect PickUpSound { get; private set; }
         public SoundEffect FireAttackSound { get; private set; }
         public SoundEffect DrinkElixir { get; private set; }
         public SoundEffect DrinkWell { get; private set; }
@@ -331,7 +331,7 @@ namespace NegroniGame
                 case 1: // Game Started
                     if (videoColor.A > 1)
                     {
-                         videoColor.A -= 2;
+                        videoColor.A -= 2;
                     }
 
                     // Checks for Pause
@@ -367,7 +367,7 @@ namespace NegroniGame
                         MediaPlayer.Resume();
                         GameState = 1;
                     }
-                    
+
                     Toolbar.HP.Instance.Update(gameTime);
                     InfoBoxes.Instance.Update(gameTime, MouseState);
                     Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
@@ -421,7 +421,7 @@ namespace NegroniGame
                 SpriteBatch.Draw(CursorTexture, cursorPos, Color.White); // draws cursor
             }
 
-			if (videoColor.A > 1)
+            if (videoColor.A > 1)
             {
                 SpriteBatch.Draw(videoTexture, new Vector2(0, 0), videoColor); // Intro Video
             }
