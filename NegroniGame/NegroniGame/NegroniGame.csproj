@@ -79,11 +79,14 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FireBall.cs" />
     <Compile Include="Handlers\ElixirsHandler.cs" />
     <Compile Include="Drop.cs" />
     <Compile Include="Handlers\GameOverHandler.cs" />
     <Compile Include="Handlers\DropHandler.cs" />
     <Compile Include="InfoBoxes.cs" />
+    <Compile Include="Interfaces\IBurn.cs" />
+    <Compile Include="Interfaces\ImPlayer.cs" />
     <Compile Include="Interfaces\IReact.cs" />
     <Compile Include="Interfaces\IRobe.cs" />
     <Compile Include="Handlers\MarketDialogHandler.cs" />

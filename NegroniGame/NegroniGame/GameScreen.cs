@@ -117,12 +117,13 @@ namespace NegroniGame
 
             sorcerer = new Sorcerer("media/sprites/sorcerer", new Vector2(4, 1), new Vector2(1, 1));
             sorcerer.Initialize();
-            GameManager.SpriteObjList.Add(sorcerer);
+            sorcerer.isActive = true;
+            GameManager.AddSprite(sorcerer);
 
             player2 = new Player2("media/sprites/player2", new Vector2(3, 4), new Vector2(100, 100));
             player2.Initialize();
             player2.isActive = false;
-            GameManager.SpriteObjList.Add(player2);
+            GameManager.AddSprite(player2);
 
             base.Initialize();
         }
@@ -362,8 +363,7 @@ namespace NegroniGame
                     Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
                     Handlers.GameOverHandler.Instance.Update(gameTime);
 
-                    sorcerer.Update(gameTime);
-                    player2.Update(gameTime);
+                    GameManager.Update(gameTime);
 
                     break;
 
@@ -423,8 +423,7 @@ namespace NegroniGame
 
                 Handlers.GameOverHandler.Instance.Draw();
 
-                sorcerer.Draw();
-                player2.Draw();
+                GameManager.Draw(SpriteBatch);
 
                 SpriteBatch.Draw(CursorTexture, cursorPos, Color.White); // draws cursor
             }

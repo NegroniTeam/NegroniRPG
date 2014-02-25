@@ -6,7 +6,7 @@
     using NegroniGame.Interfaces;
     using NegroniGame.SystemFunctions;
 
-    public class Sorcerer : SpriteObjectAnime, IReact
+    public class Sorcerer : SpriteObjectAnime, ImPlayer
     {
         private Rectangle reactRect;
 

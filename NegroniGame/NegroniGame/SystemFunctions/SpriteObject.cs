@@ -13,9 +13,9 @@
         public Texture2D Image { get; protected set; }
         public Rectangle DrawRect { get; protected set; }
         public Vector2 AmountOfFrames { get; protected set; }
-        public Vector2 Position { get; protected set; }
+        public Vector2 Position { get { return this.position; } protected set { this.position = value; } }
         public bool IsActive { get { return this.isActive; } protected set { this.isActive = value; } }
-
+        public bool IsDeleted { get; protected set; }
 
         // TODO: Add your initialization logic here
         public abstract void Initialize();
