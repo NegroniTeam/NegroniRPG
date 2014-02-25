@@ -42,11 +42,6 @@
                 this.Amount = 1;
             }
 
-
-
-
-
-
         }
         public bool Update(GameTime gameTime)
         {

@@ -78,6 +78,7 @@ namespace NegroniGame
         public List<Texture2D> NegroniHPTextures { get; private set; }
         public List<Texture2D> ShotsTextures { get; private set; }
         public List<Texture2D> DropTextures { get; private set; }
+        public List<Texture2D> HealthBars { get; private set; }
         public Texture2D NewbieStaffTexture { get; private set; }
         public Texture2D MysticStaffTexture { get; private set; }
         public Texture2D CoinsTexture { get; private set; }
@@ -267,6 +268,12 @@ namespace NegroniGame
             {
                 Content.Load<Texture2D>("media/drop/coins2"),
                 Content.Load<Texture2D>("media/drop/elixirs")
+            };
+
+            HealthBars = new List<Texture2D>()
+            {
+                Content.Load<Texture2D>("media/health-full"),
+                Content.Load<Texture2D>("media/health-low")
             };
 
             ElixirBought = Content.Load<SoundEffect>("media/sounds/potionBought");

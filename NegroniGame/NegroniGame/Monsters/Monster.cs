@@ -16,7 +16,9 @@
         private const int MOB_SPEED = 1;
         private const int AGGRO_RANGE = 80;
         private const int ATTACK_INTERVAL = 2;
-
+        private const double WIDTH_OF_FULL_HEALTHBAR = 32;
+        private const double MINUS_WIDTH_OF_HEALTH_BAR = 3.2; // the width of the health bar is 32, so we lose 3.2 width per 10 damage
+        
         private int currentFrame = 0;
         private string name;
         private readonly int hpPointsInitial;
@@ -46,6 +48,7 @@
             this.hpPointsInitial = initialHpPoints;
             this.HpPointsCurrent = hpPointsInitial;
             this.DirectionForMovement = -1;
+            this.FullHealthBarWidth = WIDTH_OF_FULL_HEALTHBAR;
         }
 
         # region Properties Declaration
@@ -84,13 +87,18 @@
         }
         public int DirectionForMovement { get; private set; }
         public Rectangle DestinationPosition { get; private set; }
+        public Rectangle LowHealthBarPositon { get; private set; }
+        public Rectangle FullHealthBarPositon { get; private set; }
         public int HpPointsCurrent { get; set; }
+        public double FullHealthBarWidth { get; set; }
 
         # endregion
 
         public void Draw(GameTime gameTime)
         {
             new SystemFunctions.Sprite(this.monsterAnim, this.DestinationPosition, this.animSourcePosition).DrawBoxAnim();
+            new SystemFunctions.Sprite(GameScreen.Instance.HealthBars[1], this.LowHealthBarPositon).DrawBox();
+            new SystemFunctions.Sprite(GameScreen.Instance.HealthBars[0], this.FullHealthBarPositon).DrawBox();
         }
 
         public void Update(GameTime gameTime)
@@ -109,6 +117,11 @@
             else
             {
                 MoveCombat(gameTime);
+            }
+
+            if (this.HpPointsCurrent < 100)
+            {
+                this.FullHealthBarWidth = 32 - (this.hpPointsInitial - this.HpPointsCurrent) / 10 * MINUS_WIDTH_OF_HEALTH_BAR;
             }
         }
 
@@ -233,6 +246,9 @@
 
             this.animSourcePosition = Animate(gameTime);
             this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
+
+            this.LowHealthBarPositon = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - 10, 32, 16);
+            this.FullHealthBarPositon = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - 10, (int)this.FullHealthBarWidth, 16);
         }
 
         private void MoveCombat(GameTime gameTime)
@@ -362,7 +378,8 @@
             }
 
             this.animSourcePosition = Animate(gameTime);
-
+            this.LowHealthBarPositon = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - 10, 32, 16);
+            this.FullHealthBarPositon = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - 10, (int)this.FullHealthBarWidth, 16);
 
             // Check if the obstacle is already gone and changes to normal direction
             if (this.changeDirection == "vertical")
