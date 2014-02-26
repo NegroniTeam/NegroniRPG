@@ -3,6 +3,7 @@
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
+    using NegroniGame.Handlers;
     using NegroniGame.Interfaces;
     using NegroniGame.Monsters;
     using NegroniGame.SystemFunctions;
@@ -14,12 +15,6 @@
         private Vector2 tempCurrentFrame;
         private Vector2 velocity;
         private float moveSpeed;
-
-        //public override void LoadContent(ContentManager content)
-        //{
-        //    Image = content.Load<Texture2D>("sprites/FireBall");
-        //    animation.AnimationImage = Image;
-        //}
 
         public FireBall(string spriteName, Vector2 amountOfFrames, Vector2 position, IMonster targetObj)
         {
@@ -70,6 +65,17 @@
                 base.Animation.CurrentFrame = tempCurrentFrame;
                 base.Animation.Update(gameTime);
 
+                for (int i = 0; i < MonstersHandler.Instance.SpawnedMobs.Count; i++)
+                {
+                    Monster monster = MonstersHandler.Instance.SpawnedMobs[i];
+                    if (monster.DestinationPosition.Intersects(this.ReactRect))
+                    {
+                        monster.HpPointsCurrent -= 30;
+                        MonstersHandler.Instance.MobsHit.Add(i);
+                        base.IsDeleted = true;
+                    }
+                }
+
                 if (tempCurrentFrame.X / base.Animation.FrameWidth >= base.AmountOfFrames.X - 1)
                 {
                     base.IsDeleted = true;
@@ -87,12 +93,11 @@
 
         public Rectangle ReactRect
         {
-            get { throw new NotImplementedException(); }
+            get { return new Rectangle((int)base.Position.X, (int)base.Position.Y, base.Animation.FrameWidth, base.Animation.FrameHeight); }
         }
 
         public void DoAction<T>(IReact obj)
         {
-            throw new NotImplementedException();
         }
     }
 }
