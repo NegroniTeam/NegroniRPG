@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FireBall.cs" />
+    <Compile Include="GameSettings.cs" />
     <Compile Include="Handlers\ElixirsHandler.cs" />
     <Compile Include="Drop.cs" />
     <Compile Include="Handlers\GameOverHandler.cs" />

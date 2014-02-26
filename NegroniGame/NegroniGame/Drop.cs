@@ -7,15 +7,15 @@
 
     public class Drop
     {
-        public const float SECONDS_TO_DISAPPEARING = 20;
-        private const int PERCENT_TO_DROP_POTION = 10;
+        //public con-st float SECONDS_TO_DISAPPEARING = 20;
+        //private con-st int PERCENT_TO_DROP_POTION = 10;
 
         public Drop(Rectangle mobPosition)
         {
             RandomGenerator = new Random();
             int RandomDrop = RandomGenerator.Next(0, 101);
 
-            if (RandomDrop > PERCENT_TO_DROP_POTION && RandomDrop <= 100) //coins
+            if (RandomDrop > GameSettings.PERCENT_TO_DROP_POTION && RandomDrop <= 100) //coins
             {
                 this.DropTextures = GameScreen.Instance.DropTextures;
                 this.CurrentTexture = DropTextures[0];
@@ -33,7 +33,7 @@
                     this.Amount = 1;
                 }
             }
-            else if (RandomDrop <= PERCENT_TO_DROP_POTION)
+            else if (RandomDrop <= GameSettings.PERCENT_TO_DROP_POTION)
             {
                 this.DropTextures = GameScreen.Instance.DropTextures;
                 this.CurrentTexture = DropTextures[1];
@@ -47,7 +47,7 @@
         {
             this.ElapsedTimeDrop += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (ElapsedTimeDrop >= SECONDS_TO_DISAPPEARING)
+            if (ElapsedTimeDrop >= GameSettings.SECONDS_TO_DISAPPEARING)
             {
                 return true;
             }
