@@ -8,6 +8,7 @@ namespace NegroniGame
     using NegroniGame.Handlers;
     using System.Collections.Generic;
 
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -361,6 +362,7 @@ namespace NegroniGame
 
                 case 2: // Paused
 
+                    
                     // Checks for Resume
                     if (KeyboardState.IsKeyDown(Keys.P) && KeyboardStatePrevious.IsKeyUp(Keys.P))
                     {
