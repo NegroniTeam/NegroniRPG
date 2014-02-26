@@ -16,9 +16,9 @@
 
         #region Fields Declaration
 
-        public const int HP_POINTS_INITIAL = 200;
-        private const float PLAYER_SPEED = 2f;
-        private const float PLAYER_ANIM_SPEED = 200f;
+        //public con-st int HP_POINTS_INITIAL = 200;
+        //private con-st float PLAYER_SPEED = 2f;
+        //private con-st float PLAYER_ANIM_SPEED = 200f;
 
         private Vector2 playerPosition = new Vector2((float)GameScreen.ScreenWidth / 2, (float)GameScreen.ScreenHeight / 2 - 50);
 
@@ -146,7 +146,7 @@
         public override void Initialize()
         {
             base.Name = "Elvina";
-            this.HpPointsCurrent = HP_POINTS_INITIAL;
+            this.HpPointsCurrent = GameSettings.HP_POINTS_INITIAL;
             this.Direction = SystemFunctions.DirectionsEnum.South;
 
             // 16 = half of texture width
@@ -215,9 +215,9 @@
 
         public int DrinkFromWell()
         {
-            int restoredPoints = HP_POINTS_INITIAL - this.HpPointsCurrent;
+            int restoredPoints = GameSettings.HP_POINTS_INITIAL - this.HpPointsCurrent;
 
-            this.HpPointsCurrent = HP_POINTS_INITIAL;
+            this.HpPointsCurrent = GameSettings.HP_POINTS_INITIAL;
 
             GameScreen.Instance.DrinkWell.Play();
 
@@ -405,11 +405,11 @@
             {
                 if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + GameSettings.PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.X += PLAYER_SPEED;
+                        this.playerPosition.X += GameSettings.PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[0];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -420,11 +420,11 @@
             {
                 if (playerPosition.X > 0)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - GameSettings.PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.X -= PLAYER_SPEED;
+                        this.playerPosition.X -= GameSettings.PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[1];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -435,11 +435,11 @@
             {
                 if (playerPosition.Y > 0)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - PLAYER_SPEED), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - GameSettings.PLAYER_SPEED), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.Y -= PLAYER_SPEED;
+                        this.playerPosition.Y -= GameSettings.PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[2];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -450,11 +450,11 @@
             {
                 if (playerPosition.Y <= GameScreen.ScreenHeight - 170)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + GameSettings.PLAYER_SPEED), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.Y += PLAYER_SPEED;
+                        this.playerPosition.Y += GameSettings.PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[3];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -498,7 +498,7 @@
         {
             this.elapsedTimePlayerAnim += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (this.elapsedTimePlayerAnim >= PLAYER_ANIM_SPEED)
+            if (this.elapsedTimePlayerAnim >= GameSettings.PLAYER_ANIM_SPEED)
             {
                 if (this.frames >= 2)
                 {

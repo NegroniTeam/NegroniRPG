@@ -9,14 +9,14 @@
         // Singleton !
         private static ElixirsHandler instance;
 
-        public const int REUSE_TIME = 10;
+        //public con-st int REUSE_TIME = 10;
 
         private float elapsedTimeLastMsgElixir;
         private float elapsedTimeElixir;
 
         private ElixirsHandler()
         {
-            this.elapsedTimeElixir = REUSE_TIME;
+            this.elapsedTimeElixir = GameSettings.REUSE_TIME;
         }
 
         public static ElixirsHandler Instance
@@ -39,9 +39,9 @@
 
         public bool UseElixir()
         {
-            if (this.elapsedTimeElixir >= REUSE_TIME)
+            if (this.elapsedTimeElixir >= GameSettings.REUSE_TIME)
             {
-                this.RestoredPoints = ((Player.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent) >= Items.ElixirsHP.RECOVERY_AMOUNT) ? Items.ElixirsHP.RECOVERY_AMOUNT : Player.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent;
+                this.RestoredPoints = ((GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent) >= Items.ElixirsHP.RECOVERY_AMOUNT) ? Items.ElixirsHP.RECOVERY_AMOUNT : GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent;
 
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You restored {0} HP.", this.RestoredPoints), Color.Aquamarine } });
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> 1 HP Elixir destroyed."), Color.Red } });
@@ -56,7 +56,7 @@
                 if (this.elapsedTimeLastMsgElixir >= 1)
                 {
                     Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() {
-                        { String.Format(">> {0} seconds to reuse Elixir.", REUSE_TIME - (int)this.elapsedTimeElixir), Color.Pink } });
+                        { String.Format(">> {0} seconds to reuse Elixir.", GameSettings.REUSE_TIME - (int)this.elapsedTimeElixir), Color.Pink } });
                     this.elapsedTimeLastMsgElixir = 0;
                 }
             }

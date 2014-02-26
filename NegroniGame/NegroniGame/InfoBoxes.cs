@@ -114,7 +114,7 @@
             if (Toolbar.HP.Instance.HpPosition.Contains(MousePosition))
             {
                 this.HpInfoRectangle = new Rectangle(MousePosition.X + 20, MousePosition.Y, 80, 30);
-                this.HpInfoText = String.Format("HP\n{0} / {1}", Player.Instance.HpPointsCurrent, Player.HP_POINTS_INITIAL);
+                this.HpInfoText = String.Format("HP\n{0} / {1}", Player.Instance.HpPointsCurrent, GameSettings.HP_POINTS_INITIAL);
             }
             else
             {

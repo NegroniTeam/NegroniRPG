@@ -19,6 +19,8 @@ namespace NegroniGame //GameSettings.
         public const int MOB_SPEED = 1; //from class Monster
         public const int AGGRO_RANGE = 80; //from class Monster
         public const int ATTACK_INTERVAL = 2; //from class Monster
+        public const double WIDTH_OF_FULL_HEALTHBAR = 32; //from class Monster
+        public const double MINUS_WIDTH_OF_HEALTH_BAR = 3.2; //from class Monster
         public const int HP_POINTS_INITIAL = 200; //from class Player
         public const float PLAYER_SPEED = 2f; //from class Player
         public const float PLAYER_ANIM_SPEED = 200f; //from class Player

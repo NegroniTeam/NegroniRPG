@@ -10,14 +10,14 @@
     {
         # region Fields Declaration
 
-        private const float TIME_TO_CHANGE_DIRECTION = 5; // sec 5
-        private const int MOVE_MAX_LENGTH = 80;
-        private const float ANIM_DELAY = 200f;
-        private const int MOB_SPEED = 1;
-        private const int AGGRO_RANGE = 80;
-        private const int ATTACK_INTERVAL = 2;
-        private const double WIDTH_OF_FULL_HEALTHBAR = 32;
-        private const double MINUS_WIDTH_OF_HEALTH_BAR = 3.2; // the width of the health bar is 32, so we lose 3.2 width per 10 damage
+        //private con-st float TIME_TO_CHANGE_DIRECTION = 5; // sec 5
+        //private con-st int MOVE_MAX_LENGTH = 80;
+        //private con-st float ANIM_DELAY = 200f;
+        //private con-st int MOB_SPEED = 1;
+        //private con-st int AGGRO_RANGE = 80;
+        //private con-st int ATTACK_INTERVAL = 2;
+        //private con-st double WIDTH_OF_FULL_HEALTHBAR = 32;
+        //private con-st double MINUS_WIDTH_OF_HEALTH_BAR = 3.2; // the width of the health bar is 32, so we lose 3.2 width per 10 damage
         
         private int currentFrame = 0;
         private string name;
@@ -48,7 +48,7 @@
             this.hpPointsInitial = initialHpPoints;
             this.HpPointsCurrent = hpPointsInitial;
             this.DirectionForMovement = -1;
-            this.FullHealthBarWidth = WIDTH_OF_FULL_HEALTHBAR;
+            this.FullHealthBarWidth = GameSettings.WIDTH_OF_FULL_HEALTHBAR;
         }
 
         # region Properties Declaration
@@ -105,7 +105,7 @@
         {
             if (this.isInCombatState == false &&
                     (this.HpPointsCurrent < this.hpPointsInitial
-                    || Player.Instance.DestinationPosition.Intersects(new Rectangle(this.DestinationPosition.X - AGGRO_RANGE, this.DestinationPosition.Y - AGGRO_RANGE, 32 + (AGGRO_RANGE * 2), 32 + (AGGRO_RANGE * 2)))))
+                    || Player.Instance.DestinationPosition.Intersects(new Rectangle(this.DestinationPosition.X - GameSettings.AGGRO_RANGE, this.DestinationPosition.Y - GameSettings.AGGRO_RANGE, 32 + (GameSettings.AGGRO_RANGE * 2), 32 + (GameSettings.AGGRO_RANGE * 2)))))
             {
                 this.isInCombatState = true;
             }
@@ -121,7 +121,7 @@
 
             if (this.HpPointsCurrent < 100)
             {
-                this.FullHealthBarWidth = 32 - (this.hpPointsInitial - this.HpPointsCurrent) / 10 * MINUS_WIDTH_OF_HEALTH_BAR;
+                this.FullHealthBarWidth = 32 - (this.hpPointsInitial - this.HpPointsCurrent) / 10 * GameSettings.MINUS_WIDTH_OF_HEALTH_BAR;
             }
         }
 
@@ -129,7 +129,7 @@
         {
             this.elapsedTimeChangePos += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (this.elapsedTimeChangePos >= TIME_TO_CHANGE_DIRECTION)
+            if (this.elapsedTimeChangePos >= GameSettings.TIME_TO_CHANGE_DIRECTION)
             {
                 this.DirectionForMovement = this.randomGenerator.Next(1, 5);
                 this.elapsedTimeChangePos = 0;
@@ -141,14 +141,14 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = (this.monsterPosition.Y > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : this.monsterPosition.Y;
+                    int maxPosition = (this.monsterPosition.Y > GameSettings.MOVE_MAX_LENGTH) ? GameSettings.MOVE_MAX_LENGTH : this.monsterPosition.Y;
                     maxPosition = (maxPosition <= 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
                 }
                 else if (this.positionsToMove > 0)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - GameSettings.MOB_SPEED, 32, 32);
 
                     if (IntersectsWithObstacles(newPosition))
                     {
@@ -156,9 +156,9 @@
                     }
                     else
                     {
-                        this.monsterPosition.Y -= MOB_SPEED;
+                        this.monsterPosition.Y -= GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[3];
-                        this.positionsToMove -= MOB_SPEED;
+                        this.positionsToMove -= GameSettings.MOB_SPEED;
                     }
                 }
             }
@@ -167,7 +167,7 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = ((GameScreen.ScreenHeight - 170 - this.monsterPosition.Y) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (GameScreen.ScreenHeight - 170 - this.monsterPosition.Y);
+                    int maxPosition = ((GameScreen.ScreenHeight - 170 - this.monsterPosition.Y) > GameSettings.MOVE_MAX_LENGTH) ? GameSettings.MOVE_MAX_LENGTH : (GameScreen.ScreenHeight - 170 - this.monsterPosition.Y);
                     maxPosition = (maxPosition < 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
@@ -175,7 +175,7 @@
 
                 else if (this.positionsToMove > 0)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + GameSettings.MOB_SPEED, 32, 32);
 
                     if (IntersectsWithObstacles(newPosition))
                     {
@@ -183,9 +183,9 @@
                     }
                     else
                     {
-                        this.monsterPosition.Y += MOB_SPEED;
+                        this.monsterPosition.Y += GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[0];
-                        this.positionsToMove -= MOB_SPEED;
+                        this.positionsToMove -= GameSettings.MOB_SPEED;
                     }
                 }
             }
@@ -194,7 +194,7 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = (this.monsterPosition.X > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : this.monsterPosition.X;
+                    int maxPosition = (this.monsterPosition.X > GameSettings.MOVE_MAX_LENGTH) ? GameSettings.MOVE_MAX_LENGTH : this.monsterPosition.X;
                     maxPosition = (maxPosition < 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
@@ -202,7 +202,7 @@
 
                 else if (this.positionsToMove > 0)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (IntersectsWithObstacles(newPosition))
                     {
@@ -210,9 +210,9 @@
                     }
                     else
                     {
-                        this.monsterPosition.X -= MOB_SPEED;
+                        this.monsterPosition.X -= GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[1];
-                        this.positionsToMove -= MOB_SPEED;
+                        this.positionsToMove -= GameSettings.MOB_SPEED;
                     }
                 }
             }
@@ -221,7 +221,7 @@
             {
                 if (this.positionsToMove == int.MinValue)
                 {
-                    int maxPosition = ((GameScreen.ScreenWidth - 30 - this.monsterPosition.X) > MOVE_MAX_LENGTH) ? MOVE_MAX_LENGTH : (GameScreen.ScreenWidth - 30 - this.monsterPosition.X);
+                    int maxPosition = ((GameScreen.ScreenWidth - 30 - this.monsterPosition.X) > GameSettings.MOVE_MAX_LENGTH) ? GameSettings.MOVE_MAX_LENGTH : (GameScreen.ScreenWidth - 30 - this.monsterPosition.X);
                     maxPosition = (maxPosition < 0) ? 0 : maxPosition;
 
                     this.positionsToMove = this.randomGenerator.Next(0, maxPosition);
@@ -229,7 +229,7 @@
 
                 else if (this.positionsToMove > 0)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (IntersectsWithObstacles(newPosition))
                     {
@@ -237,9 +237,9 @@
                     }
                     else
                     {
-                        this.monsterPosition.X += MOB_SPEED;
+                        this.monsterPosition.X += GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[2];
-                        this.positionsToMove -= MOB_SPEED;
+                        this.positionsToMove -= GameSettings.MOB_SPEED;
                     }
                 }
             }
@@ -277,17 +277,17 @@
             {
                 if (this.monsterPosition.X < Player.Instance.CenterOfPlayer.X || this.changeDirection == "right")
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (!IntersectsWithObstacles(newPosition))
                     {
-                        this.monsterPosition.X += MOB_SPEED;
+                        this.monsterPosition.X += GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[2]; // moves right
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
                     }
                     else if (Player.Instance.DestinationPosition.Intersects(newPosition))
                     {
-                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        if (this.elapsedTimeHit >= GameSettings.ATTACK_INTERVAL)
                         {
                             Player.Instance.TakeDamage(this.Damage);
                             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
@@ -301,17 +301,17 @@
                 }
                 else
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (!IntersectsWithObstacles(newPosition))
                     {
-                        this.monsterPosition.X -= MOB_SPEED;
+                        this.monsterPosition.X -= GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[1]; // moves left
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
                     }
                     else if (Player.Instance.DestinationPosition.Intersects(newPosition))
                     {
-                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        if (this.elapsedTimeHit >= GameSettings.ATTACK_INTERVAL)
                         {
                             Player.Instance.TakeDamage(this.Damage);
                             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
@@ -329,17 +329,17 @@
             {
                 if (this.monsterPosition.Y < Player.Instance.CenterOfPlayer.Y || this.changeDirection == "down")
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + GameSettings.MOB_SPEED, 32, 32);
 
                     if (!IntersectsWithObstacles(newPosition))
                     {
-                        this.monsterPosition.Y += MOB_SPEED;
+                        this.monsterPosition.Y += GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[0]; // moves down
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
                     }
                     else if (Player.Instance.DestinationPosition.Intersects(newPosition))
                     {
-                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        if (this.elapsedTimeHit >= GameSettings.ATTACK_INTERVAL)
                         {
                             Player.Instance.TakeDamage(this.Damage);
                             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
@@ -353,17 +353,17 @@
                 }
                 else
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - GameSettings.MOB_SPEED, 32, 32);
 
                     if (!IntersectsWithObstacles(newPosition))
                     {
-                        this.monsterPosition.Y -= MOB_SPEED;
+                        this.monsterPosition.Y -= GameSettings.MOB_SPEED;
                         this.monsterAnim = this.monsterTextures[3]; // moves up
                         this.DestinationPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y, 32, 32);
                     }
                     else if (Player.Instance.DestinationPosition.Intersects(newPosition))
                     {
-                        if (this.elapsedTimeHit >= ATTACK_INTERVAL)
+                        if (this.elapsedTimeHit >= GameSettings.ATTACK_INTERVAL)
                         {
                             Player.Instance.TakeDamage(this.Damage);
                             Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} did you {1} dmg.", this.Name, this.Damage), Color.Red } });
@@ -386,7 +386,7 @@
             {
                 if (this.monsterPosition.X < Player.Instance.CenterOfPlayer.X)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X + GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (!IntersectsWithObstaclesNoPlayer(newPosition))
                     {
@@ -395,7 +395,7 @@
                 }
                 else
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - MOB_SPEED, this.monsterPosition.Y, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X - GameSettings.MOB_SPEED, this.monsterPosition.Y, 32, 32);
 
                     if (!IntersectsWithObstaclesNoPlayer(newPosition))
                     {
@@ -407,7 +407,7 @@
             {
                 if (this.monsterPosition.Y < Player.Instance.CenterOfPlayer.Y)
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y + GameSettings.MOB_SPEED, 32, 32);
 
                     if (!IntersectsWithObstaclesNoPlayer(newPosition))
                     {
@@ -416,7 +416,7 @@
                 }
                 else
                 {
-                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - MOB_SPEED, 32, 32);
+                    Rectangle newPosition = new Rectangle(this.monsterPosition.X, this.monsterPosition.Y - GameSettings.MOB_SPEED, 32, 32);
 
                     if (!IntersectsWithObstaclesNoPlayer(newPosition))
                     {
@@ -466,7 +466,7 @@
         {
             this.elapsedTimeChangeAnim += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (this.elapsedTimeChangeAnim >= ANIM_DELAY)
+            if (this.elapsedTimeChangeAnim >= GameSettings.ANIM_DELAY)
             {
                 if (this.currentFrame >= 2)
                 {

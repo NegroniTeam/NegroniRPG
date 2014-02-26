@@ -11,8 +11,8 @@
         // Singleton !
         private static Well instance;
 
-        private const float REUSE_TIME = 15;
-        private float elapsedTimeToReuse = REUSE_TIME;
+        //private con-st float REUSE_TIME = 15;
+        private float elapsedTimeToReuse = GameSettings.REUSE_TIME;
         private float elapsedTimeLastMsg;
         private readonly Texture2D wellGraphic = GameScreen.Instance.AllSceneryTextures[2];
 
@@ -48,7 +48,7 @@
                 {
 
                     // if reuse time is elapsed
-                    if (this.elapsedTimeToReuse >= REUSE_TIME)
+                    if (this.elapsedTimeToReuse >= GameSettings.REUSE_TIME)
                     {
                         int restoredPoints = Player.Instance.DrinkFromWell();
 
@@ -60,7 +60,7 @@
                     {
                         if (this.elapsedTimeLastMsg >= 1)
                         {
-                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} seconds to reuse.", REUSE_TIME - (int)this.elapsedTimeToReuse), Color.Red } });
+                            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> {0} seconds to reuse.", GameSettings.REUSE_TIME - (int)this.elapsedTimeToReuse), Color.Red } });
                             this.elapsedTimeLastMsg = 0;
                         }
                     }

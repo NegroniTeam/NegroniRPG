@@ -7,9 +7,9 @@
 
     public class Shot
     {
-        private const float SHOT_SPEED = 4f;
-        private const float SHOT_ANIM_SPEED = 100f;
-        private const int RANGE = 150;
+        //private con-st float SHOT_SPEED = 4f;
+        //private con-st float SHOT_ANIM_SPEED = 100f;
+        //private con-st int RANGE = 150;
         private Vector2 shotPosition;
         private readonly SystemFunctions.DirectionsEnum direction;
 
@@ -22,22 +22,22 @@
             if (this.direction == SystemFunctions.DirectionsEnum.South)
             {
                 this.shotPosition = new Vector2(playerPosition.X + 8, playerPosition.Y + 15);
-                this.EndPoint = new Point((int)(shotPosition.X), (int)(shotPosition.Y + RANGE));
+                this.EndPoint = new Point((int)(shotPosition.X), (int)(shotPosition.Y + GameSettings.RANGE));
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.North)
             {
                 this.shotPosition = new Vector2(playerPosition.X + 8, playerPosition.Y - 8);
-                this.EndPoint = new Point((int)(shotPosition.X), (int)(shotPosition.Y - RANGE));
+                this.EndPoint = new Point((int)(shotPosition.X), (int)(shotPosition.Y - GameSettings.RANGE));
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.East)
             {
                 this.shotPosition = new Vector2(playerPosition.X + 24, playerPosition.Y + 12);
-                this.EndPoint = new Point((int)(shotPosition.X + RANGE), (int)(shotPosition.Y));
+                this.EndPoint = new Point((int)(shotPosition.X + GameSettings.RANGE), (int)(shotPosition.Y));
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.West)
             {
                 this.shotPosition = new Vector2(playerPosition.X - 8, playerPosition.Y + 12);
-                this.EndPoint = new Point((int)(shotPosition.X - RANGE), (int)(shotPosition.Y));
+                this.EndPoint = new Point((int)(shotPosition.X - GameSettings.RANGE), (int)(shotPosition.Y));
             }
 
             GameScreen.Instance.FireAttackSound.Play();
@@ -48,22 +48,22 @@
         {
             if (this.direction == SystemFunctions.DirectionsEnum.South)
             {
-                this.shotPosition.Y += SHOT_SPEED;
+                this.shotPosition.Y += GameSettings.SHOT_SPEED;
                 this.ShotSourcePosition = AnimateShot(gameTime);
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.North)
             {
-                this.shotPosition.Y -= SHOT_SPEED;
+                this.shotPosition.Y -= GameSettings.SHOT_SPEED;
                 this.ShotSourcePosition = AnimateShot(gameTime);
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.East)
             {
-                this.shotPosition.X += SHOT_SPEED;
+                this.shotPosition.X += GameSettings.SHOT_SPEED;
                 this.ShotSourcePosition = AnimateShot(gameTime);
             }
             else if (this.direction == SystemFunctions.DirectionsEnum.West)
             {
-                this.shotPosition.X -= SHOT_SPEED;
+                this.shotPosition.X -= GameSettings.SHOT_SPEED;
                 this.ShotSourcePosition = AnimateShot(gameTime);
             }
 
@@ -96,8 +96,8 @@
         private Rectangle AnimateShot(GameTime gameTime)
         {
             this.Elapsed += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            
-            if (this.Elapsed >= SHOT_ANIM_SPEED)
+
+            if (this.Elapsed >= GameSettings.SHOT_ANIM_SPEED)
             {
                 if (this.Frames >= 7)
                 {
