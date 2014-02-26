@@ -41,7 +41,7 @@
         {
             if (this.elapsedTimeElixir >= GameSettings.REUSE_TIME)
             {
-                this.RestoredPoints = ((GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent) >= Items.ElixirsHP.RECOVERY_AMOUNT) ? Items.ElixirsHP.RECOVERY_AMOUNT : GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent;
+                this.RestoredPoints = ((GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent) >= GameSettings.RECOVERY_AMOUNT) ? GameSettings.RECOVERY_AMOUNT : GameSettings.HP_POINTS_INITIAL - Player.Instance.HpPointsCurrent;
 
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> You restored {0} HP.", this.RestoredPoints), Color.Aquamarine } });
                 Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { String.Format(">> 1 HP Elixir destroyed."), Color.Red } });

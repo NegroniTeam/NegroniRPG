@@ -140,7 +140,7 @@
                 {
                     this.InventoryPopUpInfoBox = new Rectangle(MousePosition.X + 20, MousePosition.Y + 20, 100, 40);
 
-                    this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, Items.ElixirsHP.RECOVERY_AMOUNT);
+                    this.InventoryPopUpInfoBoxText = String.Format("{0} HP Elixir(s)" + "\n" + "Restores {1} HP", Player.Instance.Elixirs.Count, GameSettings.RECOVERY_AMOUNT);
                     this.StringLength = (int)this.Font.MeasureString(this.InventoryPopUpInfoBoxText).X;
 
                     this.TextPosition = new Vector2(MousePosition.X + 25 + ((InventoryPopUpInfoBox.Width - StringLength) / 2), MousePosition.Y + 25);

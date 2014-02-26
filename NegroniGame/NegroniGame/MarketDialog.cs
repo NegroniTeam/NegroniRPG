@@ -48,7 +48,7 @@
 
         private MarketDialog()
         {
-            this.elixirText = String.Format("{0}" + "\n" + "HP {1} / {2} Coins", this.item1.Name, Items.ElixirsHP.RECOVERY_AMOUNT, this.item1.BuyingPrice);
+            this.elixirText = String.Format("{0}" + "\n" + "HP {1} / {2} Coins", this.item1.Name, GameSettings.RECOVERY_AMOUNT, this.item1.BuyingPrice);
             this.bootsText = String.Format("{0}" + "\n" + "Def.{1} / {2} Coins", this.item2.Name, this.item2.Defence, this.item2.BuyingPrice);
             this.glovesText = String.Format("{0}" + "\n" + "Def.{1} / {2} Coins", this.item3.Name, this.item3.Defence, this.item3.BuyingPrice);
             this.helmetText = String.Format("{0}" + "\n" + "Def.{1} / {2} Coins", this.item4.Name, this.item4.Defence, this.item4.BuyingPrice);
