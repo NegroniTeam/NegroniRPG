@@ -1,6 +1,6 @@
 ﻿namespace NegroniGame.Interfaces
 {
-    interface ImPlayer : IReact
+    public interface ImPlayer : IReact
     {
     }
 }

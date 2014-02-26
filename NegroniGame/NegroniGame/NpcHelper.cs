@@ -1,44 +1,52 @@
 ﻿namespace NegroniGame
 {
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Content;
-    using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
+    using NegroniGame.Handlers;
     using NegroniGame.Interfaces;
     using NegroniGame.SystemFunctions;
 
-    public class Player2 : SpriteObjectAnime, IReact
+    public sealed class NpcHelper : SpriteObjectAnime, IReact
     {
-        private Vector2 tempCurrentFrame;
-        //private readonly float moveSpeed = 120;
+        // Singleton!
+        private static NpcHelper instance;
+
+        private Vector2 currentFrame;
+
         private int frameCounter = 0;
-        private int activeTime = 30000;
 
         private Rectangle reactRect;
 
-        public Player2(string spriteName, Vector2 amountOfFrames, Vector2 playerPosition)
+        private NpcHelper()
         {
-            base.Name = spriteName;
-            base.position = playerPosition;
-            base.AmountOfFrames = amountOfFrames;
+            base.Name = "NPC Helper";
+            base.AmountOfFrames = new Vector2(3, 4);
+            base.position = new Vector2(100, 100);
+            Initialize();
         }
 
-        public override void Initialize()
+        public static NpcHelper Instance
         {
-            base.Animation = new Animation();
-            base.Animation.Initialize(base.position, base.AmountOfFrames);
-            base.Animation.Active = true;
-            this.tempCurrentFrame = Vector2.Zero;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new NpcHelper();
+                }
+                return instance;
+            }
         }
 
-        public override void LoadContent(ContentManager content)
+        public void Initialize()
         {
-            base.Image = content.Load<Texture2D>(this.Name);
-            base.Animation.AnimationImage = base.Image;
-        }
+            base.Image = GameScreen.Instance.NpcHelperTexture;
+            this.currentFrame = Vector2.Zero;
 
-        public override void UnloadContent()
-        {
+            base.Animation = new Animation(base.position, base.AmountOfFrames, base.Image);
+
+            // base.Animation.AnimationImage = base.Image;
+
+            NpcHelperHandler.AddSprite(this);
         }
 
         public override void Update(GameTime gameTime)
@@ -46,7 +54,7 @@
             if (this.isActive)
             {
                 this.frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (this.frameCounter > this.activeTime)
+                if (this.frameCounter > GameSettings.ACTIVE_TIME)
                 {
                     this.frameCounter = 0;
                     this.isActive = false;
@@ -56,25 +64,25 @@
                 {
                     base.position.X = Player.Instance.DestinationPosition.X - 40;
                     base.position.Y = Player.Instance.DestinationPosition.Y - 40;
-                    this.tempCurrentFrame.Y = 2;
+                    this.currentFrame.Y = 2;
                 }
                 else if (Player.Instance.Direction == DirectionsEnum.North)
                 {
                     base.position.X = Player.Instance.DestinationPosition.X;
                     base.position.Y = Player.Instance.DestinationPosition.Y + 10;
-                    this.tempCurrentFrame.Y = 3;
+                    this.currentFrame.Y = 3;
                 }
                 else if (Player.Instance.Direction == DirectionsEnum.South)
                 {
                     base.position.X = Player.Instance.DestinationPosition.X;
                     base.position.Y = Player.Instance.DestinationPosition.Y - 50;
-                    this.tempCurrentFrame.Y = 0;
+                    this.currentFrame.Y = 0;
                 }
                 else if (Player.Instance.Direction == DirectionsEnum.West)
                 {
                     base.position.X = Player.Instance.DestinationPosition.X + 10;
                     base.position.Y = Player.Instance.DestinationPosition.Y - 40;
-                    this.tempCurrentFrame.Y = 1;
+                    this.currentFrame.Y = 1;
                 }
 
                 this.DrawRect = new Rectangle((int)base.position.X, (int)base.position.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
@@ -84,20 +92,18 @@
                 {
                     if (monster.DestinationPosition.Intersects(reactRect) && this.frameCounter % 600 == 0)
                     {
-                        FireBall fireBall = new FireBall("media/sprites/fireballs", new Vector2(8, 1), new Vector2(this.DrawRect.X + this.DrawRect.Width / 2, this.DrawRect.Y + this.DrawRect.Height / 2), monster);
-                        fireBall.Initialize();
-                        fireBall.LoadContent(GameScreen.Instance.Content);
+                        FireBall fireBall = new FireBall(new Vector2(8, 1), new Vector2(this.DrawRect.X + this.DrawRect.Width / 2, this.DrawRect.Y + this.DrawRect.Height / 2), monster);
                         fireBall.isActive = true;
-                        GameManager.AddSprite(fireBall);
+                        NpcHelperHandler.AddSprite(fireBall);
 
                         break;
                     }
                 }
 
-                this.tempCurrentFrame.X = base.Animation.CurrentFrame.X;
+                this.currentFrame.X = base.Animation.CurrentFrame.X;
 
                 base.Animation.Position = base.position;
-                base.Animation.CurrentFrame = this.tempCurrentFrame;
+                base.Animation.CurrentFrame = this.currentFrame;
 
                 base.Animation.Update(gameTime);
             }
@@ -105,9 +111,9 @@
             {
                 if (GameScreen.Instance.KeyboardState.IsKeyDown(Keys.Enter))
                 {
-                    this.DrawRect = new Rectangle((int)Player.Instance.DestinationPosition.X, (int)Player.Instance.DestinationPosition.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
+                    this.DrawRect = new Rectangle(Player.Instance.DestinationPosition.X, Player.Instance.DestinationPosition.Y, (int)(base.Image.Width / base.AmountOfFrames.X), (int)(base.Image.Height / base.AmountOfFrames.Y));
                     this.reactRect = new Rectangle(this.DrawRect.X - 10, this.DrawRect.Y - 10, this.DrawRect.Width + 10, this.DrawRect.Height + 10);
-                    GameManager.DoReaction<ImPlayer>(this);
+                    NpcHelperHandler.DoReaction<ImPlayer>(this);
                     this.reactRect = Rectangle.Empty;
                 }
             }

@@ -11,8 +11,6 @@
         // Singleton !
         private static MonstersHandler instance;
 
-        //public con-st int MAX_SPAWNED_MOBS = 4; // 4
-
         private readonly Random randomGenerator = new Random();
         private bool isCountingDownToSpawn = false;
         private float elapsedTimeToNextSpawn;
@@ -146,6 +144,7 @@
                     if (!monsterPosition.Intersects(Player.Instance.DestinationPosition)
                     && !monsterPosition.Intersects(Well.Instance.WellPosition)
                     && !monsterPosition.Intersects(SceneryHandler.Instance.MarketPosition)
+                    && !monsterPosition.Intersects(NpcSorcerer.Instance.DrawRect)
                     && !doesIntersectWithMobs
                     && !doesIntersectWithDrop)
                     {

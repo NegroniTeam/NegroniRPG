@@ -1,7 +1,6 @@
 ﻿namespace NegroniGame
 {
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
     using NegroniGame.Interfaces;
@@ -16,9 +15,8 @@
 
         #region Fields Declaration
 
-        //public con-st int HP_POINTS_INITIAL = 200;
-        //private con-st float PLAYER_SPEED = 2f;
-        //private con-st float PLAYER_ANIM_SPEED = 200f;
+        private const float PLAYER_SPEED = 2f;
+        private const float PLAYER_ANIM_SPEED = 200f;
 
         private Vector2 playerPosition = new Vector2((float)GameScreen.ScreenWidth / 2, (float)GameScreen.ScreenHeight / 2 - 50);
 
@@ -62,21 +60,6 @@
 
         #region Properties Declarations
 
-        //public string Name
-        //{
-        //    get
-        //    {
-        //        return this.name;
-        //    }
-        //    private set
-        //    {
-        //        if (string.IsNullOrEmpty(value))
-        //        {
-        //            throw new SystemFunctions.Exceptions.InvalidNameException("The name can't be null or empty!");
-        //        }
-        //        this.name = value;
-        //    }
-        //}
         public Rectangle DestinationPosition { get; private set; }
         public Vector2 CenterOfPlayer { get; private set; }
         public SystemFunctions.DirectionsEnum Direction { get; private set; }
@@ -143,7 +126,7 @@
 
         #endregion
 
-        public override void Initialize()
+        public void Initialize()
         {
             base.Name = "Elvina";
             this.HpPointsCurrent = GameSettings.HP_POINTS_INITIAL;
@@ -162,14 +145,6 @@
             this.randomGenerator = new Random();
 
             this.IsActive = true;
-        }
-
-        public override void LoadContent(ContentManager content)
-        {
-        }
-
-        public override void UnloadContent()
-        {
         }
 
         public override void Update(GameTime gameTime)
@@ -366,6 +341,13 @@
             }
         }
 
+        public void RentHelper()
+        {
+            int newCoinsAmount = this.Coins.Amount - GameSettings.HELPER_RENTING_PRICE;
+            this.Coins = new Items.Coins(newCoinsAmount);
+            Toolbar.SystemMsg.Instance.AllMessages.Add(new Dictionary<string, Color>() { { ">> You rented a helper.", Color.DarkGoldenrod } });
+        }
+
         public override void Draw()
         {
             if (GameScreen.Instance.GameState != 3)
@@ -405,11 +387,11 @@
             {
                 if (playerPosition.X < GameScreen.ScreenWidth - 30)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + GameSettings.PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X + PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.X += GameSettings.PLAYER_SPEED;
+                        this.playerPosition.X += PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[0];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -420,11 +402,11 @@
             {
                 if (playerPosition.X > 0)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - GameSettings.PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X - PLAYER_SPEED), (int)(this.playerPosition.Y), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.X -= GameSettings.PLAYER_SPEED;
+                        this.playerPosition.X -= PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[1];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -435,11 +417,11 @@
             {
                 if (playerPosition.Y > 0)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - GameSettings.PLAYER_SPEED), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y - PLAYER_SPEED), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.Y -= GameSettings.PLAYER_SPEED;
+                        this.playerPosition.Y -= PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[2];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -450,11 +432,11 @@
             {
                 if (playerPosition.Y <= GameScreen.ScreenHeight - 170)
                 {
-                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + GameSettings.PLAYER_SPEED), 32, 32);
+                    Rectangle newPosition = new Rectangle((int)(this.playerPosition.X), (int)(this.playerPosition.Y + PLAYER_SPEED), 32, 32);
 
                     if (!IntersectsWithObjects(newPosition))
                     {
-                        this.playerPosition.Y += GameSettings.PLAYER_SPEED;
+                        this.playerPosition.Y += PLAYER_SPEED;
                     }
                     this.playerAnim = this.playerTextures[3];
                     this.animSourcePosition = AnimatePlayer(gameTime);
@@ -486,6 +468,7 @@
 
             if (Well.Instance.WellPosition.Intersects(newPosition)
                 || Handlers.SceneryHandler.Instance.MarketPosition.Intersects(newPosition)
+                || NpcSorcerer.Instance.DrawRect.Intersects(newPosition)
                 || doesIntersectWithMobs)
             {
                 return true;
@@ -498,7 +481,7 @@
         {
             this.elapsedTimePlayerAnim += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (this.elapsedTimePlayerAnim >= GameSettings.PLAYER_ANIM_SPEED)
+            if (this.elapsedTimePlayerAnim >= PLAYER_ANIM_SPEED)
             {
                 if (this.frames >= 2)
                 {

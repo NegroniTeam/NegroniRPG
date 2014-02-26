@@ -1,47 +1,31 @@
 ﻿namespace NegroniGame
 {
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Content;
-    using Microsoft.Xna.Framework.Graphics;
     using NegroniGame.Handlers;
     using NegroniGame.Interfaces;
     using NegroniGame.Monsters;
     using NegroniGame.SystemFunctions;
     using System;
 
-    public class FireBall : SpriteObjectAnime, IBurn
+    public class FireBall : SpriteObjectAnime
     {
-        private Vector2 target;
-        private Vector2 tempCurrentFrame;
+        private readonly Vector2 target;
+        private Vector2 currentFrame;
         private Vector2 velocity;
         private float moveSpeed;
 
-        public FireBall(string spriteName, Vector2 amountOfFrames, Vector2 position, IMonster targetObj)
+        public FireBall(Vector2 amountOfFrames, Vector2 position, IMonster targetObj)
         {
-            base.Name = spriteName;
+            base.Name = "FireBall";
             base.position = position;
             base.AmountOfFrames = amountOfFrames;
-            this.target.X = (targetObj as Monster).DestinationPosition.X;
-            this.target.Y = (targetObj as Monster).DestinationPosition.Y;
-        }
+            this.target = new Vector2(targetObj.DestinationPosition.X, targetObj.DestinationPosition.Y);
 
-        public override void Initialize()
-        {
-            base.Animation = new Animation();
-            base.Animation.Initialize(base.position, base.AmountOfFrames);
-            base.Animation.Active = true;
             this.moveSpeed = 120;
-            this.tempCurrentFrame = Vector2.Zero;
-        }
+            this.currentFrame = Vector2.Zero;
+            base.Image = GameScreen.Instance.FireballsTexture;
 
-        public override void LoadContent(ContentManager content)
-        {
-            base.Image = content.Load<Texture2D>(this.Name);
-            base.Animation.AnimationImage = base.Image;
-        }
-
-        public override void UnloadContent()
-        {
+            base.Animation = new Animation(base.position, base.AmountOfFrames, base.Image);
         }
 
         public override void Update(GameTime gameTime)
@@ -55,14 +39,14 @@
                 velocity.X = velocityTmp.X.CompareTo(0) * (float)Math.Sin(rotation);
                 velocity.Y = velocityTmp.Y.CompareTo(0) * (float)Math.Sin(rotation);
 
-                tempCurrentFrame.Y = 0;
+                currentFrame.Y = 0;
 
                 position.X += velocity.X * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 position.Y += velocity.Y * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 base.Animation.Position = position;
-                tempCurrentFrame.X = base.Animation.CurrentFrame.X;
-                base.Animation.CurrentFrame = tempCurrentFrame;
+                currentFrame.X = base.Animation.CurrentFrame.X;
+                base.Animation.CurrentFrame = currentFrame;
                 base.Animation.Update(gameTime);
 
                 for (int i = 0; i < MonstersHandler.Instance.SpawnedMobs.Count; i++)
@@ -76,7 +60,7 @@
                     }
                 }
 
-                if (tempCurrentFrame.X / base.Animation.FrameWidth >= base.AmountOfFrames.X - 1)
+                if (currentFrame.X / base.Animation.FrameWidth >= base.AmountOfFrames.X - 1)
                 {
                     base.IsDeleted = true;
                 }
@@ -85,10 +69,10 @@
 
         public override void Draw()
         {
-            if (base.Animation.Active)
-            {
+            //if (base.Animation.IsActive)
+            //{
                 base.Animation.Draw();
-            }
+            //}
         }
 
         public Rectangle ReactRect

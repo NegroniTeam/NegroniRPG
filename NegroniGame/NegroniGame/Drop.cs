@@ -7,15 +7,21 @@
 
     public class Drop
     {
-        //public con-st float SECONDS_TO_DISAPPEARING = 20;
-        //private con-st int PERCENT_TO_DROP_POTION = 10;
+        public string Name { get; private set; }
+        public int Amount { get; private set; }
+        public Texture2D CurrentTexture { get; private set; }
+        public List<Texture2D> DropTextures { get; private set; }
+        public Rectangle DropPosition { get; private set; }
+        public float ElapsedTimeDrop { get; private set; }
+        public Random RandomGenerator { get; private set; }
 
         public Drop(Rectangle mobPosition)
         {
             RandomGenerator = new Random();
-            int RandomDrop = RandomGenerator.Next(0, 101);
 
-            if (RandomDrop > GameSettings.PERCENT_TO_DROP_POTION && RandomDrop <= 100) //coins
+            int randomDrop = RandomGenerator.Next(0, 101);
+
+            if (randomDrop > GameSettings.PERCENT_TO_DROP_POTION) //coins
             {
                 this.DropTextures = GameScreen.Instance.DropTextures;
                 this.CurrentTexture = DropTextures[0];
@@ -33,7 +39,7 @@
                     this.Amount = 1;
                 }
             }
-            else if (RandomDrop <= GameSettings.PERCENT_TO_DROP_POTION)
+            else if (randomDrop <= GameSettings.PERCENT_TO_DROP_POTION)
             {
                 this.DropTextures = GameScreen.Instance.DropTextures;
                 this.CurrentTexture = DropTextures[1];
@@ -58,14 +64,5 @@
         {
             new SystemFunctions.Sprite(CurrentTexture, DropPosition).DrawBox();
         }
-
-        public string Name { get; private set; }
-        public int Amount { get; private set; }
-        public Texture2D CurrentTexture { get; private set; }
-        public List<Texture2D> DropTextures { get; private set; }
-        public Rectangle DropPosition { get; private set; }
-        public float ElapsedTimeDrop { get; private set; }
-        // public float InitialTimeDrop { get; private set; }
-        public Random RandomGenerator { get; private set; }
     }
 }

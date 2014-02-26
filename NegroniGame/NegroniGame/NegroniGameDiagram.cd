@@ -99,7 +99,7 @@
   <Class Name="NegroniGame.Monsters.Monster" Collapsed="true">
     <Position X="12.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQQAGACEiAAAigAQQAAhAAQAYEAEABAIIAxAICAAKgA=</HashCode>
+      <HashCode>AQQIGACEgAAAigAQSAAgAAQAYEAEABAIIAxAACBAKgA=</HashCode>
       <FileName>Monsters\Monster.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -128,13 +128,6 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="NegroniGame.SystemFunctions.Sound" Collapsed="true">
-    <Position X="20.75" Y="5.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAAAAIAAQAAAAAAAAAAAAAAACAAAABAAAAAAAAAAA=</HashCode>
-      <FileName>SystemFunctions\Sound.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="NegroniGame.SystemFunctions.Sprite" Collapsed="true">
     <Position X="20.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
@@ -145,7 +138,7 @@
   <Class Name="NegroniGame.Toolbar.HP" Collapsed="true">
     <Position X="26.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAgAAAACAIAAAAAFAAAAAQIAABAACAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAIAAAAAFAAAAAQAAABAAAAAA=</HashCode>
       <FileName>Toolbar\HP.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -166,7 +159,7 @@
   <Class Name="NegroniGame.Drop" Collapsed="true">
     <Position X="22.75" Y="7.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAQgAAAAAJAAAgEAAAAAAASIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>QAQAAAAAAJAAAgEAAAAAAASIAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Drop.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -180,7 +173,7 @@
   <Class Name="NegroniGame.InfoBoxes" Collapsed="true">
     <Position X="22.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAEAAgAEAAEgIAAAAABAJDAAQAACABCiCAA=</HashCode>
+      <HashCode>AAQAAAAAAAEAAgAEAAGgIAAAAABAJDAAQIACABCiCAA=</HashCode>
       <FileName>InfoBoxes.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -194,7 +187,7 @@
   <Class Name="NegroniGame.Player" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="17.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AASBIAACOaEAUwIAECgBCAQAAZBkBAgAYCAAgSABgwI=</HashCode>
+      <HashCode>AASBMAACOaEAUwIAECgBCBAAARB4BAgAYCAAgSABgwI=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -202,21 +195,21 @@
   <Class Name="NegroniGame.Shot" Collapsed="true">
     <Position X="22.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQBAIAEAAAAZgAAAAgAAAAAgAAAAAAQAAAAAAAAAIE=</HashCode>
+      <HashCode>AAQBAIAEAAAAZgAAAAAAAAAAgAAAAAAQAAAAAAAAAIE=</HashCode>
       <FileName>Shot.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NegroniGame.Well" Collapsed="true">
     <Position X="24.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAwAAAAAAABAEgAAAAAAAAAAAABAAAAAQAACAAAABAA=</HashCode>
+      <HashCode>AAwAAAAAAABAEgAAAAAAAAAAAABAAAAAQAAAAAAABAA=</HashCode>
       <FileName>Well.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NegroniGame.GameScreen" Collapsed="true">
     <Position X="16.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gAQUuCAiAUAKAwIBAIAwAAQakABAAUoAQAAqCECACAQ=</HashCode>
+      <HashCode>AAQUuCgiQUQKgwIBAYAwAAQakADAAUoAQCAKCEAgKAQ=</HashCode>
       <FileName>GameScreen.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -237,7 +230,7 @@
   <Struct Name="NegroniGame.Items.ElixirsHP" Collapsed="true">
     <Position X="22.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAEQEAAAEAAAAAAIAAAAEAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAQEAAAEAAAAAAIAAAAEAAA=</HashCode>
       <FileName>Items\ElixirsHP.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -287,7 +280,7 @@
   <Interface Name="NegroniGame.Interfaces.IMonster" Collapsed="true">
     <Position X="12.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>Interfaces\IMonster.cs</FileName>
     </TypeIdentifier>
   </Interface>

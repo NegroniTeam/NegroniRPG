@@ -61,18 +61,14 @@ Content\media\sprites\Elvina-dead.xnb
 Content\media\GameOver.xnb
 Content\media\drop\coins2.xnb
 Content\media\drop\coins.xnb
-Content\media\sprites\Player2.xnb
-Content\media\sprites\Sorcerer.xnb
-Content\media\health-full.xnb
-Content\media\health-low.xnb
 Content\Segoe UI Mono.xnb
 Content\Segoe UI Mono Smaller.xnb
 Content\media\IntroVideo.xnb
+Content\media\sprites\Player2.xnb
+Content\media\sprites\Sorcerer.xnb
 Content\media\sounds\armorBought.xnb
 Content\media\sounds\drinkPotion.xnb
 Content\media\sounds\drinkWell.xnb
-Content\media\sounds\DST-Exanos.xnb
-Content\media\sounds\DST-GameOver.xnb
 Content\media\sounds\firehit.xnb
 Content\media\sounds\hit1.xnb
 Content\media\sounds\hit2.xnb
@@ -80,6 +76,10 @@ Content\media\sounds\hit3.xnb
 Content\media\sounds\pickup.xnb
 Content\media\sounds\potionBought.xnb
 Content\media\sounds\weaponBought.xnb
+Content\media\sounds\DST-Exanos.xnb
+Content\media\sounds\DST-GameOver.xnb
+Content\media\health-full.xnb
+Content\media\health-low.xnb
 Content\media\IntroVideo.wmv
 Content\media\sounds\DST-Exanos.wma
 Content\media\sounds\DST-GameOver.wma

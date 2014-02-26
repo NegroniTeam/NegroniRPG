@@ -86,7 +86,6 @@
     <Compile Include="Handlers\GameOverHandler.cs" />
     <Compile Include="Handlers\DropHandler.cs" />
     <Compile Include="InfoBoxes.cs" />
-    <Compile Include="Interfaces\IBurn.cs" />
     <Compile Include="Interfaces\ImPlayer.cs" />
     <Compile Include="Interfaces\IReact.cs" />
     <Compile Include="Interfaces\IRobe.cs" />
@@ -100,10 +99,10 @@
     <Compile Include="Monsters\RedDragon.cs" />
     <Compile Include="Handlers\MonstersHandler.cs" />
     <Compile Include="Handlers\ShotsHandler.cs" />
-    <Compile Include="Player2.cs" />
+    <Compile Include="NpcHelper.cs" />
     <Compile Include="Shot.cs" />
     <Compile Include="GameScreen.cs" />
-    <Compile Include="Sorcerer.cs" />
+    <Compile Include="NpcSorcerer.cs" />
     <Compile Include="SystemFunctions\Animation.cs" />
     <Compile Include="SystemFunctions\DirectionsEnum.cs" />
     <Compile Include="Interfaces\IBoots.cs" />
@@ -131,7 +130,7 @@
     <Compile Include="Handlers\SceneryHandler.cs" />
     <Compile Include="SystemFunctions\Exceptions\InvalidAmountException.cs" />
     <Compile Include="SystemFunctions\Exceptions\InvalidNameException.cs" />
-    <Compile Include="SystemFunctions\GameManager.cs" />
+    <Compile Include="Handlers\NpcHelperHandler.cs" />
     <Compile Include="SystemFunctions\SpriteObject.cs" />
     <Compile Include="SystemFunctions\SpriteObjectAnime.cs" />
     <Compile Include="Toolbar\HP.cs" />

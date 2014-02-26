@@ -5,15 +5,25 @@
 
     public class Animation
     {
-        private int frameCounter;
-        private int switchFrame;
-        private bool active;
+        private const int SWITCH_FRAME = 170;
+
+        private int frame;
+        //private bool active;
 
         private Vector2 position;
         private Vector2 amountOfFrames;
         private Rectangle sourceRect;
 
         public Vector2 CurrentFrame;
+
+        public Animation(Vector2 position1, Vector2 frames1, Texture2D animationImage)
+        {
+            //this.active = true;
+            this.position = position1;
+            this.amountOfFrames = frames1;
+            this.IsActive = true;
+            this.AnimationImage = animationImage;
+        }
 
         public int AnimationSpeed { get; set; }
 
@@ -29,32 +39,19 @@
             get { return (int)(this.AnimationImage.Height / this.amountOfFrames.Y); }
         }
 
-        public bool Active { get { return this.active; } set { this.active = value; } }
+        //public bool Active { get { return this.active; } set { this.active = value; } }
+
+        public bool IsActive { get; private set; }
 
         public Texture2D AnimationImage { get; set; }
 
-        public void Initialize(Vector2 position, Vector2 frames)
-        {
-            this.active = false;
-            this.switchFrame = 170;             // Set default value
-            this.position = position;
-            this.amountOfFrames = frames;
-        }
-
         public void Update(GameTime gameTime)
         {
-            if (this.active)
-            {
-                this.frameCounter += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-            }
-            else
-            {
-                this.frameCounter = 0;
-            }
+            this.frame += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (this.frameCounter >= this.switchFrame)
+            if (this.frame >= SWITCH_FRAME)
             {
-                this.frameCounter = 0;
+                this.frame = 0;
                 this.CurrentFrame.X += this.FrameWidth;
                 if (this.CurrentFrame.X >= this.AnimationImage.Width)
                 {

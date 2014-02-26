@@ -5,7 +5,7 @@ namespace NegroniGame
     using Microsoft.Xna.Framework.Input;
     using Microsoft.Xna.Framework.Media;
     using Microsoft.Xna.Framework.Audio;
-    using NegroniGame.SystemFunctions;
+    using NegroniGame.Handlers;
     using System.Collections.Generic;
 
     /// <summary>
@@ -26,9 +26,6 @@ namespace NegroniGame
         private Texture2D videoTexture;
         private Color videoColor;
         private Song inGameMusic, gameOverMusic;
-
-        private Sorcerer sorcerer;
-        private Player2 player2;
 
         #endregion
 
@@ -90,6 +87,8 @@ namespace NegroniGame
         public Texture2D MarketDialog { get; private set; }
         public Texture2D BuyButton { get; private set; }
         public Texture2D GameOverTex { get; private set; }
+        public Texture2D NpcSorcererTexture { get; private set; }
+        public Texture2D NpcHelperTexture { get; private set; }
         public SoundEffect PickUpSound { get; private set; }
         public SoundEffect FireAttackSound { get; private set; }
         public SoundEffect DrinkElixir { get; private set; }
@@ -115,21 +114,15 @@ namespace NegroniGame
             videoPlayer.Play(video);
             videoColor = new Color(255, 255, 255);
 
-            sorcerer = new Sorcerer("media/sprites/sorcerer", new Vector2(4, 1), new Vector2(1, 1));
-            sorcerer.Initialize();
-            sorcerer.isActive = true;
-            GameManager.AddSprite(sorcerer);
-
-            player2 = new Player2("media/sprites/player2", new Vector2(3, 4), new Vector2(100, 100));
-            player2.Initialize();
-            player2.isActive = false;
-            GameManager.AddSprite(player2);
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            NpcSorcererTexture = Content.Load<Texture2D>("media/sprites/sorcerer");
+
+            NpcHelperTexture = Content.Load<Texture2D>("media/sprites/player2");
+
             FontMessages = Content.Load<SpriteFont>("Segoe UI Mono");
 
             FontInfoBox = Content.Load<SpriteFont>("Segoe UI Mono Smaller");
@@ -265,6 +258,8 @@ namespace NegroniGame
                 Content.Load<Texture2D>("media/sprites/fireballs")
             };
 
+            FireballsTexture = Content.Load<Texture2D>("media/sprites/fireballs");
+
             DropTextures = new List<Texture2D>()
             {
                 Content.Load<Texture2D>("media/drop/coins2"),
@@ -302,11 +297,8 @@ namespace NegroniGame
 
             inGameMusic = Content.Load<Song>("media/sounds/DST-Exanos");
 
-            sorcerer.LoadContent(Content);
-
-            player2.LoadContent(Content);
-
             Player.Instance.Initialize();
+            NpcSorcerer.Instance.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
@@ -351,19 +343,19 @@ namespace NegroniGame
                     }
 
                     Player.Instance.Update(gameTime);
-                    Handlers.MonstersHandler.Instance.Update(gameTime);
-                    Handlers.DropHandler.Instance.Update(gameTime);
-                    Handlers.ShotsHandler.Instance.UpdateShots(gameTime, KeyboardState);
+                    MonstersHandler.Instance.Update(gameTime);
+                    DropHandler.Instance.Update(gameTime);
+                    ShotsHandler.Instance.UpdateShots(gameTime, KeyboardState);
                     Toolbar.InventorySlots.Instance.Update(gameTime, MouseState);
                     Toolbar.SystemMsg.Instance.GetLastMessages();
                     Toolbar.HP.Instance.Update(gameTime);
                     InfoBoxes.Instance.Update(gameTime, MouseState);
-                    Handlers.ElixirsHandler.Instance.Update(gameTime); // updates elixir reuse time
+                    ElixirsHandler.Instance.Update(gameTime); // updates elixir reuse time
                     Well.Instance.Update(gameTime); // updates well reuse time
-                    Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
-                    Handlers.GameOverHandler.Instance.Update(gameTime);
+                    MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+                    GameOverHandler.Instance.Update(gameTime);
 
-                    GameManager.Update(gameTime);
+                    NpcHelperHandler.Update(gameTime);
 
                     break;
 
@@ -378,7 +370,7 @@ namespace NegroniGame
 
                     Toolbar.HP.Instance.Update(gameTime);
                     InfoBoxes.Instance.Update(gameTime, MouseState);
-                    Handlers.MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
+                    MarketDialogHandler.Instance.Update(MouseState, MouseStatePrevious);
 
                     break;
 
@@ -405,25 +397,27 @@ namespace NegroniGame
 
             if (GameState != 0 && videoColor.A != 255)
             {
-                Handlers.SceneryHandler.Instance.Draw(); // Scenery
+                SceneryHandler.Instance.Draw(); // Scenery
 
-                Handlers.DropHandler.Instance.Draw(); // Drop
-                Handlers.MonstersHandler.Instance.Draw(gameTime); // Monsters
-                Handlers.ShotsHandler.Instance.Draw(); // Shots
+                DropHandler.Instance.Draw(); // Drop
+
+                ShotsHandler.Instance.Draw(); // Shots
 
                 Player.Instance.Draw(); // Player
 
-                Handlers.MarketDialogHandler.Instance.Draw(); // Market dialog
+                MonstersHandler.Instance.Draw(gameTime); // Monsters
+
+                MarketDialogHandler.Instance.Draw(); // Market dialog
 
                 Toolbar.InventorySlots.Instance.Draw(); // Inventory
                 Toolbar.SystemMsg.Instance.DrawText(); // System messages
                 Toolbar.HP.Instance.Draw(); // HP bar
 
+                NpcHelperHandler.Draw();
+
                 InfoBoxes.Instance.Draw(); // Pop-up info boxes
 
-                Handlers.GameOverHandler.Instance.Draw();
-
-                GameManager.Draw(SpriteBatch);
+                GameOverHandler.Instance.Draw();
 
                 SpriteBatch.Draw(CursorTexture, cursorPos, Color.White); // draws cursor
             }

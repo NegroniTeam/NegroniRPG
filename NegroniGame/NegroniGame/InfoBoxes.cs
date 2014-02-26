@@ -49,6 +49,8 @@
         public Rectangle WellInfoRectangle { get; private set; }
         public Rectangle PlayerInfoRectangle { get; private set; }
         public Rectangle HpInfoRectangle { get; private set; }
+        public Rectangle NpcSorcererInfoRectangle { get; private set; }
+        public Rectangle MobInfoRectangle { get; private set; }
 
         public Point MousePosition { get; private set; }
         public string BoxNameText { get; private set; }
@@ -57,6 +59,8 @@
         public string PlayerInfoText { get; private set; }
         public string BoxAtkDefText { get; private set; }
         public string HpInfoText { get; private set; }
+        public string NpcSorcererInfoText { get; private set; }
+        public string MobInfoText { get; private set; }
 
 		# endregion
 
@@ -110,6 +114,17 @@
                 this.PlayerInfoText = "";
             }
 
+            if (NpcSorcerer.Instance.DrawRect.Contains(MousePosition))
+            {
+                this.NpcSorcererInfoRectangle = new Rectangle(MousePosition.X + 20, MousePosition.Y + 10, 80, 30);
+                this.NpcSorcererInfoText = "NPC Sorcerer\nRent Helper";
+            }
+            else
+            {
+                this.NpcSorcererInfoRectangle = new Rectangle(0, 0, 0, 0);
+                this.NpcSorcererInfoText = "";
+            }
+
             // hp
             if (Toolbar.HP.Instance.HpPosition.Contains(MousePosition))
             {
@@ -120,6 +135,30 @@
             {
                 this.HpInfoRectangle = new Rectangle(0, 0, 0, 0);
                 this.HpInfoText = "";
+            }
+
+            // Mobs
+            if (Handlers.MonstersHandler.Instance.SpawnedMobs == null || Handlers.MonstersHandler.Instance.SpawnedMobs.Count == 0)
+            {
+                this.MobInfoRectangle = new Rectangle(0, 0, 0, 0);
+                this.MobInfoText = "";
+            }
+            else
+            {
+                foreach (var monster in Handlers.MonstersHandler.Instance.SpawnedMobs)
+                {
+                    if (monster.DestinationPosition.Contains(MousePosition))
+                    {
+                        this.MobInfoRectangle = new Rectangle(MousePosition.X + 20, MousePosition.Y, 80, 30);
+                        this.MobInfoText = String.Format("{0}\nAtk.{1}", monster.Name, monster.Attack);
+                        break;
+                    }
+                    else
+                    {
+                        this.MobInfoRectangle = new Rectangle(0, 0, 0, 0);
+                        this.MobInfoText = "";
+                    }
+                }
             }
 
             // Show small pop-up descriptive text box when mouse is over an item in the inventory
@@ -251,6 +290,12 @@
 
             new Sprite(GameScreen.Instance.InfoBox1Texture, HpInfoRectangle).DrawBox();
             new Sprite(GameScreen.Instance.FontMessages, this.HpInfoText, new Vector2(HpInfoRectangle.X + 10, HpInfoRectangle.Y)).DrawText();
+
+            new Sprite(GameScreen.Instance.InfoBox1Texture, NpcSorcererInfoRectangle).DrawBox();
+            new Sprite(GameScreen.Instance.FontInfoBox, this.NpcSorcererInfoText, new Vector2(NpcSorcererInfoRectangle.X + 15, NpcSorcererInfoRectangle.Y + 2)).DrawText();
+
+            new Sprite(GameScreen.Instance.InfoBox1Texture, MobInfoRectangle).DrawBox();
+            new Sprite(GameScreen.Instance.FontInfoBox, this.MobInfoText, new Vector2(MobInfoRectangle.X + 15, MobInfoRectangle.Y + 2)).DrawText();
 
             new Sprite(this.InfoBoxTexture, this.InventoryPopUpInfoBox).DrawBox();
             new Sprite(this.Font, this.InventoryPopUpInfoBoxText, this.TextPosition).DrawText(); 

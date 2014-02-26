@@ -1,19 +1,19 @@
-﻿namespace NegroniGame.SystemFunctions
+﻿namespace NegroniGame.Handlers
 {
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Content;
     using Microsoft.Xna.Framework.Graphics;
     using NegroniGame.Interfaces;
+    using NegroniGame.SystemFunctions;
     using System.Collections.Generic;
 
-    public static class GameManager
+    public static class NpcHelperHandler
     {
         private static bool isLocked;
         private static List<SpriteObject> spriteObjList;
         private static List<SpriteObject> spriteToAddList;
         private static List<SpriteObject> spriteToDeleteList;
 
-        static GameManager()
+        static NpcHelperHandler()
         {
             spriteObjList = new List<SpriteObject>();
             spriteToAddList = new List<SpriteObject>();
@@ -44,7 +44,7 @@
             isLocked = true;
             foreach (var item in spriteObjList)
             {
-                if (item != obj && item.DrawRect.Intersects(positionRect))
+                if (item != obj && item.DrawRect.Intersects(new Rectangle(positionRect.X - 5, positionRect.Y - 5, positionRect.Width + 10, positionRect.Height + 10)))
                 {
                     isLocked = false;
                     return true;
@@ -55,10 +55,10 @@
             return false;
         }
 
-        // Call Update method for all not deleted game objects
+        // Call Update method for not deleted game objects
         public static void Update(GameTime gameTime)
         {
-            foreach (var obj in GameManager.spriteObjList)
+            foreach (var obj in NpcHelperHandler.spriteObjList)
             {
                 if (obj.IsDeleted)
                 {
@@ -70,8 +70,8 @@
             }
         }
 
-        // Call Draw method for all visible game objects
-        public static void Draw(SpriteBatch spriteBatch)
+        // Call Draw method for visible game objects
+        public static void Draw()
         {
             // Add objects
             if (!isLocked)
