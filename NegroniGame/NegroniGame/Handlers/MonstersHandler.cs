@@ -11,7 +11,7 @@
         // Singleton !
         private static MonstersHandler instance;
 
-        public const int MAX_SPAWNED_MOBS = 4; // 4
+        //public con-st int MAX_SPAWNED_MOBS = 4; // 4
 
         private readonly Random randomGenerator = new Random();
         private bool isCountingDownToSpawn = false;
@@ -104,7 +104,7 @@
                 this.timeToNextSpawn = 1;
                 this.isCountingDownToSpawn = true;
             }
-            else if (this.SpawnedMobsNumber < MAX_SPAWNED_MOBS && this.isCountingDownToSpawn == false)
+            else if (this.SpawnedMobsNumber < GameSettings.MAX_SPAWNED_MOBS && this.isCountingDownToSpawn == false)
             {
                 this.elapsedTimeToNextSpawn = 0;
                 this.timeToNextSpawn = randomGenerator.Next(5, 10); ///// 5, 15 ////////////////////

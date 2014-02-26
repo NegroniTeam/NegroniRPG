@@ -10,7 +10,7 @@
         // Singleton !
         private static ShotsHandler instance;
 
-        private const float SHOT_REUSE_TIME = 1000f;
+        //private con-st float SHOT_REUSE_TIME = 1000f;
         private float elapsedTimeShot;
         private List<int> indexesForDeletionShots = new List<int>();
 
@@ -40,7 +40,7 @@
             // Adds new shot to the list
             if (ks.IsKeyDown(Keys.Space))
             {
-                if (this.elapsedTimeShot >= SHOT_REUSE_TIME)
+                if (this.elapsedTimeShot >= GameSettings.SHOT_REUSE_TIME)
                 {
                     Shots.Add(new Shot(new Vector2(Player.Instance.DestinationPosition.X, Player.Instance.DestinationPosition.Y), Player.Instance.Direction));
                     this.elapsedTimeShot = 0;
